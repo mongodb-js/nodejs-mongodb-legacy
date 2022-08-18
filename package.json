@@ -9,7 +9,7 @@
   "main": "src/index.js",
   "types": "mongodb-legacy.d.ts",
   "dependencies": {
-    "mongodb": "^4.8.1"
+    "mongodb": "^4.9.0"
   },
   "scripts": {
     "check:test": "mocha test/unit",
