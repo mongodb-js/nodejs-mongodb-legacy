@@ -1,3 +1,4 @@
 !mongodb-legacy.d.ts
 .vscode/
 *.tgz
+etc/node-mongodb-native
