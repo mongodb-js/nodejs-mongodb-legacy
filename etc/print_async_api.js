@@ -7,6 +7,9 @@ const { stat, readFile, writeFile } = require('fs/promises');
 const { join: joinPath } = require('path');
 const { spawn } = require('child_process');
 
+const { ApiModel } = require('@microsoft/api-extractor-model');
+const { inspect } = require('util');
+
 class APIPrinterError extends Error {}
 
 const readJSON = async filePath => JSON.parse(await readFile(filePath, { encoding: 'utf8' }));
@@ -28,11 +31,6 @@ const API_CONFIG = joinPath(DRIVER_REPO_DIR, 'api-extractor.json');
 const DOC_MODEL = joinPath(DRIVER_REPO_DIR, 'etc/api.json');
 
 async function getDriverAPI() {
-  const apiExists = await stat(DOC_MODEL).then(statRes => statRes.isFile());
-  if (apiExists) {
-    return await readJSON(DOC_MODEL);
-  }
-
   const repoExists = await stat(DRIVER_REPO_DIR).then(statRes => statRes.isDirectory());
   if (!repoExists) {
     throw new APIPrinterError('You must clone the driver repo next to this script');
@@ -50,33 +48,56 @@ async function getDriverAPI() {
   return await readJSON(DOC_MODEL);
 }
 
-async function main() {
-  const api = await getDriverAPI();
-
-  const packageMembers = api.members[0].members;
-
-  for (const classDescription of packageMembers.filter(m => m.kind === 'Class')) {
-    const className = classDescription.name;
-    const methodsPrinted = new Set();
-    for (const methodDescription of classDescription.members.filter(m => m.kind === 'Method')) {
-      /** @type {string} */
-      const returnType = methodDescription.excerptTokens
-        .slice(
-          methodDescription.returnTypeTokenRange.startIndex,
-          methodDescription.returnTypeTokenRange.endIndex
-        )
-        .map(token => token.text.replaceAll('\n', '').replace(/\s\s+/g, ' '))
-        .join('');
-      if (returnType.includes('Promise<') && !methodsPrinted.has(methodDescription.name)) {
-        methodsPrinted.add(methodDescription.name);
-        const apiString = `${className}.${methodDescription.name}(): ${returnType}`;
-        console.log(apiString);
-      }
-    }
+/**
+ * @param {string[]} args
+ */
+async function main(args) {
+  if (args.includes('build:api')) {
+    return await getDriverAPI();
   }
+  const apiModel = new ApiModel();
+  const apiPackage = apiModel.loadPackage(DOC_MODEL);
+
+  const apiList = [];
+
+  const recursivelyWalkApi = rootMember => {
+    if (rootMember == null) {
+      return;
+    }
+    const printedMethods = new Set(); // make overloads only print once
+    for (const member of rootMember.members) {
+      if (member.kind === 'Method') {
+        /** @type {string} */
+        const returnType = member.returnTypeExcerpt.text;
+        if (returnType.includes('Promise<') && !printedMethods.has(member.name)) {
+          apiList.push({ className: member.parent.name, method: member.name, returnType });
+        }
+        printedMethods.add(member.name);
+      }
+      recursivelyWalkApi(member);
+    }
+  };
+  recursivelyWalkApi(apiPackage);
+
+  writeFile(
+    'test/tools/api.new.js', // use new in the name to not override the source of truth
+    Buffer.from(
+      `/* eslint-disable prettier/prettier */
+'use strict';
+
+module.exports = Object.create(null);
+Object.defineProperty(module.exports, '__esModule', { value: true });
+
+module.exports.asyncApi = [
+  ${apiList.map(v => inspect(v, { depth: Infinity, breakLength: Infinity })).join(',\n  ')}
+];
+`,
+      'utf8'
+    )
+  );
 }
 
-main()
+main(process.argv)
   .then(() => {
     process.exitCode = 0;
   })
