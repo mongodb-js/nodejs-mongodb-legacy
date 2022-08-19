@@ -6,7 +6,6 @@
 const { stat, readFile, writeFile } = require('fs/promises');
 const { join: joinPath } = require('path');
 const { spawn } = require('child_process');
-const typescript = require('typescript');
 
 class APIPrinterError extends Error {}
 
@@ -54,11 +53,11 @@ async function getDriverAPI() {
 async function main() {
   const api = await getDriverAPI();
 
-  console.log(api.name);
   const packageMembers = api.members[0].members;
 
   for (const classDescription of packageMembers.filter(m => m.kind === 'Class')) {
     const className = classDescription.name;
+    const methodsPrinted = new Set();
     for (const methodDescription of classDescription.members.filter(m => m.kind === 'Method')) {
       /** @type {string} */
       const returnType = methodDescription.excerptTokens
@@ -68,7 +67,8 @@ async function main() {
         )
         .map(token => token.text.replaceAll('\n', '').replace(/\s\s+/g, ' '))
         .join('');
-      if (returnType.includes('Promise')) {
+      if (returnType.includes('Promise<') && !methodsPrinted.has(methodDescription.name)) {
+        methodsPrinted.add(methodDescription.name);
         const apiString = `${className}.${methodDescription.name}(): ${returnType}`;
         console.log(apiString);
       }
