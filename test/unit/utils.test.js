@@ -20,51 +20,58 @@ describe('utils.js', () => {
       expect(maybeCallback).to.have.lengthOf(2);
     });
 
-    it('should return promise provided if no other arguments are present', async () => {
-      const promise = Promise.resolve(2);
-      const result = maybeCallback(promise);
-      expect(promise).to.equal(result);
-      expect(await result).to.equal(2);
-    });
-
-    it('should return void if callback is provided', () => {
-      const promise = Promise.resolve(2);
-      const result = maybeCallback(promise, () => null);
-      expect(result).to.be.undefined;
-    });
-
-    it('should call callback with the resolved value from the promise', done => {
-      const promise = Promise.resolve(2);
-      const result = maybeCallback(promise, (error, result) => {
-        try {
-          expect(error).to.not.exist;
-          expect(result).to.equal(2);
-          done();
-        } catch (assertionError) {
-          done(assertionError);
-        }
+    describe('when handling an error case', () => {
+      it('should pass the error to the callback provided', done => {
+        const superPromiseRejection = Promise.reject(new Error('fail'));
+        const result = maybeCallback(superPromiseRejection, (error, result) => {
+          try {
+            expect(result).to.not.exist;
+            expect(error).to.be.instanceOf(Error);
+            return done();
+          } catch (assertionError) {
+            return done(assertionError);
+          }
+        });
+        expect(result).to.be.undefined;
       });
-      expect(result).to.be.undefined;
+
+      it('should return the rejected promise to the caller when no callback is provided', async () => {
+        const superPromiseRejection = Promise.reject(new Error('fail'));
+        const returnedPromise = maybeCallback(superPromiseRejection, null);
+        expect(returnedPromise).to.equal(superPromiseRejection);
+        const thrownError = await returnedPromise.catch(error => error);
+        expect(thrownError).to.be.instanceOf(Error);
+      });
+
+      it('should not modify a rejection error promise', async () => {
+        class MyError extends Error {}
+        const rejection = Promise.reject(new MyError());
+        const thrownError = await maybeCallback(rejection, null).catch(error => error);
+        expect(thrownError).to.be.instanceOf(MyError);
+      });
     });
 
-    it('should not modify a rejection error promise', async () => {
-      class MyError extends Error {}
-      const rejection = Promise.reject(new MyError());
-      const thrownError = await maybeCallback(rejection, null).catch(error => error);
-      expect(thrownError).to.be.instanceOf(MyError);
-    });
+    describe('when handling a success case', () => {
+      it('should pass the result and undefined error to the callback provided', done => {
+        const superPromiseSuccess = Promise.resolve(2);
 
-    it('should not modify a rejection error callback', done => {
-      class MyError extends Error {}
-      const rejection = Promise.reject(new MyError());
-      maybeCallback(rejection, (error, result) => {
-        try {
-          expect(result).to.not.exist;
-          expect(error).to.be.instanceOf(MyError);
-          return done();
-        } catch (assertionError) {
-          return done(assertionError);
-        }
+        const result = maybeCallback(superPromiseSuccess, (error, result) => {
+          try {
+            expect(error).to.be.undefined;
+            expect(result).to.equal(2);
+            done();
+          } catch (assertionError) {
+            done(assertionError);
+          }
+        });
+        expect(result).to.be.undefined;
+      });
+
+      it('should return the resolved promise to the caller when no callback is provided', async () => {
+        const superPromiseSuccess = Promise.resolve(2);
+        const result = maybeCallback(superPromiseSuccess);
+        expect(result).to.equal(superPromiseSuccess);
+        expect(await result).to.equal(2);
       });
     });
   });
