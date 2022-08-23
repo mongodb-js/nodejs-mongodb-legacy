@@ -146,6 +146,8 @@ const transformMethods = [
 module.exports.asyncApi = asyncApi;
 module.exports.transformMethods = transformMethods;
 module.exports.asyncApiClasses = new Set(asyncApi.map(({className}) => className))
-module.exports.classesToMethods = new Map([...asyncApi, ...transformMethods].map((api, _, array) =>
-  [api.className, new Set(array.filter(v => v.className === api.className))]
-));
+module.exports.classNameToMethodList = new Map([...asyncApi, ...transformMethods].map((api, _, array) => {
+  const methodNames = Array.from(new Set(Array.from(array.filter(v => v.className === api.className), ({ method }) => method)))
+  methodNames.sort((a, b) => a.localeCompare(b))
+  return [api.className, methodNames]
+}));

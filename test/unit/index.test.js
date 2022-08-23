@@ -3,7 +3,7 @@
 const { expect } = require('chai');
 const mdbLegacy = require('../..');
 const mdbDriver = require('mongodb');
-const { asyncApiClasses, classesToMethods } = require('../tools/api');
+const { asyncApiClasses, classNameToMethodList } = require('../tools/api');
 
 describe('index.js', () => {
   it('should export everything mongodb does', () => {
@@ -18,11 +18,8 @@ describe('index.js', () => {
   }
 
   describe('subclass for legacy callback support', () => {
-    for (const [className, methods] of classesToMethods) {
+    for (const [className, methodNames] of classNameToMethodList) {
       describe(`class ${className}`, () => {
-        const methodNames = Array.from(new Set(Array.from(methods, ({ method }) => method)));
-        methodNames.sort((a, b) => String.prototype.localeCompare.call(a, b));
-
         for (const method of methodNames) {
           it(`should define override ${method}()`, () => {
             expect(mdbLegacy[className].prototype)
