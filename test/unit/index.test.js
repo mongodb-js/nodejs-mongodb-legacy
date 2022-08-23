@@ -20,13 +20,24 @@ describe('index.js', () => {
   describe('subclass for legacy callback support', () => {
     for (const [className, methods] of classesToMethods) {
       describe(`class ${className}`, () => {
-        for (const { method } of methods) {
+        const methodNames = Array.from(new Set(Array.from(methods, ({ method }) => method)));
+        methodNames.sort((a, b) => String.prototype.localeCompare.call(a, b));
+
+        for (const method of methodNames) {
           it(`should define override ${method}()`, () => {
             expect(mdbLegacy[className].prototype)
               .to.have.own.property(method)
               .that.is.a('function');
           });
         }
+
+        it(`should only define methods declared in api table for ${className}`, () => {
+          let names = Object.getOwnPropertyNames(mdbLegacy[className].prototype).filter(
+            name => name !== 'constructor'
+          );
+          names.sort((a, b) => String.prototype.localeCompare.call(a, b));
+          expect(names).to.be.deep.equal(methodNames);
+        });
       });
     }
 
