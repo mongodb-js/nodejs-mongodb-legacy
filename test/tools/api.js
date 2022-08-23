@@ -111,6 +111,8 @@ const asyncApi = [
 
   { className: 'MongoClient', method: 'close', returnType: 'Promise<void>' },
   { className: 'MongoClient', method: 'connect', returnType: 'Promise<this>' },
+  // Manually test the static version of connect
+  // { className: 'MongoClient', method: 'static connect', returnType: 'Promise<this>' },
 ];
 
 const transformMethods = [
