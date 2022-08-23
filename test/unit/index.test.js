@@ -29,5 +29,9 @@ describe('index.js', () => {
         }
       });
     }
+
+    it('class MongoClient should define static override connect()', () => {
+      expect(mdbLegacy.MongoClient).to.have.own.property('connect').that.is.a('function');
+    });
   });
 });
