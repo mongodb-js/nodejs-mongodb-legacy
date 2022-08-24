@@ -45,9 +45,25 @@ describe('utils.js', () => {
 
       it('should not modify a rejection error promise', async () => {
         class MyError extends Error {}
-        const rejection = Promise.reject(new MyError());
+        const driverError = Object.freeze(new MyError());
+        const rejection = Promise.reject(driverError);
         const thrownError = await maybeCallback(rejection, null).catch(error => error);
-        expect(thrownError).to.be.instanceOf(MyError);
+        expect(thrownError).to.be.equal(driverError);
+      });
+
+      it('should not modify a rejection error when passed to callback', done => {
+        class MyError extends Error {}
+        const driverError = Object.freeze(new MyError());
+        const rejection = Promise.reject(driverError);
+        maybeCallback(rejection, error => {
+          try {
+            expect(error).to.exist;
+            expect(error).to.equal(driverError);
+            done();
+          } catch (assertionError) {
+            done(assertionError);
+          }
+        });
       });
     });
 

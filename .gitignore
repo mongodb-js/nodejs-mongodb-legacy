@@ -1,3 +1,4 @@
+node_modules/
 !mongodb-legacy.d.ts
 .vscode/
 *.tgz
