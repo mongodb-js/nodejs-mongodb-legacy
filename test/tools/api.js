@@ -40,7 +40,7 @@ const asyncApi = [
   { className: 'AggregationCursor', method: 'explain', returnType: 'Promise<Document>' },
 
   // Super class of Unordered/Ordered Bulk operations
-  // This is listed here as a reference for completeness, but it is tested manually
+  // This is listed here as a reference for completeness, but it is tested by the subclass overrides of execute
   // { className: 'BulkOperationBase', method: 'execute', returnType: 'Promise<BulkWriteResult>' },
   { className: 'OrderedBulkOperation', method: 'execute', returnType: 'Promise<BulkWriteResult>' },
   { className: 'UnorderedBulkOperation', method: 'execute', returnType: 'Promise<BulkWriteResult>' },

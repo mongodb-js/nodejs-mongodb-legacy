@@ -19,7 +19,7 @@ module.exports.makeLegacyMongoClient = function (baseClass) {
         const client = new this(url, options);
         return maybeCallback(client.connect(callback), callback);
       } catch (error) {
-        return maybeCallback(() => Promise.reject(error), callback);
+        return maybeCallback(Promise.reject(error), callback);
       }
     }
 
