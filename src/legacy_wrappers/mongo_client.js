@@ -15,15 +15,16 @@ module.exports.makeLegacyMongoClient = function (baseClass) {
           ? options
           : undefined;
       options = typeof options !== 'function' ? options : undefined;
+      const client = new this(url, options);
       return maybeCallback(
-        baseClass.connect(url, options).then(client => client[toLegacy]()),
+        client.connect(callback).then(() => client),
         callback
       );
     }
 
     connect(callback) {
       return maybeCallback(
-        super.connect().then(client => client[toLegacy]()),
+        super.connect().then(() => this),
         callback
       );
     }
@@ -59,13 +60,6 @@ module.exports.makeLegacyMongoClient = function (baseClass) {
       return super.withSession(options, session => executeWithSession(session[toLegacy]()));
     }
   }
-
-  Object.defineProperty(baseClass.prototype, toLegacy, {
-    enumerable: false,
-    value: function () {
-      return Object.setPrototypeOf(this, LegacyMongoClient.prototype);
-    }
-  });
 
   return LegacyMongoClient;
 };
