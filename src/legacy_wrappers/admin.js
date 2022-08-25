@@ -17,9 +17,9 @@ module.exports.makeLegacyAdmin = function (baseClass) {
           ? password
           : undefined;
       options =
-        typeof options !== 'function'
+        options != null && typeof options === 'object'
           ? options
-          : typeof password !== 'function'
+          : password != null && typeof password === 'object'
           ? password
           : undefined;
       return maybeCallback(super.addUser(username, password, options), callback);
