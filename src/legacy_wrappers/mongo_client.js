@@ -15,8 +15,12 @@ module.exports.makeLegacyMongoClient = function (baseClass) {
           ? options
           : undefined;
       options = typeof options !== 'function' ? options : undefined;
-      const client = new this(url, options);
-      return maybeCallback(client.connect(callback), callback);
+      try {
+        const client = new this(url, options);
+        return maybeCallback(client.connect(callback), callback);
+      } catch (error) {
+        return maybeCallback(() => Promise.reject(error), callback);
+      }
     }
 
     connect(callback) {
