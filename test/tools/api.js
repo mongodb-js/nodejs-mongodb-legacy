@@ -40,6 +40,7 @@ const asyncApi = [
   { className: 'AggregationCursor', method: 'explain', returnType: 'Promise<Document>' },
 
   // Super class of Unordered/Ordered Bulk operations
+  // This is listed here as a reference for completeness, but it is tested by the subclass overrides of execute
   // { className: 'BulkOperationBase', method: 'execute', returnType: 'Promise<BulkWriteResult>' },
   { className: 'OrderedBulkOperation', method: 'execute', returnType: 'Promise<BulkWriteResult>' },
   { className: 'UnorderedBulkOperation', method: 'execute', returnType: 'Promise<BulkWriteResult>' },
@@ -111,6 +112,11 @@ const asyncApi = [
 
   { className: 'MongoClient', method: 'close', returnType: 'Promise<void>' },
   { className: 'MongoClient', method: 'connect', returnType: 'Promise<this>' },
+  // Manually test the static version of connect
+  // This is listed here as a reference for completeness, but it is tested manually
+  // it is checked to exist in index.test.js
+  // its functionally tested in maybe_callback.test.js
+  // { className: 'MongoClient', method: 'static connect', returnType: 'Promise<this>' },
 ];
 
 const transformMethods = [
@@ -144,6 +150,8 @@ const transformMethods = [
 module.exports.asyncApi = asyncApi;
 module.exports.transformMethods = transformMethods;
 module.exports.asyncApiClasses = new Set(asyncApi.map(({className}) => className))
-module.exports.classesToMethods = new Map([...asyncApi, ...transformMethods].map((api, _, array) =>
-  [api.className, new Set(array.filter(v => v.className === api.className))]
-));
+module.exports.classNameToMethodList = new Map([...asyncApi, ...transformMethods].map((api, _, array) => {
+  const methodNames = Array.from(new Set(Array.from(array.filter(v => v.className === api.className), ({ method }) => method)))
+  methodNames.sort((a, b) => a.localeCompare(b))
+  return [api.className, methodNames]
+}));
