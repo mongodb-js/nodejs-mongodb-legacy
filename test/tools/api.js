@@ -114,6 +114,8 @@ const asyncApi = [
   { className: 'MongoClient', method: 'connect', returnType: 'Promise<this>' },
   // Manually test the static version of connect
   // This is listed here as a reference for completeness, but it is tested manually
+  // it is checked to exist in index.test.js
+  // its functionally tested in maybe_callback.test.js
   // { className: 'MongoClient', method: 'static connect', returnType: 'Promise<this>' },
 ];
 
