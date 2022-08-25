@@ -20,10 +20,7 @@ module.exports.makeLegacyMongoClient = function (baseClass) {
     }
 
     connect(callback) {
-      return maybeCallback(
-        super.connect().then(() => this),
-        callback
-      );
+      return maybeCallback(super.connect(), callback);
     }
 
     close(force, callback) {
