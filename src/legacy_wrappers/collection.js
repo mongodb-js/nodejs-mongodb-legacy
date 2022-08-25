@@ -183,18 +183,15 @@ module.exports.makeLegacyCollection = function (baseClass) {
       return maybeCallback(super.findOneAndDelete(filter, options), callback);
     }
 
-    findOneAndReplace(filter, options, callback) {
+    findOneAndReplace(filter, replacement, options, callback) {
       callback =
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
           ? options
-          : typeof filter === 'function'
-          ? filter
           : undefined;
       options = typeof options !== 'function' ? options : undefined;
-      filter = typeof filter !== 'function' ? filter : undefined;
-      return maybeCallback(super.findOneAndReplace(filter, options), callback);
+      return maybeCallback(super.findOneAndReplace(filter, replacement, options), callback);
     }
 
     findOneAndUpdate(filter, options, callback) {
