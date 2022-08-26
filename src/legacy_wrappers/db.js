@@ -34,6 +34,7 @@ module.exports.makeLegacyDb = function (baseClass) {
           : password != null && typeof password === 'object'
           ? password
           : undefined;
+      password = typeof password === 'string' ? password : undefined;
       return maybeCallback(super.addUser(username, password, options), callback);
     }
 

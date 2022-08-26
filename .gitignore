@@ -3,3 +3,6 @@ node_modules/
 .vscode/
 *.tgz
 etc/node-mongodb-native
+.nyc_output/
+coverage/
+.DS_Store

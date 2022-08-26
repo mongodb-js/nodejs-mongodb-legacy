@@ -7,7 +7,11 @@ const { asyncApiClasses, classNameToMethodList } = require('../tools/api');
 
 describe('index.js', () => {
   it('should export everything mongodb does', () => {
-    expect(mdbLegacy).to.have.all.keys(Object.keys(mdbDriver));
+    const mdbDriverExportKeys = Object.keys(mdbDriver);
+    expect(mdbLegacy).to.have.all.keys(mdbDriverExportKeys);
+    for (const exportKey of mdbDriverExportKeys.filter(k => !asyncApiClasses.has(k))) {
+      expect(mdbLegacy).to.have.property(exportKey).that.equals(mdbDriver[exportKey]);
+    }
   });
 
   for (const className of asyncApiClasses) {

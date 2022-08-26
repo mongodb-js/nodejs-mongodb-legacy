@@ -17,14 +17,17 @@ module.exports.makeLegacyMongoClient = function (baseClass) {
       options = typeof options !== 'function' ? options : undefined;
       try {
         const client = new this(url, options);
-        return maybeCallback(client.connect(callback), callback);
+        return client.connect(callback);
       } catch (error) {
         return maybeCallback(Promise.reject(error), callback);
       }
     }
 
     connect(callback) {
-      return maybeCallback(super.connect(), callback);
+      return maybeCallback(
+        super.connect().then(() => this),
+        callback
+      );
     }
 
     close(force, callback) {

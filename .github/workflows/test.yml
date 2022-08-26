@@ -1,4 +1,4 @@
-name: unit tests
+name: unit
 
 on:
   push:
@@ -7,15 +7,11 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [12.x, 14.x, 16.x, 18.x]
-        driver-version: [ 'current', 'latest' ]
-
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -23,8 +19,34 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm clean-install
-
-      - if: ${{ matrix.driver-version == 'latest' }}
-        run: npm install --no-save mongodb/node-mongodb-native#main
-
       - run: npm run check:test
+
+  test-latest-driver:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js LTS
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+      - run: npm clean-install
+      - run: npm install --no-save mongodb/node-mongodb-native#main
+      - run: npm run check:test
+
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js LTS
+      uses: actions/setup-node@v3
+      with:
+        node-version: lts/*
+    - run: npm clean-install
+    - run: npm run check:coverage
+    - name: code coverage results
+      if: success() || failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: code-coverage-report
+        path: coverage
+        retention-days: 1

@@ -1,0 +1,14 @@
+{
+    "include": [
+        "src/**/*"
+    ],
+    "reporter": [
+        "lcovonly",
+        "html",
+        "text-summary"
+    ],
+    "functions": 100,
+    "lines": 100,
+    "statements": 100,
+    "branches": 100
+}

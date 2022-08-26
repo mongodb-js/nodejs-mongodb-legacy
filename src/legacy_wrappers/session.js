@@ -27,7 +27,7 @@ module.exports.makeLegacyClientSession = function (baseClass) {
     }
 
     withTransaction(executeWithTransaction, options) {
-      super.withTransaction(session => executeWithTransaction(session[toLegacy]()), options);
+      return super.withTransaction(session => executeWithTransaction(session[toLegacy]()), options);
     }
   }
 
