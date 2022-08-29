@@ -78,9 +78,15 @@ describe('Maybe Callback', () => {
         if (callbackPosition === 2) {
           if (functionLength < 2) continue;
         }
-        it(`returns void and uses callback(_, result) in position ${
-          functionLength - callbackPosition
-        }`, async () => {
+
+        const callString = () => {
+          const args = Array.from({ length: functionLength }, (_, i) => i);
+          args[functionLength - callbackPosition] = 'callback';
+          args.length = functionLength - (callbackPosition - 1);
+          return args.join(', ');
+        };
+
+        it(`should support calling ${apiName}(${callString()}(undefined, result))`, async () => {
           const superPromise = Promise.resolve({ message: 'success!' });
           makeStub(superPromise);
 
@@ -109,9 +115,7 @@ describe('Maybe Callback', () => {
           expect(stubbedMethod).to.have.been.calledOnceWith(...argsPassedToDriver);
         });
 
-        it(`returns void and uses callback(error) in position ${
-          functionLength - callbackPosition
-        }`, async () => {
+        it(`should support calling ${apiName}(${callString()}(error))`, async () => {
           const superPromise = Promise.reject(new Error('error!'));
           makeStub(superPromise);
 
@@ -140,7 +144,11 @@ describe('Maybe Callback', () => {
         });
       }
 
-      it(`returns resolved promise`, async () => {
+      const callString = () => {
+        return Array.from({ length: functionLength - 1 }, (_, i) => i).join(', ');
+      };
+
+      it(`should support calling ${apiName}(${callString()}) returns resolved Promise`, async () => {
         // should have a message property to make equality checking consistent
         const superPromise = Promise.resolve({ message: 'success!' });
         makeStub(superPromise);
@@ -163,7 +171,7 @@ describe('Maybe Callback', () => {
         expect(stubbedMethod).to.have.been.calledOnceWithExactly(...args);
       });
 
-      it('returns rejected promise', async () => {
+      it(`should support calling ${apiName}(${callString()}) returns rejected Promise`, async () => {
         const superPromise = Promise.reject(new Error('error!'));
         makeStub(superPromise);
 
