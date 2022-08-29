@@ -26,7 +26,7 @@ const asyncApi = [
   // Super class of cursors, we do not directly override these but override them in the inherited classes
   ...commonCursorApis.flatMap(({ method, returnType }) => cursorClasses.map(cursorClass => ({ className: cursorClass, method, returnType }))),
 
-  { className: 'Admin', method: 'addUser', returnType: 'Promise<Document>', special: true },
+  { className: 'Admin', method: 'addUser', returnType: 'Promise<Document>', special: 'takes 4 arguments the callback can be positioned at the 3 locations and password need to be fixed to not pass incorrect type' },
   { className: 'Admin', method: 'buildInfo', returnType: 'Promise<Document>' },
   { className: 'Admin', method: 'command', returnType: 'Promise<Document>' },
   { className: 'Admin', method: 'listDatabases', returnType: 'Promise<ListDatabasesResult>' },
@@ -80,26 +80,26 @@ const asyncApi = [
   { className: 'Collection', method: 'mapReduce', returnType: 'Promise<Document | Document[]>' },
   { className: 'Collection', method: 'options', returnType: 'Promise<Document>' },
   { className: 'Collection', method: 'remove', returnType: 'Promise<DeleteResult> | void' },
-  { className: 'Collection', method: 'rename', returnType: 'Promise<Collection>', special: true },
+  { className: 'Collection', method: 'rename', returnType: 'Promise<Collection>', special: 'returns transformed collection' },
   { className: 'Collection', method: 'replaceOne', returnType: 'Promise<UpdateResult | Document>' },
   { className: 'Collection', method: 'stats', returnType: 'Promise<CollStats>' },
   { className: 'Collection', method: 'update', returnType: 'Promise<UpdateResult> | void' },
   { className: 'Collection', method: 'updateMany', returnType: 'Promise<UpdateResult | Document>' },
   { className: 'Collection', method: 'updateOne', returnType: 'Promise<UpdateResult>' },
-  { className: 'Collection', method: 'initializeOrderedBulkOp', returnType: 'OrderedBulkOperation', special: true },
-  { className: 'Collection', method: 'initializeUnorderedBulkOp', returnType: 'UnorderedBulkOperation', special: true },
+  { className: 'Collection', method: 'initializeOrderedBulkOp', returnType: 'OrderedBulkOperation', special: 'not a callback accepting API' },
+  { className: 'Collection', method: 'initializeUnorderedBulkOp', returnType: 'UnorderedBulkOperation', special: 'not a callback accepting API' },
 
-  { className: 'Db', method: 'addUser', returnType: 'Promise<Document>', special: true },
-  { className: 'Db', method: 'collections', returnType: 'Promise<Collection[]>', special: true },
+  { className: 'Db', method: 'addUser', returnType: 'Promise<Document>', special: 'see Admin.addUser' },
+  { className: 'Db', method: 'collections', returnType: 'Promise<Collection[]>', special: 'returns transformed collections' },
   { className: 'Db', method: 'command', returnType: 'Promise<Document>' },
-  { className: 'Db', method: 'createCollection', returnType: 'Promise<Collection<TSchema>>', special: true },
+  { className: 'Db', method: 'createCollection', returnType: 'Promise<Collection<TSchema>>', special: 'returns transformed collection' },
   { className: 'Db', method: 'createIndex', returnType: 'Promise<string>' },
   { className: 'Db', method: 'dropCollection', returnType: 'Promise<boolean>' },
   { className: 'Db', method: 'dropDatabase', returnType: 'Promise<boolean>' },
   { className: 'Db', method: 'indexInformation', returnType: 'Promise<Document>' },
   { className: 'Db', method: 'profilingLevel', returnType: 'Promise<string>' },
   { className: 'Db', method: 'removeUser', returnType: 'Promise<boolean>' },
-  { className: 'Db', method: 'renameCollection', returnType: 'Promise<Collection<TSchema>>', special: true },
+  { className: 'Db', method: 'renameCollection', returnType: 'Promise<Collection<TSchema>>', special: 'returns transformed collection' },
   { className: 'Db', method: 'setProfilingLevel', returnType: 'Promise<ProfilingLevel>' },
   { className: 'Db', method: 'stats', returnType: 'Promise<Document>' },
 
@@ -109,13 +109,13 @@ const asyncApi = [
   { className: 'GridFSBucket', method: 'delete', returnType: 'Promise<void>' },
   { className: 'GridFSBucket', method: 'drop', returnType: 'Promise<void>' },
   { className: 'GridFSBucket', method: 'rename', returnType: 'Promise<void>' },
-  { className: 'GridFSBucket', method: 'openUploadStream', returnType: 'GridFSBucketWriteStream', special: true },
-  { className: 'GridFSBucket', method: 'openUploadStreamWithId', returnType: 'GridFSBucketWriteStream', special: true },
+  { className: 'GridFSBucket', method: 'openUploadStream', returnType: 'GridFSBucketWriteStream', special: 'returns transformed GridFSBucketWriteStream' },
+  { className: 'GridFSBucket', method: 'openUploadStreamWithId', returnType: 'GridFSBucketWriteStream', special: 'returns transformed GridFSBucketWriteStream' },
 
   { className: 'GridFSBucketWriteStream', method: 'abort', returnType: 'Promise<void>' },
 
   { className: 'MongoClient', method: 'close', returnType: 'Promise<void>' },
-  { className: 'MongoClient', method: 'connect', returnType: 'Promise<this>', special: true },
+  { className: 'MongoClient', method: 'connect', returnType: 'Promise<this>', special: 'returns transformed client' },
   // Manually test the static version of connect
   // This is listed here as a reference for completeness, but it is tested manually
   // it is checked to exist in index.test.js
@@ -135,7 +135,7 @@ const transformMethods = [
   { className: 'Db', method: 'aggregate', returnType: 'AggregationCursor' },
   { className: 'Db', method: 'listCollections', returnType: 'ListCollectionsCursor' },
   { className: 'Db', method: 'watch', returnType: 'ChangeStream' },
-  { className: 'Db', method: 'collections', returnType: 'Promise<Collection[]>', special: true },
+  { className: 'Db', method: 'collections', returnType: 'Promise<Collection[]>', special: 'returns transformed collection' },
   { className: 'Db', method: 'renameCollection', returnType: 'Promise<Collection>' },
   { className: 'Db', method: 'createCollection', returnType: 'Promise<Collection>' },
 

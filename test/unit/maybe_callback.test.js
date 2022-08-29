@@ -37,11 +37,11 @@ const OVERRIDDEN_CLASSES_GETTER = new Map([
 
 function* generateTests() {
   for (const [className, getInstance] of OVERRIDDEN_CLASSES_GETTER) {
-    /** @type {{ className: string; method: string; returnType: string; special?: boolean; }[]} */
+    /** @type {{ className: string; method: string; returnType: string; special?: string; }[]} */
     let methods = classesToMethods.get(className);
     if (methods == null) methods = [];
     for (const { method, special, possibleCallbackPositions } of methods) {
-      if (special === true) continue;
+      if (typeof special === 'string' && special.length !== 0) continue;
       const apiName = `${className}.${method}`;
       const instance = getInstance();
       yield {
