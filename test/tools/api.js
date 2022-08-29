@@ -94,7 +94,7 @@ const asyncApi = [
   { className: 'Db', method: 'command', returnType: 'Promise<Document>' },
   { className: 'Db', method: 'createCollection', returnType: 'Promise<Collection<TSchema>>', special: 'returns transformed collection' },
   { className: 'Db', method: 'createIndex', returnType: 'Promise<string>' },
-  { className: 'Db', method: 'dropCollection', returnType: 'Promise<boolean>', possibleCallbackPositions: [1] },
+  { className: 'Db', method: 'dropCollection', returnType: 'Promise<boolean>' },
   { className: 'Db', method: 'dropDatabase', returnType: 'Promise<boolean>' },
   { className: 'Db', method: 'indexInformation', returnType: 'Promise<Document>' },
   { className: 'Db', method: 'profilingLevel', returnType: 'Promise<string>' },
