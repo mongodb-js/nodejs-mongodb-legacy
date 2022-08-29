@@ -6,7 +6,7 @@ Object.defineProperty(module.exports, '__esModule', { value: true });
 
 const commonCursorApis = [
   { className: 'AbstractCursor', method: 'close', returnType: 'Promise<void>' },
-  { className: 'AbstractCursor', method: 'forEach', returnType: 'Promise<void>' },
+  { className: 'AbstractCursor', method: 'forEach', returnType: 'Promise<void>', possibleCallbackPositions: [1] },
   { className: 'AbstractCursor', method: 'hasNext', returnType: 'Promise<boolean>' },
   { className: 'AbstractCursor', method: 'next', returnType: 'Promise<TSchema | null>' },
   { className: 'AbstractCursor', method: 'toArray', returnType: 'Promise<TSchema[]>' },
@@ -24,7 +24,7 @@ module.exports.cursorClasses = cursorClasses;
 
 const asyncApi = [
   // Super class of cursors, we do not directly override these but override them in the inherited classes
-  ...commonCursorApis.flatMap(({ method, returnType }) => cursorClasses.map(cursorClass => ({ className: cursorClass, method, returnType }))),
+  ...commonCursorApis.flatMap(({ method, returnType, possibleCallbackPositions }) => cursorClasses.map(cursorClass => ({ className: cursorClass, method, returnType, possibleCallbackPositions }))),
 
   { className: 'Admin', method: 'addUser', returnType: 'Promise<Document>', special: 'takes 4 arguments the callback can be positioned at the 3 locations and password need to be fixed to not pass incorrect type' },
   { className: 'Admin', method: 'buildInfo', returnType: 'Promise<Document>' },
@@ -94,7 +94,7 @@ const asyncApi = [
   { className: 'Db', method: 'command', returnType: 'Promise<Document>' },
   { className: 'Db', method: 'createCollection', returnType: 'Promise<Collection<TSchema>>', special: 'returns transformed collection' },
   { className: 'Db', method: 'createIndex', returnType: 'Promise<string>' },
-  { className: 'Db', method: 'dropCollection', returnType: 'Promise<boolean>' },
+  { className: 'Db', method: 'dropCollection', returnType: 'Promise<boolean>', possibleCallbackPositions: [1] },
   { className: 'Db', method: 'dropDatabase', returnType: 'Promise<boolean>' },
   { className: 'Db', method: 'indexInformation', returnType: 'Promise<Document>' },
   { className: 'Db', method: 'profilingLevel', returnType: 'Promise<string>' },
@@ -106,9 +106,9 @@ const asyncApi = [
   { className: 'FindCursor', method: 'count', returnType: 'Promise<number>' },
   { className: 'FindCursor', method: 'explain', returnType: 'Promise<Document>' },
 
-  { className: 'GridFSBucket', method: 'delete', returnType: 'Promise<void>' },
+  { className: 'GridFSBucket', method: 'delete', returnType: 'Promise<void>', possibleCallbackPositions: [1] },
   { className: 'GridFSBucket', method: 'drop', returnType: 'Promise<void>' },
-  { className: 'GridFSBucket', method: 'rename', returnType: 'Promise<void>' },
+  { className: 'GridFSBucket', method: 'rename', returnType: 'Promise<void>', possibleCallbackPositions: [1] },
   { className: 'GridFSBucket', method: 'openUploadStream', returnType: 'GridFSBucketWriteStream', special: 'returns transformed GridFSBucketWriteStream' },
   { className: 'GridFSBucket', method: 'openUploadStreamWithId', returnType: 'GridFSBucketWriteStream', special: 'returns transformed GridFSBucketWriteStream' },
 

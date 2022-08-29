@@ -64,6 +64,13 @@ module.exports.makeLegacyDb = function (baseClass) {
     }
 
     dropCollection(name, options, callback) {
+      callback =
+        typeof callback === 'function'
+          ? callback
+          : typeof options === 'function'
+          ? options
+          : undefined;
+      options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.dropCollection(name, options), callback);
     }
 

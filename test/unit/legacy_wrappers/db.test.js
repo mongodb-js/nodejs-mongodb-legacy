@@ -37,94 +37,88 @@ describe('legacy_wrappers/db.js', () => {
     expect(db.aggregate()).to.be.instanceOf(AggregationCursor);
   });
 
-  describe('addUser', () => {
-    describe('callbacks', () => {
-      it('should db.addUser(username, callback)', done => {
-        const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        db.addUser('name', (error, result) => {
-          try {
-            expect(error).to.be.undefined;
-            expect(result).to.deep.equal({ ok: 1 });
-            done();
-          } catch (assertionError) {
-            done(assertionError);
-          }
-        });
-        expect(stub).to.have.been.calledWithExactly('name', undefined, undefined);
-      });
-
-      it('should db.addUser(username, password, callback)', done => {
-        const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        db.addUser('name', 'pass', (error, result) => {
-          try {
-            expect(error).to.be.undefined;
-            expect(result).to.deep.equal({ ok: 1 });
-            done();
-          } catch (assertionError) {
-            done(assertionError);
-          }
-        });
-        expect(stub).to.have.been.calledWithExactly('name', 'pass', undefined);
-      });
-
-      it('should db.addUser(username, options, callback)', done => {
-        const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        db.addUser('name', { options: true }, (error, result) => {
-          try {
-            expect(error).to.be.undefined;
-            expect(result).to.deep.equal({ ok: 1 });
-            done();
-          } catch (assertionError) {
-            done(assertionError);
-          }
-        });
-        expect(stub).to.have.been.calledWithExactly('name', undefined, { options: true });
-      });
-
-      it('should db.addUser(username, password, options, callback)', done => {
-        const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        db.addUser('name', 'pass', { options: true }, (error, result) => {
-          try {
-            expect(error).to.be.undefined;
-            expect(result).to.deep.equal({ ok: 1 });
-            done();
-          } catch (assertionError) {
-            done(assertionError);
-          }
-        });
-        expect(stub).to.have.been.calledWithExactly('name', 'pass', { options: true });
-      });
+  it('should support db.addUser(username, callback)', done => {
+    const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
+    db.addUser('name', (error, result) => {
+      try {
+        expect(error).to.be.undefined;
+        expect(result).to.deep.equal({ ok: 1 });
+        done();
+      } catch (assertionError) {
+        done(assertionError);
+      }
     });
+    expect(stub).to.have.been.calledWithExactly('name', undefined, undefined);
+  });
 
-    describe('promises', () => {
-      it('should db.addUser(username)', async () => {
-        const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        const result = await db.addUser('name');
+  it('should support db.addUser(username, password, callback)', done => {
+    const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
+    db.addUser('name', 'pass', (error, result) => {
+      try {
+        expect(error).to.be.undefined;
         expect(result).to.deep.equal({ ok: 1 });
-        expect(stub).to.have.been.calledWithExactly('name', undefined, undefined);
-      });
-
-      it('should db.addUser(username, password)', async () => {
-        const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        const result = await db.addUser('name', 'pass');
-        expect(result).to.deep.equal({ ok: 1 });
-        expect(stub).to.have.been.calledWithExactly('name', 'pass', undefined);
-      });
-
-      it('should db.addUser(username, options)', async () => {
-        const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        const result = await db.addUser('name', { options: true });
-        expect(result).to.deep.equal({ ok: 1 });
-        expect(stub).to.have.been.calledWithExactly('name', undefined, { options: true });
-      });
-
-      it('should db.addUser(username, password, options)', async () => {
-        const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        const result = await db.addUser('name', 'pass', { options: true });
-        expect(result).to.deep.equal({ ok: 1 });
-        expect(stub).to.have.been.calledWithExactly('name', 'pass', { options: true });
-      });
+        done();
+      } catch (assertionError) {
+        done(assertionError);
+      }
     });
+    expect(stub).to.have.been.calledWithExactly('name', 'pass', undefined);
+  });
+
+  it('should support db.addUser(username, options, callback)', done => {
+    const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
+    db.addUser('name', { options: true }, (error, result) => {
+      try {
+        expect(error).to.be.undefined;
+        expect(result).to.deep.equal({ ok: 1 });
+        done();
+      } catch (assertionError) {
+        done(assertionError);
+      }
+    });
+    expect(stub).to.have.been.calledWithExactly('name', undefined, { options: true });
+  });
+
+  it('should support db.addUser(username, password, options, callback)', done => {
+    const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
+    db.addUser('name', 'pass', { options: true }, (error, result) => {
+      try {
+        expect(error).to.be.undefined;
+        expect(result).to.deep.equal({ ok: 1 });
+        done();
+      } catch (assertionError) {
+        done(assertionError);
+      }
+    });
+    expect(stub).to.have.been.calledWithExactly('name', 'pass', { options: true });
+  });
+
+  it('should support db.addUser(username)', async () => {
+    const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
+    const result = await db.addUser('name');
+    expect(result).to.deep.equal({ ok: 1 });
+    expect(stub).to.have.been.calledWithExactly('name', undefined, undefined);
+  });
+
+  it('should support db.addUser(username, password)', async () => {
+    const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
+    const result = await db.addUser('name', 'pass');
+    expect(result).to.deep.equal({ ok: 1 });
+    expect(stub).to.have.been.calledWithExactly('name', 'pass', undefined);
+  });
+
+  it('should support db.addUser(username, options)', async () => {
+    const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
+    const result = await db.addUser('name', { options: true });
+    expect(result).to.deep.equal({ ok: 1 });
+    expect(stub).to.have.been.calledWithExactly('name', undefined, { options: true });
+  });
+
+  it('should support db.addUser(username, password, options)', async () => {
+    const stub = sinon.stub(Db.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
+    const result = await db.addUser('name', 'pass', { options: true });
+    expect(result).to.deep.equal({ ok: 1 });
+    expect(stub).to.have.been.calledWithExactly('name', 'pass', { options: true });
   });
 
   it('should support renameCollection(oldName, newName)', async () => {

@@ -10,7 +10,9 @@ describe('index.js', () => {
     const mdbDriverExportKeys = Object.keys(mdbDriver);
     expect(mdbLegacy).to.have.all.keys(mdbDriverExportKeys);
     for (const exportKey of mdbDriverExportKeys.filter(k => !asyncApiClasses.has(k))) {
-      expect(mdbLegacy).to.have.property(exportKey).that.equals(mdbDriver[exportKey]);
+      expect(mdbLegacy, `expected mongodb legacy not to override export ${exportKey}`)
+        .to.have.property(exportKey)
+        .that.equals(mdbDriver[exportKey]);
     }
   });
 

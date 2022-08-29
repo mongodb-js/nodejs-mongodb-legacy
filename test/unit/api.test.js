@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use strict';
 
 const sinon = require('sinon');
@@ -78,12 +77,6 @@ describe('Maybe Callback', () => {
         : [1, 2]) {
         if (callbackPosition === 2) {
           if (functionLength < 2) continue;
-          if (
-            apiName.includes('forEach') ||
-            ['GridFSBucket.delete', 'GridFSBucket.rename', 'Db.dropCollection'].includes(apiName)
-          ) {
-            continue;
-          }
         }
         it(`returns void and uses callback(_, result) in position ${
           functionLength - callbackPosition
