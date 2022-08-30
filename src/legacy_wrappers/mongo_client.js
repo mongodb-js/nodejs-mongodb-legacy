@@ -7,6 +7,18 @@ Object.defineProperty(module.exports, '__esModule', { value: true });
 
 module.exports.makeLegacyMongoClient = function (baseClass) {
   class LegacyMongoClient extends baseClass {
+    // constructor adds client metadata before constructing final client
+    constructor(connectionString, options) {
+      options = { ...options };
+      if (options.driverInfo != null && typeof options.driverInfo.name === 'string') {
+        options.driverInfo.name += '|mongodb-legacy';
+      } else {
+        options.driverInfo = { name: 'mongodb-legacy' };
+      }
+
+      super(connectionString, options);
+    }
+
     static connect(url, options, callback) {
       callback =
         typeof callback === 'function'
