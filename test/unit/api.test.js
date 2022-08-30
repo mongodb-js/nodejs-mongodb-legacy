@@ -8,6 +8,7 @@ const mongodbLegacy = require('../..');
 const { MongoDBNamespace } = require('mongodb/lib/utils');
 const { asyncApi } = require('../tools/api');
 
+// A map of class names to their list of method details
 const classesToMethods = new Map(
   asyncApi.map((api, _, array) => [
     api.className,
@@ -15,12 +16,14 @@ const classesToMethods = new Map(
   ])
 );
 
+// Dummy data to help with testing
 const iLoveJs = 'mongodb://iLoveJavascript';
 const client = new mongodbLegacy.MongoClient(iLoveJs);
 const db = new mongodbLegacy.Db(client, 'animals');
 const collection = new mongodbLegacy.Collection(db, 'pets');
 const namespace = MongoDBNamespace.fromString('animals.pets');
 
+// A map to helpers that can create instances of the overridden classes for testing
 const OVERRIDDEN_CLASSES_GETTER = new Map([
   ['Admin', () => new mongodbLegacy.Admin(db)],
   ['FindCursor', () => new mongodbLegacy.FindCursor(client, namespace)],
@@ -36,11 +39,19 @@ const OVERRIDDEN_CLASSES_GETTER = new Map([
 
 function* generateTests() {
   for (const [className, getInstance] of OVERRIDDEN_CLASSES_GETTER) {
+    // For each of the overridden classes listed above
     /** @type {{ className: string; method: string; returnType: string; special?: string; }[]} */
     let methods = classesToMethods.get(className);
     if (methods == null) methods = [];
+
     for (const { method, special, possibleCallbackPositions } of methods) {
-      if (typeof special === 'string' && special.length !== 0) continue;
+      // for each of the methods on the overridden class
+      if (typeof special === 'string' && special.length !== 0) {
+        // If there is a special handling reason this method should be manually tested elsewhere
+        continue;
+      }
+
+      // Make the readable API name and construct an instance for testing
       const apiName = `${className}.${method}`;
       const instance = getInstance();
       yield {
@@ -71,22 +82,24 @@ describe('Maybe Callback', () => {
   } of generateTests()) {
     const functionLength = instance[method].length;
 
-    context(`${apiName}()`, () => {
-      for (const callbackPosition of possibleCallbackPositions != null
-        ? possibleCallbackPositions
-        : [1, 2]) {
-        if (callbackPosition === 2) {
-          if (functionLength < 2) continue;
-        }
+    describe(`${apiName}()`, () => {
+      // Use the callback positions manually defined, or use a default of [1] / [1,2] depending on function length
+      const callbackPositions =
+        possibleCallbackPositions != null
+          ? possibleCallbackPositions
+          : functionLength < 2
+          ? [1]
+          : [1, 2];
 
-        const callString = () => {
-          const args = Array.from({ length: functionLength }, (_, i) => i);
-          args[functionLength - callbackPosition] = 'callback';
-          args.length = functionLength - (callbackPosition - 1);
-          return args.join(', ');
-        };
+      for (const callbackPosition of callbackPositions) {
+        // Make an array that is the same length as the function under test
+        const args = Array.from({ length: functionLength }, (_, i) => i);
+        // Place the callback at the position we want to see it in
+        args[functionLength - callbackPosition] = 'callback';
+        // truncate the array
+        args.length = functionLength - (callbackPosition - 1);
 
-        it(`should support calling ${apiName}(${callString()}(undefined, result))`, async () => {
+        it(`should support calling ${apiName}(${args.join(', ')}(undefined, result))`, async () => {
           const superPromise = Promise.resolve({ message: 'success!' });
           makeStub(superPromise);
 
@@ -94,9 +107,7 @@ describe('Maybe Callback', () => {
 
           const callback = sinon.spy();
 
-          const args = Array.from({ length: functionLength }, (_, i) => i);
           args[functionLength - callbackPosition] = callback;
-          args.length = functionLength - (callbackPosition - 1);
           const actualReturnValue = instance[method](...args);
 
           expect(actualReturnValue).to.be.undefined;
@@ -115,7 +126,7 @@ describe('Maybe Callback', () => {
           expect(stubbedMethod).to.have.been.calledOnceWith(...argsPassedToDriver);
         });
 
-        it(`should support calling ${apiName}(${callString()}(error))`, async () => {
+        it(`should support calling ${apiName}(${args.join(', ')}(error))`, async () => {
           const superPromise = Promise.reject(new Error('error!'));
           makeStub(superPromise);
 
@@ -123,9 +134,7 @@ describe('Maybe Callback', () => {
 
           const callback = sinon.spy();
 
-          const args = Array.from({ length: functionLength }, (_, i) => i);
           args[functionLength - callbackPosition] = callback;
-          args.length = functionLength - (callbackPosition - 1);
           const actualReturnValue = instance[method](...args);
 
           expect(actualReturnValue).to.be.undefined;
@@ -144,18 +153,16 @@ describe('Maybe Callback', () => {
         });
       }
 
-      const callString = () => {
-        return Array.from({ length: functionLength - 1 }, (_, i) => i).join(', ');
-      };
+      const args = Array.from({ length: functionLength - 1 }, (_, i) => i);
+      const argsString = args.join(', ');
 
-      it(`should support calling ${apiName}(${callString()}) returns resolved Promise`, async () => {
+      it(`should support calling ${apiName}(${argsString}) returns resolved Promise`, async () => {
         // should have a message property to make equality checking consistent
         const superPromise = Promise.resolve({ message: 'success!' });
         makeStub(superPromise);
 
         expect(instance).to.have.property(method).that.is.a('function');
 
-        const args = Array.from({ length: functionLength - 1 }, (_, i) => i);
         const actualReturnValue = instance[method](...args);
 
         // should return the same promise the driver returns
@@ -171,13 +178,12 @@ describe('Maybe Callback', () => {
         expect(stubbedMethod).to.have.been.calledOnceWithExactly(...args);
       });
 
-      it(`should support calling ${apiName}(${callString()}) returns rejected Promise`, async () => {
+      it(`should support calling ${apiName}(${argsString}) returns rejected Promise`, async () => {
         const superPromise = Promise.reject(new Error('error!'));
         makeStub(superPromise);
 
         expect(instance).to.have.property(method).that.is.a('function');
 
-        const args = Array.from({ length: functionLength - 1 }, (_, i) => i);
         const actualReturnValue = instance[method](...args);
 
         // should return the same promise the driver returns
