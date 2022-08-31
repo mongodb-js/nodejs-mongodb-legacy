@@ -1,6 +1,6 @@
 'use strict';
 
-const { MongoClient } = require('../../../src/index');
+const { MongoClient: LegacyMongoClient } = require('../../../src/index');
 const sinon = require('sinon');
 const { expect } = require('chai');
 const { BulkOperationBase } = require('mongodb/lib/bulk/common');
@@ -11,7 +11,7 @@ describe('legacy_wrappers/bulk.js', () => {
   let stub;
 
   beforeEach(async function () {
-    client = new MongoClient('mongodb://iLoveJs');
+    client = new LegacyMongoClient('mongodb://iLoveJs');
     // This is the minimal topology shim needed to get bulk apis to work
     client.topology = {
       s: { options: {} },

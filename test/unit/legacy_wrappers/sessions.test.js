@@ -1,6 +1,9 @@
 'use strict';
 
-const { MongoClient, ClientSession: LegacyClientSession } = require('../../../src/index');
+const {
+  MongoClient: LegacyMongoClient,
+  ClientSession: LegacyClientSession
+} = require('../../../src/index');
 const { ClientSession: DriverClientSession } = require('mongodb');
 const { expect } = require('chai');
 const sinon = require('sinon');
@@ -9,7 +12,7 @@ describe('legacy_wrappers/session.js', () => {
   let session;
   let client;
   beforeEach(async function () {
-    client = new MongoClient('mongodb://iLoveJs');
+    client = new LegacyMongoClient('mongodb://iLoveJs');
     session = client.startSession();
   });
 

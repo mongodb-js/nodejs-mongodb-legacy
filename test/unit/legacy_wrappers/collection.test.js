@@ -1,12 +1,12 @@
 'use strict';
 
 const {
-  MongoClient,
-  FindCursor,
-  ListIndexesCursor,
-  ChangeStream,
-  AggregationCursor,
-  Collection
+  MongoClient: LegacyMongoClient,
+  FindCursor: LegacyFindCursor,
+  ListIndexesCursor: LegacyListIndexesCursor,
+  ChangeStream: LegacyChangeStream,
+  AggregationCursor: LegacyAggregationCursor,
+  Collection: LegacyCollection
 } = require('../../../src/index');
 const mongodbDriver = require('mongodb');
 const sinon = require('sinon');
@@ -18,7 +18,7 @@ describe('legacy_wrappers/collection.js', () => {
   let client;
   let collection;
   beforeEach(async function () {
-    client = new MongoClient(iLoveJs);
+    client = new LegacyMongoClient(iLoveJs);
     collection = client.db().collection('test');
   });
 
@@ -28,19 +28,19 @@ describe('legacy_wrappers/collection.js', () => {
   });
 
   it('should return legacy listIndexes cursor', () => {
-    expect(collection.listIndexes()).to.be.instanceOf(ListIndexesCursor);
+    expect(collection.listIndexes()).to.be.instanceOf(LegacyListIndexesCursor);
   });
 
   it('should return legacy ChangeStream', () => {
-    expect(collection.watch()).to.be.instanceOf(ChangeStream);
+    expect(collection.watch()).to.be.instanceOf(LegacyChangeStream);
   });
 
   it('should return legacy ChangeStream', () => {
-    expect(collection.aggregate()).to.be.instanceOf(AggregationCursor);
+    expect(collection.aggregate()).to.be.instanceOf(LegacyAggregationCursor);
   });
 
   it('should return legacy FindCursor', () => {
-    expect(collection.find()).to.be.instanceOf(FindCursor);
+    expect(collection.find()).to.be.instanceOf(LegacyFindCursor);
   });
 
   it('should support rename(newName)', async () => {
@@ -48,7 +48,7 @@ describe('legacy_wrappers/collection.js', () => {
       .stub(mongodbDriver.Collection.prototype, 'rename')
       .returns(Promise.resolve(new mongodbDriver.Collection(client.db(), 'test')));
     const result = await collection.rename('newName');
-    expect(result).to.be.instanceOf(Collection);
+    expect(result).to.be.instanceOf(LegacyCollection);
     expect(stub).to.be.calledWithExactly('newName', undefined);
   });
 
@@ -57,7 +57,7 @@ describe('legacy_wrappers/collection.js', () => {
       .stub(mongodbDriver.Collection.prototype, 'rename')
       .returns(Promise.resolve(new mongodbDriver.Collection(client.db(), 'test')));
     const result = await collection.rename('newName', { options: true });
-    expect(result).to.be.instanceOf(Collection);
+    expect(result).to.be.instanceOf(LegacyCollection);
     expect(stub).to.be.calledWithExactly('newName', { options: true });
   });
 
@@ -68,7 +68,7 @@ describe('legacy_wrappers/collection.js', () => {
     collection.rename('newName', (error, result) => {
       try {
         expect(error).to.be.undefined;
-        expect(result).to.be.instanceOf(Collection);
+        expect(result).to.be.instanceOf(LegacyCollection);
         done();
       } catch (assertionError) {
         done(assertionError);
@@ -84,7 +84,7 @@ describe('legacy_wrappers/collection.js', () => {
     collection.rename('newName', { options: true }, (error, result) => {
       try {
         expect(error).to.be.undefined;
-        expect(result).to.be.instanceOf(Collection);
+        expect(result).to.be.instanceOf(LegacyCollection);
         done();
       } catch (assertionError) {
         done(assertionError);

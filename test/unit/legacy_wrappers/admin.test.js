@@ -1,6 +1,6 @@
 'use strict';
 
-const { MongoClient } = require('../../../src/index');
+const { MongoClient: LegacyMongoClient } = require('../../../src/index');
 const { Admin } = require('mongodb');
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -9,7 +9,7 @@ describe('legacy_wrappers/admin.js', () => {
   let admin;
   let client;
   beforeEach(async function () {
-    client = new MongoClient('mongodb://iLoveJs');
+    client = new LegacyMongoClient('mongodb://iLoveJs');
     admin = client.db().admin();
   });
 

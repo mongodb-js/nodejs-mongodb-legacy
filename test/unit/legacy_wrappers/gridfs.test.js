@@ -1,10 +1,10 @@
 'use strict';
 
 const {
-  MongoClient,
-  GridFSBucket,
-  FindCursor,
-  GridFSBucketWriteStream
+  MongoClient: LegacyMongoClient,
+  GridFSBucket: LegacyGridFSBucket,
+  FindCursor: LegacyFindCursor,
+  GridFSBucketWriteStream: LegacyGridFSBucketWriteStream
 } = require('../../../src/index');
 const mongodbDriver = require('mongodb');
 const sinon = require('sinon');
@@ -17,8 +17,8 @@ describe('legacy_wrappers/gridfs.js', () => {
   let client;
   let bucket;
   beforeEach(async function () {
-    client = new MongoClient(iLoveJs);
-    bucket = new GridFSBucket(client.db());
+    client = new LegacyMongoClient(iLoveJs);
+    bucket = new LegacyGridFSBucket(client.db());
   });
 
   afterEach(async function () {
@@ -29,21 +29,23 @@ describe('legacy_wrappers/gridfs.js', () => {
   it("should convert bucket.find's FindCursor to legacy version", () => {
     const spy = sinon.spy(mongodbDriver.GridFSBucket.prototype, 'find');
     const find = bucket.find({ filter: 1 }, { options: true });
-    expect(find).to.be.instanceOf(FindCursor);
+    expect(find).to.be.instanceOf(LegacyFindCursor);
     expect(spy).to.be.calledWithExactly({ filter: 1 }, { options: true });
   });
 
   // We do not have an API that returns a bucket, users just use the constructor
   // however, it may be useful to have this exist for a quick way to fix inconsistent instances
   it('should define a toLegacy helper', () => {
-    expect(bucket[toLegacy]()).to.be.instanceOf(GridFSBucket);
+    expect(bucket[toLegacy]()).to.be.instanceOf(LegacyGridFSBucket);
   });
 
   it('should return legacy GridFSBucketWriteStream from openUploadStream', () => {
-    expect(bucket.openUploadStream('filename')).to.be.instanceOf(GridFSBucketWriteStream);
+    expect(bucket.openUploadStream('filename')).to.be.instanceOf(LegacyGridFSBucketWriteStream);
   });
   it('should return legacy GridFSBucketWriteStream from openUploadStreamWithId', () => {
-    expect(bucket.openUploadStreamWithId(0, 'filename')).to.be.instanceOf(GridFSBucketWriteStream);
+    expect(bucket.openUploadStreamWithId(0, 'filename')).to.be.instanceOf(
+      LegacyGridFSBucketWriteStream
+    );
   });
 
   it('should support GridFSBucketWriteStream.abort(callback)', done => {

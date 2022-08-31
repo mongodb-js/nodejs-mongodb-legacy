@@ -1,6 +1,10 @@
 'use strict';
 
-const { MongoClient, ChangeStream, ClientSession } = require('../../../src/index');
+const {
+  MongoClient: LegacyMongoClient,
+  ChangeStream: LegacyChangeStream,
+  ClientSession: LegacyClientSession
+} = require('../../../src/index');
 const mongodbDriver = require('mongodb');
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -10,7 +14,7 @@ const iLoveJs = 'mongodb://iLoveJavascript';
 describe('legacy_wrappers/mongo_client.js', () => {
   let client;
   beforeEach(async function () {
-    client = new MongoClient('mongodb://iLoveJs');
+    client = new LegacyMongoClient('mongodb://iLoveJs');
   });
 
   afterEach(async function () {
@@ -22,27 +26,27 @@ describe('legacy_wrappers/mongo_client.js', () => {
     sinon.stub(mongodbDriver.MongoClient.prototype, 'connect').returns(Promise.resolve(2));
     expect(client).to.have.property('connect').that.is.a('function');
     const actualReturnValue = client.connect();
-    expect(await actualReturnValue).to.be.instanceOf(MongoClient);
+    expect(await actualReturnValue).to.be.instanceOf(LegacyMongoClient);
   });
 
   it('calling static MongoClient.connect(url) returns promise', async () => {
     sinon.stub(mongodbDriver.MongoClient.prototype, 'connect').returns(Promise.resolve(2));
-    const actualReturnValue = MongoClient.connect(iLoveJs);
-    expect(await actualReturnValue).to.be.instanceOf(MongoClient);
+    const actualReturnValue = LegacyMongoClient.connect(iLoveJs);
+    expect(await actualReturnValue).to.be.instanceOf(LegacyMongoClient);
   });
 
   it('calling static MongoClient.connect(url, options) returns promise', async () => {
     sinon.stub(mongodbDriver.MongoClient.prototype, 'connect').returns(Promise.resolve(2));
-    const actualReturnValue = MongoClient.connect(iLoveJs, { appName: 'my app!' });
-    expect(await actualReturnValue).to.be.instanceOf(MongoClient);
+    const actualReturnValue = LegacyMongoClient.connect(iLoveJs, { appName: 'my app!' });
+    expect(await actualReturnValue).to.be.instanceOf(LegacyMongoClient);
   });
 
   it('calling static MongoClient.connect(url, callback)', done => {
     sinon.stub(mongodbDriver.MongoClient.prototype, 'connect').returns(Promise.resolve(2));
-    MongoClient.connect(iLoveJs, (error, result) => {
+    LegacyMongoClient.connect(iLoveJs, (error, result) => {
       try {
         expect(error).to.be.undefined;
-        expect(result).to.be.instanceOf(MongoClient);
+        expect(result).to.be.instanceOf(LegacyMongoClient);
         done();
       } catch (assertionError) {
         done(assertionError);
@@ -53,10 +57,10 @@ describe('legacy_wrappers/mongo_client.js', () => {
   it('calling static MongoClient.connect(url, options, callback)', done => {
     const returnValue = Promise.resolve(new mongodbDriver.MongoClient(iLoveJs));
     sinon.stub(mongodbDriver.MongoClient.prototype, 'connect').returns(returnValue);
-    MongoClient.connect(iLoveJs, { appName: 'my app!' }, (error, result) => {
+    LegacyMongoClient.connect(iLoveJs, { appName: 'my app!' }, (error, result) => {
       try {
         expect(error).to.be.undefined;
-        expect(result).to.be.instanceOf(MongoClient);
+        expect(result).to.be.instanceOf(LegacyMongoClient);
         done();
       } catch (assertionError) {
         done(assertionError);
@@ -67,27 +71,27 @@ describe('legacy_wrappers/mongo_client.js', () => {
   it('errors thrown from MongoClient constructor are passed to the promise for static connect', async () => {
     const makeClientIncorrectly = () => {
       try {
-        return new MongoClient();
+        return new LegacyMongoClient();
       } catch (error) {
         return error;
       }
     };
     const result = makeClientIncorrectly();
     expect(result).to.be.instanceOf(Error); // make sure constructor still throws
-    const actualReturnValue = MongoClient.connect().catch(error => error);
+    const actualReturnValue = LegacyMongoClient.connect().catch(error => error);
     const errorFromConnect = await actualReturnValue;
     expect(errorFromConnect).to.be.instanceOf(Error);
     expect(errorFromConnect.name).to.deep.equal(makeClientIncorrectly().name);
   });
 
   it('should convert change stream to legacy version', () => {
-    expect(client.watch()).to.be.instanceOf(ChangeStream);
+    expect(client.watch()).to.be.instanceOf(LegacyChangeStream);
   });
 
   it('should convert session to legacy version inside withSession', async () => {
     const spy = sinon.spy(mongodbDriver.MongoClient.prototype, 'withSession');
     const execCallback = async session => {
-      expect(session).to.be.instanceOf(ClientSession);
+      expect(session).to.be.instanceOf(LegacyClientSession);
     };
 
     await client.withSession(execCallback);

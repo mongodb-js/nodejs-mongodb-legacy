@@ -1,11 +1,11 @@
 'use strict';
 
 const {
-  MongoClient,
-  ListCollectionsCursor,
-  ChangeStream,
-  AggregationCursor,
-  Collection
+  MongoClient: LegacyMongoClient,
+  ListCollectionsCursor: LegacyListCollectionsCursor,
+  ChangeStream: LegacyChangeStream,
+  AggregationCursor: LegacyAggregationCursor,
+  Collection: LegacyCollection
 } = require('../../../src/index');
 const mongodbDriver = require('mongodb');
 const { Db } = require('mongodb');
@@ -16,7 +16,7 @@ describe('legacy_wrappers/db.js', () => {
   let db;
   let client;
   beforeEach(async function () {
-    client = new MongoClient('mongodb://iLoveJs');
+    client = new LegacyMongoClient('mongodb://iLoveJs');
     db = client.db();
   });
 
@@ -26,15 +26,15 @@ describe('legacy_wrappers/db.js', () => {
   });
 
   it('should return legacy listCollections cursor', () => {
-    expect(db.listCollections()).to.be.instanceOf(ListCollectionsCursor);
+    expect(db.listCollections()).to.be.instanceOf(LegacyListCollectionsCursor);
   });
 
   it('should return legacy ChangeStream', () => {
-    expect(db.watch()).to.be.instanceOf(ChangeStream);
+    expect(db.watch()).to.be.instanceOf(LegacyChangeStream);
   });
 
   it('should return legacy AggregationCursor', () => {
-    expect(db.aggregate()).to.be.instanceOf(AggregationCursor);
+    expect(db.aggregate()).to.be.instanceOf(LegacyAggregationCursor);
   });
 
   it('should support db.addUser(username, callback)', done => {
@@ -175,7 +175,7 @@ describe('legacy_wrappers/db.js', () => {
     const returnValue = Promise.resolve(new mongodbDriver.Collection(db, 'a'));
     const stub = sinon.stub(mongodbDriver.Db.prototype, 'createCollection').returns(returnValue);
     const actualReturnValue = db.createCollection('a');
-    expect(await actualReturnValue).to.be.instanceOf(Collection);
+    expect(await actualReturnValue).to.be.instanceOf(LegacyCollection);
     expect(stub).to.be.calledWithExactly('a', undefined);
   });
 
@@ -183,7 +183,7 @@ describe('legacy_wrappers/db.js', () => {
     const returnValue = Promise.resolve(new mongodbDriver.Collection(db, 'a'));
     const stub = sinon.stub(mongodbDriver.Db.prototype, 'createCollection').returns(returnValue);
     const actualReturnValue = db.createCollection('a', { options: true });
-    expect(await actualReturnValue).to.be.instanceOf(Collection);
+    expect(await actualReturnValue).to.be.instanceOf(LegacyCollection);
     expect(stub).to.be.calledWithExactly('a', { options: true });
   });
 
@@ -193,7 +193,7 @@ describe('legacy_wrappers/db.js', () => {
     db.createCollection('a', (error, collection) => {
       try {
         expect(error).to.be.undefined;
-        expect(collection).to.be.instanceOf(Collection);
+        expect(collection).to.be.instanceOf(LegacyCollection);
         done();
       } catch (assertionError) {
         done(assertionError);
@@ -208,7 +208,7 @@ describe('legacy_wrappers/db.js', () => {
     db.createCollection('a', { options: true }, (error, collection) => {
       try {
         expect(error).to.be.undefined;
-        expect(collection).to.be.instanceOf(Collection);
+        expect(collection).to.be.instanceOf(LegacyCollection);
         done();
       } catch (assertionError) {
         done(assertionError);
@@ -227,7 +227,7 @@ describe('legacy_wrappers/db.js', () => {
     expect(stub).to.be.calledWithExactly(undefined);
     const collections = await actualReturnValue;
     expect(collections).to.be.an('array');
-    expect(collections.every(coll => coll instanceof Collection)).to.be.true;
+    expect(collections.every(coll => coll instanceof LegacyCollection)).to.be.true;
   });
 
   it('support db.collections(options)', async () => {
@@ -240,7 +240,7 @@ describe('legacy_wrappers/db.js', () => {
     expect(stub).to.be.calledWithExactly({ options: true });
     const collections = await actualReturnValue;
     expect(collections).to.be.an('array');
-    expect(collections.every(coll => coll instanceof Collection)).to.be.true;
+    expect(collections.every(coll => coll instanceof LegacyCollection)).to.be.true;
   });
 
   it('support db.collections(callback)', done => {
@@ -253,7 +253,7 @@ describe('legacy_wrappers/db.js', () => {
       try {
         expect(error).to.be.undefined;
         expect(collections).to.be.an('array');
-        expect(collections.every(coll => coll instanceof Collection)).to.be.true;
+        expect(collections.every(coll => coll instanceof LegacyCollection)).to.be.true;
         done();
       } catch (assertionError) {
         done(assertionError);
@@ -273,7 +273,7 @@ describe('legacy_wrappers/db.js', () => {
       try {
         expect(error).to.be.undefined;
         expect(collections).to.be.an('array');
-        expect(collections.every(coll => coll instanceof Collection)).to.be.true;
+        expect(collections.every(coll => coll instanceof LegacyCollection)).to.be.true;
         done();
       } catch (assertionError) {
         done(assertionError);
