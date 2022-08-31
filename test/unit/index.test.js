@@ -4,6 +4,15 @@ const { expect } = require('chai');
 const mdbLegacy = require('../..');
 const mdbDriver = require('mongodb');
 const { asyncApiClasses, classNameToMethodList } = require('../tools/api');
+const { byStrings } = require('../tools/utils');
+
+const classNameToMethodNameList = new Map(
+  Array.from(classNameToMethodList.entries()).map(([className, methods]) => {
+    const methodNames = methods.map(({ method }) => method);
+    methodNames.sort(byStrings);
+    return [className, methodNames];
+  })
+);
 
 describe('index.js', () => {
   it('should export everything mongodb does', () => {
@@ -24,7 +33,7 @@ describe('index.js', () => {
   }
 
   describe('subclass for legacy callback support', () => {
-    for (const [className, methodNames] of classNameToMethodList) {
+    for (const [className, methodNames] of classNameToMethodNameList) {
       describe(`class ${className}`, () => {
         for (const method of methodNames) {
           it(`should define override ${method}()`, () => {
@@ -38,7 +47,7 @@ describe('index.js', () => {
           let names = Object.getOwnPropertyNames(mdbLegacy[className].prototype).filter(
             name => name !== 'constructor'
           );
-          names.sort((a, b) => String.prototype.localeCompare.call(a, b));
+          names.sort(byStrings);
           expect(names).to.be.deep.equal(methodNames);
         });
       });
