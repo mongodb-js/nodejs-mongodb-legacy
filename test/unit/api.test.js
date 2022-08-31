@@ -140,146 +140,161 @@ describe('wrapper API', () => {
           ? [1]
           : [1, 2];
 
-      for (const callbackPosition of callbackPositions) {
+      for (const argumentDecrement of callbackPositions) {
         // For each callback position, we construct an array of arguments that contains the callback
         // at the specified position.  We can then test various scenarios (success callback, success promise, error callback and error promise)
         // for that given overload.
 
         // Make an array that is the same length as the function under test
         const args = Array.from({ length: functionLength }, (_, i) => i);
+        const callbackPosition = functionLength - argumentDecrement;
         // Place the callback at the position we want to see it in
-        args[functionLength - callbackPosition] = 'callback';
+        args[callbackPosition] = 'callback';
         // truncate the array
-        args.length = functionLength - (callbackPosition - 1);
-
-        const successTest = async () => {
-          const superPromise = Promise.resolve({ message: 'success!' });
-          makeStub(superPromise);
-
-          expect(instance).to.have.property(method).that.is.a('function');
-
-          const callback = sinon.spy();
-
-          args[functionLength - callbackPosition] = callback;
-          const actualReturnValue = instance[method](...args);
-
-          expect(actualReturnValue).to.be.undefined;
-
-          const returnValue = await superPromise.catch(error => error);
-          expect(callback).to.have.been.calledOnce;
-          const expectedArgs = callback.args[0];
-          expect(expectedArgs).to.have.property('0', undefined);
-          expect(expectedArgs).to.have.nested.property('[1].message', returnValue.message);
-
-          const stubbedMethod = Object.getPrototypeOf(Object.getPrototypeOf(instance))[method];
-          const argsPassedToDriver = args.slice(
-            0,
-            args.findIndex(arg => arg === callback)
-          );
-          expect(stubbedMethod).to.have.been.calledOnceWith(...argsPassedToDriver);
-        };
-
-        const errorTest = async () => {
-          const superPromise = Promise.reject(new Error('error!'));
-          makeStub(superPromise);
-
-          expect(instance).to.have.property(method).that.is.a('function');
-
-          const callback = sinon.spy();
-
-          args[functionLength - callbackPosition] = callback;
-          const actualReturnValue = instance[method](...args);
-
-          expect(actualReturnValue).to.be.undefined;
-
-          const returnValue = await superPromise.catch(error => error);
-          expect(callback).to.have.been.calledOnce;
-          const expectedArgs = callback.args[0];
-          expect(expectedArgs).to.have.nested.property('[0].message', returnValue.message);
-
-          const stubbedMethod = Object.getPrototypeOf(Object.getPrototypeOf(instance))[method];
-          const argsPassedToDriver = args.slice(
-            0,
-            args.findIndex(arg => arg === callback)
-          );
-          expect(stubbedMethod).to.have.been.calledOnceWith(...argsPassedToDriver);
-        };
+        args.length = functionLength - (argumentDecrement - 1);
+        const argsPassedToDriver = args.slice(0, callbackPosition);
 
         resolveSuite.push(() =>
           describe(`and ${apiName} is called  with (${args.join(', ')})`, () => {
-            it(`should call the callback with (undefined, result)`, successTest);
+            let superPromise;
+            let actualReturnValue;
+            let callback;
+            let stubbedMethod;
+
+            before('setup success stub for callback case', function () {
+              superPromise = Promise.resolve({ message: 'success!' });
+              stubbedMethod = makeStub(superPromise);
+              callback = sinon.spy();
+              args[callbackPosition] = callback;
+              actualReturnValue = instance[method](...args);
+            });
+
+            beforeEach(async function () {
+              await superPromise.catch(error => error);
+            });
+
+            it('should return void', () => expect(actualReturnValue).to.be.undefined);
+
+            it('should call the callback with undefined error and successful result', () => {
+              expect(callback).to.have.been.calledOnce;
+              const expectedArgs = callback.args[0];
+              expect(expectedArgs).to.have.property('0', undefined);
+              expect(expectedArgs).to.have.nested.property('[1].message', 'success!');
+            });
+
+            it(`should pass only (${argsPassedToDriver.join(', ')}) to the driver api`, () => {
+              expect(stubbedMethod).to.have.been.calledOnceWith(...argsPassedToDriver);
+            });
           })
         );
 
         rejectsSuite.push(() =>
           describe(`and ${apiName} is called  with (${args.join(', ')})`, () => {
-            it(`should call the callback with (error)`, errorTest);
+            let superPromise;
+            let actualReturnValue;
+            let callback;
+            let stubbedMethod;
+
+            before('setup error stub for callback case', function () {
+              superPromise = Promise.reject(new Error('error!'));
+              stubbedMethod = makeStub(superPromise);
+              callback = sinon.spy();
+              args[callbackPosition] = callback;
+              actualReturnValue = instance[method](...args);
+            });
+
+            beforeEach(async function () {
+              await superPromise.catch(error => error);
+            });
+
+            it('should return void', () => expect(actualReturnValue).to.be.undefined);
+
+            it('should call the callback with error', () => {
+              expect(callback).to.have.been.calledOnce;
+              const expectedArgs = callback.args[0];
+              expect(expectedArgs).to.have.nested.property('[0].message', 'error!');
+            });
+
+            it(`should pass only (${argsPassedToDriver.join(', ')}) to the driver api`, () => {
+              expect(stubbedMethod).to.have.been.calledOnceWith(...argsPassedToDriver);
+            });
           })
         );
       }
 
       const args = Array.from({ length: functionLength - 1 }, (_, i) => i);
 
-      const successTest = async () => {
-        // should have a message property to make equality checking consistent
-        const superPromise = Promise.resolve({ message: 'success!' });
-        makeStub(superPromise);
-
-        expect(instance).to.have.property(method).that.is.a('function');
-
-        const actualReturnValue = instance[method](...args);
-
-        // should return the same promise the driver returns
-        expect(actualReturnValue).to.equal(superPromise);
-
-        // should have a message property to make equality checking consistent
-        await superPromise;
-        const result = await actualReturnValue.catch(error => error);
-
-        expect(result).to.have.property('message', 'success!');
-
-        const stubbedMethod = Object.getPrototypeOf(Object.getPrototypeOf(instance))[method];
-        expect(stubbedMethod).to.have.been.calledOnceWithExactly(...args);
-      };
-
-      const errorTest = async () => {
-        const superPromise = Promise.reject(new Error('error!'));
-        makeStub(superPromise);
-
-        expect(instance).to.have.property(method).that.is.a('function');
-
-        const actualReturnValue = instance[method](...args);
-
-        // should return the same promise the driver returns
-        expect(actualReturnValue).to.equal(superPromise);
-
-        // awaiting triggers the callback to be called
-        await superPromise.catch(error => error);
-        const result = await actualReturnValue.catch(error => error);
-
-        expect(result).to.have.property('message', 'error!');
-
-        const stubbedMethod = Object.getPrototypeOf(Object.getPrototypeOf(instance))[method];
-        expect(stubbedMethod).to.have.been.calledOnceWithExactly(...args);
-      };
-
       resolveSuite.push(() =>
         describe(`and ${apiName} is called  with (${args.join(', ')})`, () => {
-          it(`should return the same resolved promise`, successTest);
+          let superPromise;
+          let actualReturnValue;
+          let stubbedMethod;
+
+          before('setup success stub for promise case', function () {
+            superPromise = Promise.resolve({ message: 'success!' });
+            stubbedMethod = makeStub(superPromise);
+            actualReturnValue = instance[method](...args);
+          });
+
+          beforeEach(async function () {
+            await superPromise.catch(error => error);
+          });
+
+          it('should return the same promise the driver returns', () => {
+            expect(actualReturnValue).to.equal(superPromise);
+          });
+
+          it('should return a resolved promise', async () => {
+            const result = await actualReturnValue;
+            expect(result).to.have.property('message', 'success!');
+          });
+
+          it(`should pass only (${args.join(', ')}) to the driver api`, () => {
+            expect(stubbedMethod).to.have.been.calledOnceWithExactly(...args);
+          });
         })
       );
 
       rejectsSuite.push(() =>
         describe(`and ${apiName} is called  with (${args.join(', ')})`, () => {
-          it(`should return the same rejected promise`, errorTest);
+          let superPromise;
+          let actualReturnValue;
+          let stubbedMethod;
+
+          before('setup error stub for promise case', function () {
+            superPromise = Promise.reject(new Error('error!'));
+            stubbedMethod = makeStub(superPromise);
+            actualReturnValue = instance[method](...args);
+          });
+
+          beforeEach(async function () {
+            await superPromise.catch(error => error);
+          });
+
+          it('should return the same promise the driver returns', async () => {
+            expect(actualReturnValue).to.equal(superPromise);
+          });
+
+          it('should return the rejected promise', async () => {
+            const result = await actualReturnValue.catch(error => error);
+            expect(result).to.have.property('message', 'error!');
+          });
+
+          it(`should pass only (${args.join(', ')}) to the driver api`, () => {
+            expect(stubbedMethod).to.have.been.calledOnceWithExactly(...args);
+          });
         })
       );
 
       describe('when the driver api resolves', () => {
-        for (const makeSuite of resolveSuite) makeSuite();
+        for (const makeSuite of resolveSuite) {
+          makeSuite();
+        }
       });
       describe('when the driver api rejects', () => {
-        for (const makeSuite of rejectsSuite) makeSuite();
+        for (const makeSuite of rejectsSuite) {
+          makeSuite();
+        }
       });
     });
   }
