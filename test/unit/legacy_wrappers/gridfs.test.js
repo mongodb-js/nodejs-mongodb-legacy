@@ -42,35 +42,10 @@ describe('legacy_wrappers/gridfs.js', () => {
   it('should return legacy GridFSBucketWriteStream from openUploadStream', () => {
     expect(bucket.openUploadStream('filename')).to.be.instanceOf(LegacyGridFSBucketWriteStream);
   });
+
   it('should return legacy GridFSBucketWriteStream from openUploadStreamWithId', () => {
     expect(bucket.openUploadStreamWithId(0, 'filename')).to.be.instanceOf(
       LegacyGridFSBucketWriteStream
     );
-  });
-
-  it('should support GridFSBucketWriteStream.abort(callback)', done => {
-    const stub = sinon
-      .stub(mongodbDriver.GridFSBucketWriteStream.prototype, 'abort')
-      .returns(Promise.resolve());
-    const stream = bucket.openUploadStream('filename');
-    stream.abort(error => {
-      try {
-        expect(error).to.be.undefined;
-        done();
-      } catch (assertionError) {
-        done(assertionError);
-      }
-    });
-    expect(stub).to.be.calledWithExactly();
-  });
-
-  it('should support GridFSBucketWriteStream.abort()', async () => {
-    const stub = sinon
-      .stub(mongodbDriver.GridFSBucketWriteStream.prototype, 'abort')
-      .returns(Promise.resolve());
-    const stream = bucket.openUploadStream('filename');
-    const result = stream.abort();
-    expect(result).to.be.instanceOf(Promise);
-    expect(stub).to.be.calledWithExactly();
   });
 });
