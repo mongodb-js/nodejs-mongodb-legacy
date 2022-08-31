@@ -102,12 +102,13 @@ describe('legacy_wrappers/mongo_client.js', () => {
   });
 
   // Don't fix a misuse of the api in the wrapper
-  it('should pass along undefined function if none is given', async () => {
+  it('should always pass two arguments to the driver where the second is always a function', async () => {
     const spy = sinon.spy(mongodbDriver.MongoClient.prototype, 'withSession');
     const result = await client.withSession().catch(error => error);
     expect(result).to.be.instanceOf(Error);
-    const { args: args0 } = spy.getCall(0);
-    expect(args0[0]).to.equal(undefined);
-    expect(args0[1]).to.be.a('function');
+    const { args } = spy.getCall(0);
+    expect(args).to.have.lengthOf(2);
+    expect(args[0]).to.equal(undefined);
+    expect(args[1]).to.be.a('function');
   });
 });
