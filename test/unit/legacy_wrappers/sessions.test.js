@@ -4,7 +4,6 @@ const {
   MongoClient: LegacyMongoClient,
   ClientSession: LegacyClientSession
 } = require('../../../src/index');
-const { ClientSession: DriverClientSession } = require('mongodb');
 const { expect } = require('chai');
 const sinon = require('sinon');
 
