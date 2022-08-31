@@ -126,10 +126,6 @@ describe('wrapper API', () => {
     possibleCallbackPositions,
     makeStub
   } of generateTests()) {
-    // For each callback position, we construct an array of arguments that contains the callback
-    // at the specified position.  We can then test various scenarios (success callback, success promise, error callback and error promise)
-    // for that given overload.
-
     expect(instance, apiName).to.have.property(method).that.is.a('function');
     const functionLength = instance[method].length;
 
@@ -143,6 +139,10 @@ describe('wrapper API', () => {
           : [1, 2];
 
       for (const callbackPosition of callbackPositions) {
+        // For each callback position, we construct an array of arguments that contains the callback
+        // at the specified position.  We can then test various scenarios (success callback, success promise, error callback and error promise)
+        // for that given overload.
+
         // Make an array that is the same length as the function under test
         const args = Array.from({ length: functionLength }, (_, i) => i);
         // Place the callback at the position we want to see it in
