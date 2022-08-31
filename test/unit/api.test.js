@@ -130,6 +130,8 @@ describe('wrapper API', () => {
     const functionLength = instance[method].length;
 
     describe(`${apiName}()`, () => {
+      const resolveSuite = [];
+      const rejectsSuite = [];
       // Use the callback positions manually defined, or use a default of [1] / [1,2] depending on function length
       const callbackPositions =
         possibleCallbackPositions != null
@@ -150,7 +152,7 @@ describe('wrapper API', () => {
         // truncate the array
         args.length = functionLength - (callbackPosition - 1);
 
-        it(`should support calling ${apiName}(${args.join(', ')}(undefined, result))`, async () => {
+        const successTest = async () => {
           const superPromise = Promise.resolve({ message: 'success!' });
           makeStub(superPromise);
 
@@ -175,9 +177,9 @@ describe('wrapper API', () => {
             args.findIndex(arg => arg === callback)
           );
           expect(stubbedMethod).to.have.been.calledOnceWith(...argsPassedToDriver);
-        });
+        };
 
-        it(`should support calling ${apiName}(${args.join(', ')}(error))`, async () => {
+        const errorTest = async () => {
           const superPromise = Promise.reject(new Error('error!'));
           makeStub(superPromise);
 
@@ -201,13 +203,24 @@ describe('wrapper API', () => {
             args.findIndex(arg => arg === callback)
           );
           expect(stubbedMethod).to.have.been.calledOnceWith(...argsPassedToDriver);
-        });
+        };
+
+        resolveSuite.push(() =>
+          describe(`and ${apiName} is called  with (${args.join(', ')})`, () => {
+            it(`should call the callback with (undefined, result)`, successTest);
+          })
+        );
+
+        rejectsSuite.push(() =>
+          describe(`and ${apiName} is called  with (${args.join(', ')})`, () => {
+            it(`should call the callback with (error)`, errorTest);
+          })
+        );
       }
 
       const args = Array.from({ length: functionLength - 1 }, (_, i) => i);
-      const argsString = args.join(', ');
 
-      it(`should support calling ${apiName}(${argsString}) returns resolved Promise`, async () => {
+      const successTest = async () => {
         // should have a message property to make equality checking consistent
         const superPromise = Promise.resolve({ message: 'success!' });
         makeStub(superPromise);
@@ -227,9 +240,9 @@ describe('wrapper API', () => {
 
         const stubbedMethod = Object.getPrototypeOf(Object.getPrototypeOf(instance))[method];
         expect(stubbedMethod).to.have.been.calledOnceWithExactly(...args);
-      });
+      };
 
-      it(`should support calling ${apiName}(${argsString}) returns rejected Promise`, async () => {
+      const errorTest = async () => {
         const superPromise = Promise.reject(new Error('error!'));
         makeStub(superPromise);
 
@@ -248,6 +261,25 @@ describe('wrapper API', () => {
 
         const stubbedMethod = Object.getPrototypeOf(Object.getPrototypeOf(instance))[method];
         expect(stubbedMethod).to.have.been.calledOnceWithExactly(...args);
+      };
+
+      resolveSuite.push(() =>
+        describe(`and ${apiName} is called  with (${args.join(', ')})`, () => {
+          it(`should return the same resolved promise`, successTest);
+        })
+      );
+
+      rejectsSuite.push(() =>
+        describe(`and ${apiName} is called  with (${args.join(', ')})`, () => {
+          it(`should return the same rejected promise`, errorTest);
+        })
+      );
+
+      describe('when the driver api resolves', () => {
+        for (const makeSuite of resolveSuite) makeSuite();
+      });
+      describe('when the driver api rejects', () => {
+        for (const makeSuite of rejectsSuite) makeSuite();
       });
     });
   }
