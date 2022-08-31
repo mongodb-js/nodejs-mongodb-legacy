@@ -33,7 +33,7 @@ describe('legacy_wrappers/db.js', () => {
     expect(db.watch()).to.be.instanceOf(ChangeStream);
   });
 
-  it('should return legacy ChangeStream', () => {
+  it('should return legacy AggregationCursor', () => {
     expect(db.aggregate()).to.be.instanceOf(AggregationCursor);
   });
 

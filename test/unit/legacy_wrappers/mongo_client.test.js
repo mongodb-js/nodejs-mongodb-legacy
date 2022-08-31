@@ -65,9 +65,19 @@ describe('legacy_wrappers/mongo_client.js', () => {
   });
 
   it('errors thrown from MongoClient constructor are passed to the promise for static connect', async () => {
-    expect(() => new MongoClient()).to.throw; // make sure constructor still throws
+    const makeClientIncorrectly = () => {
+      try {
+        return new MongoClient();
+      } catch (error) {
+        return error;
+      }
+    };
+    const result = makeClientIncorrectly();
+    expect(result).to.be.instanceOf(Error); // make sure constructor still throws
     const actualReturnValue = MongoClient.connect().catch(error => error);
-    expect(await actualReturnValue).to.be.instanceOf(Error);
+    const errorFromConnect = await actualReturnValue;
+    expect(errorFromConnect).to.be.instanceOf(Error);
+    expect(errorFromConnect.name).to.deep.equal(makeClientIncorrectly().name);
   });
 
   it('should convert change stream to legacy version', () => {

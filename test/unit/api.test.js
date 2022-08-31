@@ -7,7 +7,7 @@ const mongodbDriver = require('mongodb');
 const mongodbLegacy = require('../..');
 const { MongoDBNamespace } = require('mongodb/lib/utils');
 const { classNameToMethodList } = require('../tools/api');
-const { byStrings } = require('../tools/utils');
+const { byStrings, sorted } = require('../tools/utils');
 
 // Dummy data to help with testing
 const iLoveJs = 'mongodb://iLoveJavascript';
@@ -34,11 +34,8 @@ const OVERRIDDEN_CLASSES_GETTER = new Map([
   ['UnorderedBulkOperation', () => collection.initializeUnorderedBulkOp()]
 ]);
 
-const classesWithGetters = Array.from(OVERRIDDEN_CLASSES_GETTER.keys());
-classesWithGetters.sort(byStrings);
-const listOfClasses = Array.from(classNameToMethodList.keys());
-listOfClasses.sort(byStrings);
-
+const classesWithGetters = sorted(OVERRIDDEN_CLASSES_GETTER.keys(), byStrings);
+const listOfClasses = sorted(classNameToMethodList.keys(), byStrings);
 expect(classesWithGetters).to.deep.equal(listOfClasses);
 
 const cleanups = [];

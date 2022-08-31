@@ -4,14 +4,16 @@ const { expect } = require('chai');
 const mdbLegacy = require('../..');
 const mdbDriver = require('mongodb');
 const { asyncApiClasses, classNameToMethodList } = require('../tools/api');
-const { byStrings } = require('../tools/utils');
+const { byStrings, sorted } = require('../tools/utils');
 
 const classNameToMethodNameList = new Map(
-  Array.from(classNameToMethodList.entries()).map(([className, methods]) => {
-    const methodNames = methods.map(({ method }) => method);
-    methodNames.sort(byStrings);
-    return [className, methodNames];
-  })
+  Array.from(classNameToMethodList.entries()).map(([className, methods]) => [
+    className,
+    sorted(
+      methods.map(({ method }) => method),
+      byStrings
+    )
+  ])
 );
 
 describe('index.js', () => {
@@ -44,10 +46,12 @@ describe('index.js', () => {
         }
 
         it(`should only define methods declared in api table for ${className}`, () => {
-          let names = Object.getOwnPropertyNames(mdbLegacy[className].prototype).filter(
-            name => name !== 'constructor'
+          let names = sorted(
+            Object.getOwnPropertyNames(mdbLegacy[className].prototype).filter(
+              name => name !== 'constructor'
+            ),
+            byStrings
           );
-          names.sort(byStrings);
           expect(names).to.be.deep.equal(methodNames);
         });
       });

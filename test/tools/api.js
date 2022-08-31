@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 'use strict';
 
-const { byStrings } = require("./utils");
+const { byStrings, sorted } = require("./utils");
 
 module.exports = Object.create(null);
 Object.defineProperty(module.exports, '__esModule', { value: true });
@@ -144,8 +144,6 @@ const api = [
 
 module.exports.api = api;
 module.exports.asyncApiClasses = new Set(api.map(({className}) => className))
-module.exports.classNameToMethodList = new Map(api.map((api, _, array) => {
-  const methods = Array.from(new Set(Array.from(array.filter(v => v.className === api.className), method => method)))
-  methods.sort(byStrings)
-  return [api.className, methods]
-}));
+module.exports.classNameToMethodList = new Map(api.map((api, _, array) =>
+  [api.className, sorted(Array.from(new Set(Array.from(array.filter(v => v.className === api.className), method => method))), (a, b) => byStrings(a.method, b.method))]
+));

@@ -26,7 +26,7 @@ describe('legacy_wrappers/gridfs.js', () => {
     await client.close();
   });
 
-  it('should convert bucket.find(filter, options) to legacy version', () => {
+  it("should convert bucket.find's FindCursor to legacy version", () => {
     const spy = sinon.spy(mongodbDriver.GridFSBucket.prototype, 'find');
     const find = bucket.find({ filter: 1 }, { options: true });
     expect(find).to.be.instanceOf(FindCursor);
