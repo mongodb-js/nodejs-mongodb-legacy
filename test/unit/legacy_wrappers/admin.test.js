@@ -90,6 +90,28 @@ describe('legacy_wrappers/admin.js', () => {
       });
     });
 
+    describe(`and addUser is called with ('name', options, callback)`, () => {
+      beforeEach(() => {
+        actualReturnValue = admin.addUser('name', { options: true }, callback);
+      });
+
+      it('should return void', () => expect(actualReturnValue).to.be.undefined);
+
+      it('should call the callback with undefined error and successful result', async () => {
+        await superPromise;
+        expect(callback).to.have.been.calledOnce;
+        const expectedArgs = callback.args[0];
+        expect(expectedArgs).to.have.property('0', undefined);
+        expect(expectedArgs).to.have.nested.property('[1].message', 'success!');
+      });
+
+      it(`should pass only ('name', undefined, options) to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('name', undefined, {
+          options: true
+        });
+      });
+    });
+
     describe(`and addUser is called with ('name')`, () => {
       beforeEach(() => {
         actualReturnValue = admin.addUser('name');
