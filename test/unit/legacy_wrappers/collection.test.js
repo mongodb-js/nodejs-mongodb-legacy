@@ -5,12 +5,12 @@ const {
   FindCursor: LegacyFindCursor,
   ListIndexesCursor: LegacyListIndexesCursor,
   ChangeStream: LegacyChangeStream,
-  AggregationCursor: LegacyAggregationCursor,
-  Collection: LegacyCollection
+  AggregationCursor: LegacyAggregationCursor
 } = require('../../../src/index');
 const mongodbDriver = require('mongodb');
 const sinon = require('sinon');
 const { expect } = require('chai');
+const { promisify } = require('util');
 
 const iLoveJs = 'mongodb://iLoveJavascript';
 
@@ -27,69 +27,114 @@ describe('legacy_wrappers/collection.js', () => {
     await client.close();
   });
 
-  it('should return legacy listIndexes cursor', () => {
+  it('collection.listIndexes() should return legacy listIndexes cursor', () => {
     expect(collection.listIndexes()).to.be.instanceOf(LegacyListIndexesCursor);
   });
 
-  it('should return legacy ChangeStream', () => {
+  it('collection.watch() should return legacy ChangeStream', () => {
     expect(collection.watch()).to.be.instanceOf(LegacyChangeStream);
   });
 
-  it('should return legacy ChangeStream', () => {
+  it('collection.aggregate() should return legacy ChangeStream', () => {
     expect(collection.aggregate()).to.be.instanceOf(LegacyAggregationCursor);
   });
 
-  it('should return legacy FindCursor', () => {
+  it('collection.find() should return legacy FindCursor', () => {
     expect(collection.find()).to.be.instanceOf(LegacyFindCursor);
   });
 
-  it('should support rename(newName)', async () => {
-    const stub = sinon
-      .stub(mongodbDriver.Collection.prototype, 'rename')
-      .returns(Promise.resolve(new mongodbDriver.Collection(client.db(), 'test')));
-    const result = await collection.rename('newName');
-    expect(result).to.be.instanceOf(LegacyCollection);
-    expect(stub).to.be.calledWithExactly('newName', undefined);
-  });
+  describe('rename()', () => {
+    let client;
+    let collection;
+    let stubbedMethod;
+    let callback;
+    let superPromise;
+    let actualReturnValue;
 
-  it('should support rename(newName, options)', async () => {
-    const stub = sinon
-      .stub(mongodbDriver.Collection.prototype, 'rename')
-      .returns(Promise.resolve(new mongodbDriver.Collection(client.db(), 'test')));
-    const result = await collection.rename('newName', { options: true });
-    expect(result).to.be.instanceOf(LegacyCollection);
-    expect(stub).to.be.calledWithExactly('newName', { options: true });
-  });
-
-  it('should support rename(newName, callback)', done => {
-    const stub = sinon
-      .stub(mongodbDriver.Collection.prototype, 'rename')
-      .returns(Promise.resolve(new mongodbDriver.Collection(client.db(), 'test')));
-    collection.rename('newName', (error, result) => {
-      try {
-        expect(error).to.be.undefined;
-        expect(result).to.be.instanceOf(LegacyCollection);
-        done();
-      } catch (assertionError) {
-        done(assertionError);
-      }
+    beforeEach(async () => {
+      client = new LegacyMongoClient('mongodb://iLoveJs');
+      collection = client.db().collection('test');
+      superPromise = Promise.resolve(client.db().collection('newName'));
+      stubbedMethod = sinon
+        .stub(mongodbDriver.Collection.prototype, 'rename')
+        .returns(superPromise);
+      callback = sinon.stub();
     });
-    expect(stub).to.be.calledWithExactly('newName', undefined);
-  });
 
-  it('should support rename(newName, options, callback)', done => {
-    const stub = sinon
-      .stub(mongodbDriver.Collection.prototype, 'rename')
-      .returns(Promise.resolve(new mongodbDriver.Collection(client.db(), 'test')));
-    collection.rename('newName', { options: true }, (error, result) => {
-      try {
-        expect(error).to.be.undefined;
-        expect(result).to.be.instanceOf(LegacyCollection);
-        done();
-      } catch (assertionError) {
-        done(assertionError);
-      }
+    describe(`rename is called with ('newName', callback)`, () => {
+      beforeEach(() => {
+        actualReturnValue = collection.rename('newName', callback);
+      });
+
+      it('should return void', () => expect(actualReturnValue).to.be.undefined);
+
+      it('should call the callback with undefined error and successful result', async () => {
+        await superPromise;
+        await promisify(queueMicrotask);
+        const calls = callback.getCalls();
+        expect(calls).to.have.lengthOf(1);
+        expect(calls[0].args[0]).to.be.undefined;
+        expect(calls[0].args[1]).to.have.nested.property('s.namespace.collection', 'newName');
+      });
+
+      it(`should pass only ('newName') to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('newName', undefined);
+      });
     });
-    expect(stub).to.be.calledWithExactly('newName', { options: true });
+
+    describe(`rename is called with ('newName', options, callback)`, () => {
+      beforeEach(() => {
+        actualReturnValue = collection.rename('newName', { options: true }, callback);
+      });
+
+      it('should return void', () => expect(actualReturnValue).to.be.undefined);
+
+      it('should call the callback with undefined error and successful result', async () => {
+        await superPromise;
+        await promisify(queueMicrotask);
+        const calls = callback.getCalls();
+        expect(calls).to.have.lengthOf(1);
+        expect(calls[0].args[0]).to.be.undefined;
+        expect(calls[0].args[1]).to.have.nested.property('s.namespace.collection', 'newName');
+      });
+
+      it(`should pass only ('newName') to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('newName', { options: true });
+      });
+    });
+
+    describe(`rename is called with ('newName')`, () => {
+      beforeEach(() => {
+        actualReturnValue = collection.rename('newName');
+      });
+
+      it('should return a Promise', () => expect(actualReturnValue).to.be.instanceOf(Promise));
+
+      it('should resolve the promise with a successful result', async () => {
+        const result = await actualReturnValue;
+        expect(result).to.have.nested.property('s.namespace.collection', 'newName');
+      });
+
+      it(`should pass only ('newName') to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('newName', undefined);
+      });
+    });
+
+    describe(`rename is called with ('newName', options)`, () => {
+      beforeEach(() => {
+        actualReturnValue = collection.rename('newName', { options: true });
+      });
+
+      it('should return a Promise', () => expect(actualReturnValue).to.be.instanceOf(Promise));
+
+      it('should resolve the promise with a successful result', async () => {
+        const result = await actualReturnValue;
+        expect(result).to.have.nested.property('s.namespace.collection', 'newName');
+      });
+
+      it(`should pass only ('newName') to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('newName', { options: true });
+      });
+    });
   });
 });
