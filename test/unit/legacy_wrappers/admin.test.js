@@ -8,102 +8,144 @@ const { expect } = require('chai');
 describe('legacy_wrappers/admin.js', () => {
   let admin;
   let client;
-  beforeEach(async function () {
-    client = new LegacyMongoClient('mongodb://iLoveJs');
-    admin = client.db().admin();
-  });
 
   afterEach(async function () {
     sinon.restore();
     await client.close();
   });
 
-  describe('addUser', () => {
-    describe('callbacks', () => {
-      it('should admin.addUser(username, callback)', done => {
-        const stub = sinon.stub(Admin.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        admin.addUser('name', (error, result) => {
-          try {
-            expect(error).to.be.undefined;
-            expect(result).to.deep.equal({ ok: 1 });
-            done();
-          } catch (assertionError) {
-            done(assertionError);
-          }
-        });
-        expect(stub).to.have.been.calledWithExactly('name', undefined, undefined);
+  describe('addUser()', () => {
+    let stubbedMethod;
+    let callback;
+    let superPromise;
+    let actualReturnValue;
+
+    beforeEach(async () => {
+      client = new LegacyMongoClient('mongodb://iLoveJs');
+      admin = client.db().admin();
+      superPromise = Promise.resolve({ message: 'success!' });
+      stubbedMethod = sinon.stub(Admin.prototype, 'addUser').returns(superPromise);
+      callback = sinon.stub();
+    });
+
+    describe(`and addUser is called with ('name', callback)`, () => {
+      beforeEach(() => {
+        actualReturnValue = admin.addUser('name', callback);
       });
 
-      it('should admin.addUser(username, password, callback)', done => {
-        const stub = sinon.stub(Admin.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        admin.addUser('name', 'pass', (error, result) => {
-          try {
-            expect(error).to.be.undefined;
-            expect(result).to.deep.equal({ ok: 1 });
-            done();
-          } catch (assertionError) {
-            done(assertionError);
-          }
-        });
-        expect(stub).to.have.been.calledWithExactly('name', 'pass', undefined);
+      it('should return void', () => expect(actualReturnValue).to.be.undefined);
+
+      it('should call the callback with undefined error and successful result', async () => {
+        await superPromise;
+        expect(callback).to.have.been.calledOnce;
+        const expectedArgs = callback.args[0];
+        expect(expectedArgs).to.have.property('0', undefined);
+        expect(expectedArgs).to.have.nested.property('[1].message', 'success!');
       });
 
-      it('should admin.addUser(username, options, callback)', done => {
-        const stub = sinon.stub(Admin.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        admin.addUser('name', { options: true }, (error, result) => {
-          try {
-            expect(error).to.be.undefined;
-            expect(result).to.deep.equal({ ok: 1 });
-            done();
-          } catch (assertionError) {
-            done(assertionError);
-          }
-        });
-        expect(stub).to.have.been.calledWithExactly('name', undefined, { options: true });
-      });
-
-      it('should admin.addUser(username, password, options, callback)', done => {
-        const stub = sinon.stub(Admin.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        admin.addUser('name', 'pass', { options: true }, (error, result) => {
-          try {
-            expect(error).to.be.undefined;
-            expect(result).to.deep.equal({ ok: 1 });
-            done();
-          } catch (assertionError) {
-            done(assertionError);
-          }
-        });
-        expect(stub).to.have.been.calledWithExactly('name', 'pass', { options: true });
+      it(`should pass only ('name') to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('name', undefined, undefined);
       });
     });
 
-    describe('promises', () => {
-      it('should admin.addUser(username)', async () => {
-        const stub = sinon.stub(Admin.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        const result = await admin.addUser('name');
-        expect(result).to.deep.equal({ ok: 1 });
-        expect(stub).to.have.been.calledWithExactly('name', undefined, undefined);
+    describe(`and addUser is called with ('name', 'pass', callback)`, () => {
+      beforeEach(() => {
+        actualReturnValue = admin.addUser('name', 'pass', callback);
       });
 
-      it('should admin.addUser(username, password)', async () => {
-        const stub = sinon.stub(Admin.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        const result = await admin.addUser('name', 'pass');
-        expect(result).to.deep.equal({ ok: 1 });
-        expect(stub).to.have.been.calledWithExactly('name', 'pass', undefined);
+      it('should return void', () => expect(actualReturnValue).to.be.undefined);
+
+      it('should call the callback with undefined error and successful result', async () => {
+        await superPromise;
+        expect(callback).to.have.been.calledOnce;
+        const expectedArgs = callback.args[0];
+        expect(expectedArgs).to.have.property('0', undefined);
+        expect(expectedArgs).to.have.nested.property('[1].message', 'success!');
       });
 
-      it('should admin.addUser(username, options)', async () => {
-        const stub = sinon.stub(Admin.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        const result = await admin.addUser('name', { options: true });
-        expect(result).to.deep.equal({ ok: 1 });
-        expect(stub).to.have.been.calledWithExactly('name', undefined, { options: true });
+      it(`should pass only ('name', 'pass') to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('name', 'pass', undefined);
+      });
+    });
+
+    describe(`and addUser is called with ('name', 'pass', options, callback)`, () => {
+      beforeEach(() => {
+        actualReturnValue = admin.addUser('name', 'pass', { options: true }, callback);
       });
 
-      it('should admin.addUser(username, password, options)', async () => {
-        const stub = sinon.stub(Admin.prototype, 'addUser').returns(Promise.resolve({ ok: 1 }));
-        const result = await admin.addUser('name', 'pass', { options: true });
-        expect(result).to.deep.equal({ ok: 1 });
-        expect(stub).to.have.been.calledWithExactly('name', 'pass', { options: true });
+      it('should return void', () => expect(actualReturnValue).to.be.undefined);
+
+      it('should call the callback with undefined error and successful result', async () => {
+        await superPromise;
+        expect(callback).to.have.been.calledOnce;
+        const expectedArgs = callback.args[0];
+        expect(expectedArgs).to.have.property('0', undefined);
+        expect(expectedArgs).to.have.nested.property('[1].message', 'success!');
+      });
+
+      it(`should pass only ('name', 'pass', options) to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('name', 'pass', {
+          options: true
+        });
+      });
+    });
+
+    describe(`and addUser is called with ('name')`, () => {
+      beforeEach(() => {
+        actualReturnValue = admin.addUser('name');
+      });
+
+      it('should return the same promise the driver returns', async () => {
+        expect(actualReturnValue).to.equal(superPromise);
+      });
+
+      it('should return a resolved promise', async () => {
+        const result = await actualReturnValue;
+        expect(result).to.have.property('message', 'success!');
+      });
+
+      it(`should pass only ('name') to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('name', undefined, undefined);
+      });
+    });
+
+    describe(`and addUser is called with ('name', 'pass')`, () => {
+      beforeEach(() => {
+        actualReturnValue = admin.addUser('name', 'pass');
+      });
+
+      it('should return the same promise the driver returns', async () => {
+        expect(actualReturnValue).to.equal(superPromise);
+      });
+
+      it('should return a resolved promise', async () => {
+        const result = await actualReturnValue;
+        expect(result).to.have.property('message', 'success!');
+      });
+
+      it(`should pass only ('name', 'pass') to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('name', 'pass', undefined);
+      });
+    });
+
+    describe(`and addUser is called with ('name', 'pass', options)`, () => {
+      beforeEach(() => {
+        actualReturnValue = admin.addUser('name', 'pass', { options: true });
+      });
+
+      it('should return the same promise the driver returns', async () => {
+        expect(actualReturnValue).to.equal(superPromise);
+      });
+
+      it('should return a resolved promise', async () => {
+        const result = await actualReturnValue;
+        expect(result).to.have.property('message', 'success!');
+      });
+
+      it(`should pass only ('name', 'pass', options) to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('name', 'pass', {
+          options: true
+        });
       });
     });
   });
