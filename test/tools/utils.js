@@ -1,5 +1,7 @@
 'use strict';
 
+const { promisify } = require('util');
+
 module.exports = Object.create(null);
 Object.defineProperty(module.exports, '__esModule', { value: true });
 
@@ -18,3 +20,5 @@ module.exports.sorted = (iterable, how) => {
   items.sort(how);
   return items;
 };
+
+module.exports.oneMicroTask = promisify(queueMicrotask);

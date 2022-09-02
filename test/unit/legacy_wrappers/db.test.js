@@ -11,6 +11,7 @@ const mongodbDriver = require('mongodb');
 const { Db } = require('mongodb');
 const sinon = require('sinon');
 const { expect } = require('chai');
+const { oneMicroTask } = require('../../tools/utils');
 
 describe('legacy_wrappers/db.js', () => {
   let db;
@@ -196,164 +197,283 @@ describe('legacy_wrappers/db.js', () => {
     });
   });
 
-  it('should support renameCollection(oldName, newName)', async () => {
-    const stub = sinon
-      .stub(mongodbDriver.Db.prototype, 'renameCollection')
-      .returns(Promise.resolve(new mongodbDriver.Db(client, 'test')));
-    const result = await db.renameCollection('oldName', 'newName');
-    expect(result).to.be.instanceOf(Db);
-    expect(stub).to.be.calledWithExactly('oldName', 'newName', undefined);
-  });
+  describe('renameCollection()', () => {
+    let db;
+    let stubbedMethod;
+    let callback;
+    let superPromise;
+    let actualReturnValue;
 
-  it('should support renameCollection(oldName, newName, options)', async () => {
-    const stub = sinon
-      .stub(mongodbDriver.Db.prototype, 'renameCollection')
-      .returns(Promise.resolve(new mongodbDriver.Db(client, 'test')));
-    const result = await db.renameCollection('oldName', 'newName', { options: true });
-    expect(result).to.be.instanceOf(Db);
-    expect(stub).to.be.calledWithExactly('oldName', 'newName', { options: true });
-  });
-
-  it('should support renameCollection(oldName, newName, callback)', done => {
-    const stub = sinon
-      .stub(mongodbDriver.Db.prototype, 'renameCollection')
-      .returns(Promise.resolve(new mongodbDriver.Db(client, 'test')));
-    db.renameCollection('oldName', 'newName', (error, result) => {
-      try {
-        expect(error).to.be.undefined;
-        expect(result).to.be.instanceOf(Db);
-        done();
-      } catch (assertionError) {
-        done(assertionError);
-      }
+    beforeEach(async () => {
+      client = new LegacyMongoClient('mongodb://iLoveJs');
+      db = client.db();
+      superPromise = Promise.resolve(client.db().collection('newName'));
+      stubbedMethod = sinon.stub(Db.prototype, 'renameCollection').returns(superPromise);
+      callback = sinon.stub();
     });
-    expect(stub).to.be.calledWithExactly('oldName', 'newName', undefined);
-  });
 
-  it('should support rename(newName, options, callback)', done => {
-    const stub = sinon
-      .stub(mongodbDriver.Db.prototype, 'renameCollection')
-      .returns(Promise.resolve(new mongodbDriver.Db(client, 'test')));
-    db.renameCollection('oldName', 'newName', { options: true }, (error, result) => {
-      try {
-        expect(error).to.be.undefined;
-        expect(result).to.be.instanceOf(Db);
-        done();
-      } catch (assertionError) {
-        done(assertionError);
-      }
+    describe(`and renameCollection is called with ('oldName', 'newName', callback)`, () => {
+      beforeEach(() => {
+        actualReturnValue = db.renameCollection('oldName', 'newName', callback);
+      });
+
+      it('should return void', () => expect(actualReturnValue).to.be.undefined);
+
+      it('should call the callback with undefined error and successful result', async () => {
+        await superPromise;
+        await oneMicroTask();
+        const calls = callback.getCalls();
+        expect(calls).to.have.lengthOf(1);
+        expect(calls[0].args[0]).to.be.undefined;
+        expect(calls[0].args[1]).to.have.nested.property('s.namespace.collection', 'newName');
+      });
+
+      it(`should pass only ('oldName', 'newName') to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('oldName', 'newName', undefined);
+      });
     });
-    expect(stub).to.be.calledWithExactly('oldName', 'newName', { options: true });
-  });
 
-  it('support db.createCollection(name)', async () => {
-    const returnValue = Promise.resolve(new mongodbDriver.Collection(db, 'a'));
-    const stub = sinon.stub(mongodbDriver.Db.prototype, 'createCollection').returns(returnValue);
-    const actualReturnValue = db.createCollection('a');
-    expect(await actualReturnValue).to.be.instanceOf(LegacyCollection);
-    expect(stub).to.be.calledWithExactly('a', undefined);
-  });
+    describe(`and renameCollection is called with ('oldName', 'newName', options, callback)`, () => {
+      beforeEach(() => {
+        actualReturnValue = db.renameCollection('oldName', 'newName', { options: true }, callback);
+      });
 
-  it('support db.createCollection(name, options)', async () => {
-    const returnValue = Promise.resolve(new mongodbDriver.Collection(db, 'a'));
-    const stub = sinon.stub(mongodbDriver.Db.prototype, 'createCollection').returns(returnValue);
-    const actualReturnValue = db.createCollection('a', { options: true });
-    expect(await actualReturnValue).to.be.instanceOf(LegacyCollection);
-    expect(stub).to.be.calledWithExactly('a', { options: true });
-  });
+      it('should return void', () => expect(actualReturnValue).to.be.undefined);
 
-  it('support db.createCollection(name, callback)', done => {
-    const returnValue = Promise.resolve(new mongodbDriver.Collection(db, 'a'));
-    const stub = sinon.stub(mongodbDriver.Db.prototype, 'createCollection').returns(returnValue);
-    db.createCollection('a', (error, collection) => {
-      try {
-        expect(error).to.be.undefined;
-        expect(collection).to.be.instanceOf(LegacyCollection);
-        done();
-      } catch (assertionError) {
-        done(assertionError);
-      }
+      it('should call the callback with undefined error and successful result', async () => {
+        await superPromise;
+        await oneMicroTask();
+        const calls = callback.getCalls();
+        expect(calls).to.have.lengthOf(1);
+        expect(calls[0].args[0]).to.be.undefined;
+        expect(calls[0].args[1]).to.have.nested.property('s.namespace.collection', 'newName');
+      });
+
+      it(`should pass only ('oldName', 'newName', options) to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('oldName', 'newName', {
+          options: true
+        });
+      });
     });
-    expect(stub).to.be.calledWithExactly('a', undefined);
-  });
 
-  it('support db.createCollection(name, options, callback)', done => {
-    const returnValue = Promise.resolve(new mongodbDriver.Collection(db, 'a'));
-    const stub = sinon.stub(mongodbDriver.Db.prototype, 'createCollection').returns(returnValue);
-    db.createCollection('a', { options: true }, (error, collection) => {
-      try {
-        expect(error).to.be.undefined;
-        expect(collection).to.be.instanceOf(LegacyCollection);
-        done();
-      } catch (assertionError) {
-        done(assertionError);
-      }
+    describe(`and renameCollection is called with ('oldName', 'newName')`, () => {
+      beforeEach(() => {
+        actualReturnValue = db.renameCollection('oldName', 'newName');
+      });
+
+      it('should return a Promise', () => expect(actualReturnValue).to.be.instanceOf(Promise));
+
+      it('should resolve the promise with a successful result', async () => {
+        const result = await actualReturnValue;
+        expect(result).to.have.nested.property('s.namespace.collection', 'newName');
+      });
+
+      it(`should pass only ('oldName', 'newName', options) to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('oldName', 'newName', undefined);
+      });
     });
-    expect(stub).to.be.calledWithExactly('a', { options: true });
-  });
 
-  it('support db.collections()', async () => {
-    const returnValue = Promise.resolve([
-      new mongodbDriver.Collection(db, 'a'),
-      new mongodbDriver.Collection(db, 'b')
-    ]);
-    const stub = sinon.stub(mongodbDriver.Db.prototype, 'collections').returns(returnValue);
-    const actualReturnValue = db.collections();
-    expect(stub).to.be.calledWithExactly(undefined);
-    const collections = await actualReturnValue;
-    expect(collections).to.be.an('array');
-    expect(collections.every(coll => coll instanceof LegacyCollection)).to.be.true;
-  });
+    describe(`and renameCollection is called with ('oldName', 'newName', options)`, () => {
+      beforeEach(() => {
+        actualReturnValue = db.renameCollection('oldName', 'newName', { options: true });
+      });
 
-  it('support db.collections(options)', async () => {
-    const returnValue = Promise.resolve([
-      new mongodbDriver.Collection(db, 'a'),
-      new mongodbDriver.Collection(db, 'b')
-    ]);
-    const stub = sinon.stub(mongodbDriver.Db.prototype, 'collections').returns(returnValue);
-    const actualReturnValue = db.collections({ options: true });
-    expect(stub).to.be.calledWithExactly({ options: true });
-    const collections = await actualReturnValue;
-    expect(collections).to.be.an('array');
-    expect(collections.every(coll => coll instanceof LegacyCollection)).to.be.true;
-  });
+      it('should return a Promise', () => expect(actualReturnValue).to.be.instanceOf(Promise));
 
-  it('support db.collections(callback)', done => {
-    const returnValue = Promise.resolve([
-      new mongodbDriver.Collection(db, 'a'),
-      new mongodbDriver.Collection(db, 'b')
-    ]);
-    const stub = sinon.stub(mongodbDriver.Db.prototype, 'collections').returns(returnValue);
-    db.collections((error, collections) => {
-      try {
-        expect(error).to.be.undefined;
-        expect(collections).to.be.an('array');
-        expect(collections.every(coll => coll instanceof LegacyCollection)).to.be.true;
-        done();
-      } catch (assertionError) {
-        done(assertionError);
-      }
+      it('should resolve the promise with a successful result', async () => {
+        const result = await actualReturnValue;
+        expect(result).to.have.nested.property('s.namespace.collection', 'newName');
+      });
+
+      it(`should pass only ('oldName', 'newName', options) to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('oldName', 'newName', {
+          options: true
+        });
+      });
     });
-    expect(stub).to.be.calledWithExactly(undefined);
   });
 
-  it('support db.collections(options, callback)', done => {
-    const returnValue = Promise.resolve([
-      new mongodbDriver.Collection(db, 'a'),
-      new mongodbDriver.Collection(db, 'b')
-    ]);
-    const stub = sinon.stub(mongodbDriver.Db.prototype, 'collections').returns(returnValue);
-    expect(db).to.have.property('collections').that.is.a('function');
-    db.collections({ options: true }, (error, collections) => {
-      try {
-        expect(error).to.be.undefined;
-        expect(collections).to.be.an('array');
-        expect(collections.every(coll => coll instanceof LegacyCollection)).to.be.true;
-        done();
-      } catch (assertionError) {
-        done(assertionError);
-      }
+  describe('createCollection()', () => {
+    let db;
+    let stubbedMethod;
+    let callback;
+    let superPromise;
+    let actualReturnValue;
+
+    beforeEach(async () => {
+      client = new LegacyMongoClient('mongodb://iLoveJs');
+      db = client.db();
+      superPromise = Promise.resolve(client.db().collection('test'));
+      stubbedMethod = sinon.stub(Db.prototype, 'createCollection').returns(superPromise);
+      callback = sinon.stub();
     });
-    expect(stub).to.be.calledWithExactly({ options: true });
+
+    describe(`and createCollection is called with ('test', callback)`, () => {
+      beforeEach(() => {
+        actualReturnValue = db.createCollection('test', callback);
+      });
+
+      it('should return void', () => expect(actualReturnValue).to.be.undefined);
+
+      it('should call the callback with undefined error and successful result', async () => {
+        await superPromise;
+        await oneMicroTask();
+        const calls = callback.getCalls();
+        expect(calls).to.have.lengthOf(1);
+        expect(calls[0].args[0]).to.be.undefined;
+        expect(calls[0].args[1]).to.have.nested.property('s.namespace.collection', 'test');
+      });
+
+      it(`should pass only ('oldName', 'newName') to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('test', undefined);
+      });
+    });
+
+    describe(`and createCollection is called with ('test', options, callback)`, () => {
+      beforeEach(() => {
+        actualReturnValue = db.createCollection('test', { options: true }, callback);
+      });
+
+      it('should return void', () => expect(actualReturnValue).to.be.undefined);
+
+      it('should call the callback with undefined error and successful result', async () => {
+        await superPromise;
+        await oneMicroTask();
+        const calls = callback.getCalls();
+        expect(calls).to.have.lengthOf(1);
+        expect(calls[0].args[0]).to.be.undefined;
+        expect(calls[0].args[1]).to.have.nested.property('s.namespace.collection', 'test');
+      });
+
+      it(`should pass only ('test', options) to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('test', { options: true });
+      });
+    });
+
+    describe(`and createCollection is called with ('test')`, () => {
+      beforeEach(() => {
+        actualReturnValue = db.createCollection('test');
+      });
+
+      it('should return a Promise', () => expect(actualReturnValue).to.be.instanceOf(Promise));
+
+      it('should resolve the promise with a successful result', async () => {
+        const result = await actualReturnValue;
+        expect(result).to.have.nested.property('s.namespace.collection', 'test');
+      });
+
+      it(`should pass only ('test') to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('test', undefined);
+      });
+    });
+
+    describe(`and createCollection is called with ('test', options)`, () => {
+      beforeEach(() => {
+        actualReturnValue = db.createCollection('test', { options: true });
+      });
+
+      it('should return a Promise', () => expect(actualReturnValue).to.be.instanceOf(Promise));
+
+      it('should resolve the promise with a successful result', async () => {
+        const result = await actualReturnValue;
+        expect(result).to.have.nested.property('s.namespace.collection', 'test');
+      });
+
+      it(`should pass only ('test', options) to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly('test', { options: true });
+      });
+    });
+  });
+
+  describe('collections()', () => {
+    let db;
+    let stubbedMethod;
+    let callback;
+    let superPromise;
+    let actualReturnValue;
+
+    beforeEach(async () => {
+      client = new LegacyMongoClient('mongodb://iLoveJs');
+      db = client.db();
+      superPromise = Promise.resolve([]);
+      stubbedMethod = sinon.stub(Db.prototype, 'collections').returns(superPromise);
+      callback = sinon.stub();
+    });
+
+    describe(`and collections is called with (callback)`, () => {
+      beforeEach(() => {
+        actualReturnValue = db.collections(callback);
+      });
+
+      it('should return void', () => expect(actualReturnValue).to.be.undefined);
+
+      it('should call the callback with undefined error and successful result', async () => {
+        await superPromise;
+        await oneMicroTask();
+        const calls = callback.getCalls();
+        expect(calls).to.have.lengthOf(1);
+        expect(calls[0].args[0]).to.be.undefined;
+        expect(calls[0].args[1]).to.be.an('array');
+      });
+
+      it(`should pass only () to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly(undefined);
+      });
+    });
+
+    describe(`and collections is called with (options, callback)`, () => {
+      beforeEach(() => {
+        actualReturnValue = db.collections({ options: true }, callback);
+      });
+
+      it('should return void', () => expect(actualReturnValue).to.be.undefined);
+
+      it('should call the callback with undefined error and successful result', async () => {
+        await superPromise;
+        await oneMicroTask();
+        const calls = callback.getCalls();
+        expect(calls).to.have.lengthOf(1);
+        expect(calls[0].args[0]).to.be.undefined;
+        expect(calls[0].args[1]).to.be.an('array');
+      });
+
+      it(`should pass only (options) to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly({ options: true });
+      });
+    });
+
+    describe(`and createCollection is called with ()`, () => {
+      beforeEach(() => {
+        actualReturnValue = db.collections();
+      });
+
+      it('should return a Promise', () => expect(actualReturnValue).to.be.instanceOf(Promise));
+
+      it('should resolve the promise with a successful result', async () => {
+        const result = await actualReturnValue;
+        expect(result).to.be.an('array');
+      });
+
+      it(`should pass only () to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly(undefined);
+      });
+    });
+
+    describe(`and createCollection is called with (options)`, () => {
+      beforeEach(() => {
+        actualReturnValue = db.collections({ options: true });
+      });
+
+      it('should return a Promise', () => expect(actualReturnValue).to.be.instanceOf(Promise));
+
+      it('should resolve the promise with a successful result', async () => {
+        const result = await actualReturnValue;
+        expect(result).to.be.an('array');
+      });
+
+      it(`should pass only (options) to the driver api`, () => {
+        expect(stubbedMethod).to.have.been.calledOnceWithExactly({ options: true });
+      });
+    });
   });
 });
