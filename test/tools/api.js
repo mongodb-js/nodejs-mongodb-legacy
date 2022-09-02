@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 'use strict';
 
-const { byStrings, sorted } = require("./utils");
+const { byStrings, sorted } = require('./utils');
 
 module.exports = Object.create(null);
 Object.defineProperty(module.exports, '__esModule', { value: true });

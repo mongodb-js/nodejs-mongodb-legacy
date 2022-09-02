@@ -7,7 +7,7 @@ const mongodbDriver = require('mongodb');
 const mongodbLegacy = require('../..');
 const { MongoDBNamespace } = require('mongodb/lib/utils');
 const { classNameToMethodList } = require('../tools/api');
-const { byStrings, sorted } = require('../tools/utils');
+const { byStrings, sorted, oneMicroTask } = require('../tools/utils');
 
 // Dummy data to help with testing
 const iLoveJs = 'mongodb://iLoveJavascript';
@@ -160,26 +160,21 @@ describe('wrapper API', () => {
             let actualReturnValue;
             let callback;
             let stubbedMethod;
+            const expectedResult = { message: 'success!' };
 
             before('setup success stub for callback case', function () {
-              superPromise = Promise.resolve({ message: 'success!' });
+              superPromise = Promise.resolve(expectedResult);
               stubbedMethod = makeStub(superPromise);
               callback = sinon.spy();
               args[callbackPosition] = callback;
               actualReturnValue = instance[method](...args);
             });
 
-            beforeEach(async function () {
-              await superPromise.catch(error => error);
-            });
-
             it('should return void', () => expect(actualReturnValue).to.be.undefined);
 
-            it('should call the callback with undefined error and successful result', () => {
-              expect(callback).to.have.been.calledOnce;
-              const expectedArgs = callback.args[0];
-              expect(expectedArgs).to.have.property('0', undefined);
-              expect(expectedArgs).to.have.nested.property('[1].message', 'success!');
+            it('should call the callback with undefined error and successful result', async () => {
+              await oneMicroTask();
+              expect(callback).to.have.been.calledOnceWithExactly(undefined, expectedResult);
             });
 
             it(`should pass only (${argsPassedToDriver.join(', ')}) to the driver api`, () => {
@@ -194,9 +189,11 @@ describe('wrapper API', () => {
             let actualReturnValue;
             let callback;
             let stubbedMethod;
+            let actualError;
+            const expectedError = new Error('error!');
 
             before('setup error stub for callback case', function () {
-              superPromise = Promise.reject(new Error('error!'));
+              superPromise = Promise.reject(expectedError);
               stubbedMethod = makeStub(superPromise);
               callback = sinon.spy();
               args[callbackPosition] = callback;
@@ -204,15 +201,14 @@ describe('wrapper API', () => {
             });
 
             beforeEach(async function () {
-              await superPromise.catch(error => error);
+              actualError = await superPromise.catch(error => error);
+              expect(actualError).to.be.instanceOf(Error); // meta check
             });
 
             it('should return void', () => expect(actualReturnValue).to.be.undefined);
 
             it('should call the callback with error', () => {
-              expect(callback).to.have.been.calledOnce;
-              const expectedArgs = callback.args[0];
-              expect(expectedArgs).to.have.nested.property('[0].message', 'error!');
+              expect(callback).to.have.been.calledOnceWithExactly(actualError);
             });
 
             it(`should pass only (${argsPassedToDriver.join(', ')}) to the driver api`, () => {
@@ -229,15 +225,12 @@ describe('wrapper API', () => {
           let superPromise;
           let actualReturnValue;
           let stubbedMethod;
+          let expectedResult = { message: 'success!' };
 
           before('setup success stub for promise case', function () {
-            superPromise = Promise.resolve({ message: 'success!' });
+            superPromise = Promise.resolve(expectedResult);
             stubbedMethod = makeStub(superPromise);
             actualReturnValue = instance[method](...args);
-          });
-
-          beforeEach(async function () {
-            await superPromise.catch(error => error);
           });
 
           it('should return the same promise the driver returns', () => {
@@ -245,8 +238,8 @@ describe('wrapper API', () => {
           });
 
           it('should return a resolved promise', async () => {
-            const result = await actualReturnValue;
-            expect(result).to.have.property('message', 'success!');
+            const actualResult = await actualReturnValue;
+            expect(actualResult).to.equal(expectedResult);
           });
 
           it(`should pass only (${args.join(', ')}) to the driver api`, () => {
@@ -260,24 +253,22 @@ describe('wrapper API', () => {
           let superPromise;
           let actualReturnValue;
           let stubbedMethod;
+          let actualError;
+          const expectedError = new Error('error!');
 
           before('setup error stub for promise case', function () {
-            superPromise = Promise.reject(new Error('error!'));
+            superPromise = Promise.reject(expectedError);
             stubbedMethod = makeStub(superPromise);
             actualReturnValue = instance[method](...args);
-          });
-
-          beforeEach(async function () {
-            await superPromise.catch(error => error);
           });
 
           it('should return the same promise the driver returns', async () => {
             expect(actualReturnValue).to.equal(superPromise);
           });
 
-          it('should return the rejected promise', async () => {
-            const result = await actualReturnValue.catch(error => error);
-            expect(result).to.have.property('message', 'error!');
+          it('should reject with the same error the driver threw', async () => {
+            actualError = await actualReturnValue.catch(error => error);
+            expect(actualError).to.equal(expectedError);
           });
 
           it(`should pass only (${args.join(', ')}) to the driver api`, () => {

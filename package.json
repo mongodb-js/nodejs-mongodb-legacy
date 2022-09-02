@@ -19,7 +19,7 @@
     "check:test": "mocha test/unit",
     "check:ts": "tsc",
     "check:types": "tsc mongodb-legacy.d.ts",
-    "check:lint": "eslint --max-warnings=0 src",
+    "check:lint": "eslint --max-warnings=0 src test",
     "release": "standard-version -a -i HISTORY.md"
   },
   "bugs": {

@@ -4,10 +4,8 @@ const {
   MongoClient: LegacyMongoClient,
   ListCollectionsCursor: LegacyListCollectionsCursor,
   ChangeStream: LegacyChangeStream,
-  AggregationCursor: LegacyAggregationCursor,
-  Collection: LegacyCollection
+  AggregationCursor: LegacyAggregationCursor
 } = require('../../../src/index');
-const mongodbDriver = require('mongodb');
 const { Db } = require('mongodb');
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -61,11 +59,8 @@ describe('legacy_wrappers/db.js', () => {
       it('should return void', () => expect(actualReturnValue).to.be.undefined);
 
       it('should call the callback with undefined error and successful result', async () => {
-        await superPromise;
-        expect(callback).to.have.been.calledOnce;
-        const expectedArgs = callback.args[0];
-        expect(expectedArgs).to.have.property('0', undefined);
-        expect(expectedArgs).to.have.nested.property('[1].message', 'success!');
+        await oneMicroTask();
+        expect(callback).to.have.been.calledOnceWith(undefined, { message: 'success!' });
       });
 
       it(`should pass only ('name') to the driver api`, () => {
@@ -81,11 +76,8 @@ describe('legacy_wrappers/db.js', () => {
       it('should return void', () => expect(actualReturnValue).to.be.undefined);
 
       it('should call the callback with undefined error and successful result', async () => {
-        await superPromise;
-        expect(callback).to.have.been.calledOnce;
-        const expectedArgs = callback.args[0];
-        expect(expectedArgs).to.have.property('0', undefined);
-        expect(expectedArgs).to.have.nested.property('[1].message', 'success!');
+        await oneMicroTask();
+        expect(callback).to.have.been.calledOnceWith(undefined, { message: 'success!' });
       });
 
       it(`should pass only ('name', 'pass') to the driver api`, () => {
@@ -101,11 +93,8 @@ describe('legacy_wrappers/db.js', () => {
       it('should return void', () => expect(actualReturnValue).to.be.undefined);
 
       it('should call the callback with undefined error and successful result', async () => {
-        await superPromise;
-        expect(callback).to.have.been.calledOnce;
-        const expectedArgs = callback.args[0];
-        expect(expectedArgs).to.have.property('0', undefined);
-        expect(expectedArgs).to.have.nested.property('[1].message', 'success!');
+        await oneMicroTask();
+        expect(callback).to.have.been.calledOnceWith(undefined, { message: 'success!' });
       });
 
       it(`should pass only ('name', 'pass', options) to the driver api`, () => {
@@ -123,11 +112,8 @@ describe('legacy_wrappers/db.js', () => {
       it('should return void', () => expect(actualReturnValue).to.be.undefined);
 
       it('should call the callback with undefined error and successful result', async () => {
-        await superPromise;
-        expect(callback).to.have.been.calledOnce;
-        const expectedArgs = callback.args[0];
-        expect(expectedArgs).to.have.property('0', undefined);
-        expect(expectedArgs).to.have.nested.property('[1].message', 'success!');
+        await oneMicroTask();
+        expect(callback).to.have.been.calledOnceWith(undefined, { message: 'success!' });
       });
 
       it(`should pass only ('name', undefined, options) to the driver api`, () => {
