@@ -395,7 +395,7 @@ describe('legacy_wrappers/db.js', () => {
     beforeEach(async () => {
       client = new LegacyMongoClient('mongodb://iLoveJs');
       db = client.db();
-      superPromise = Promise.resolve([]);
+      superPromise = Promise.resolve([client.db().collection('test')]);
       stubbedMethod = sinon.stub(Db.prototype, 'collections').returns(superPromise);
       callback = sinon.stub();
     });
