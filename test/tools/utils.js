@@ -21,5 +21,4 @@ module.exports.sorted = (iterable, how) => {
   return items;
 };
 
-const asyncMicroTask = promisify(queueMicrotask);
-module.exports.runMicroTask = asyncMicroTask;
+module.exports.runMicroTask = promisify(queueMicrotask);
