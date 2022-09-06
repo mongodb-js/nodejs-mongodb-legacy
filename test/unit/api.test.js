@@ -151,7 +151,6 @@ describe('wrapper API', () => {
         // Place the callback at the position we want to see it in
         args[callbackPosition] = 'callback';
         // truncate the array
-        args.length = functionLength - (argumentDecrement - 1);
         const argsPassedToDriver = args.slice(0, callbackPosition);
 
         resolveSuite.push(() =>
