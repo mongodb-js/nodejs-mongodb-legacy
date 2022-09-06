@@ -1,5 +1,7 @@
 'use strict';
 
+const { version } = require('../package.json');
+
 module.exports = Object.create(null);
 Object.defineProperty(module.exports, '__esModule', { value: true });
 
@@ -22,4 +24,24 @@ module.exports.maybeCallback = (promise, callback) => {
   }
 
   return promise;
+};
+
+module.exports.addLegacyMetadata = options => {
+  if (options.driverInfo == null) {
+    options.driverInfo = {
+      name: 'mongodb-legacy',
+      version
+    };
+  } else {
+    if (typeof options.driverInfo.name === 'string') {
+      options.driverInfo.name = `mongodb-legacy|${options.driverInfo.name}`;
+    } else {
+      options.driverInfo.name = 'mongodb-legacy';
+    }
+    if (typeof options.driverInfo.version === 'string') {
+      options.driverInfo.version = `${version}|${options.driverInfo.version}`;
+    } else {
+      options.driverInfo.version = version;
+    }
+  }
 };

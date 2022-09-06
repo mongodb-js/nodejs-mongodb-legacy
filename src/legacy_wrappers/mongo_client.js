@@ -1,6 +1,6 @@
 'use strict';
 
-const { toLegacy, maybeCallback } = require('../utils');
+const { toLegacy, maybeCallback, addLegacyMetadata } = require('../utils');
 
 module.exports = Object.create(null);
 Object.defineProperty(module.exports, '__esModule', { value: true });
@@ -10,11 +10,7 @@ module.exports.makeLegacyMongoClient = function (baseClass) {
     // constructor adds client metadata before constructing final client
     constructor(connectionString, options) {
       options = { ...options };
-      if (options.driverInfo != null && typeof options.driverInfo.name === 'string') {
-        options.driverInfo.name += '|mongodb-legacy';
-      } else {
-        options.driverInfo = { name: 'mongodb-legacy' };
-      }
+      addLegacyMetadata(options);
 
       super(connectionString, options);
     }
