@@ -22,6 +22,24 @@ describe('legacy_wrappers/mongo_client.js', () => {
     await client.close();
   });
 
+  describe('client metadata', () => {
+    it('should set mongodb-legacy to the client metadata', () => {
+      const client = new LegacyMongoClient(iLoveJs);
+      expect(client.options)
+        .to.have.nested.property('metadata.driver.name')
+        .to.be.a('string')
+        .that.includes('mongodb-legacy');
+    });
+
+    it('should add mongodb-legacy to existing driverInfo.name', () => {
+      const client = new LegacyMongoClient(iLoveJs, { driverInfo: { name: 'mongoose' } });
+      expect(client.options)
+        .to.have.nested.property('metadata.driver.name')
+        .to.be.a('string')
+        .that.includes('mongoose|mongodb-legacy');
+    });
+  });
+
   it('calling MongoClient.connect() returns promise', async () => {
     sinon.stub(mongodbDriver.MongoClient.prototype, 'connect').returns(Promise.resolve(2));
     expect(client).to.have.property('connect').that.is.a('function');
