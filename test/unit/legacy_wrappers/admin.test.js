@@ -4,7 +4,7 @@ const { MongoClient: LegacyMongoClient } = require('../../../src/index');
 const { Admin } = require('mongodb');
 const sinon = require('sinon');
 const { expect } = require('chai');
-const { oneMicroTask } = require('../../tools/utils');
+const { runMicroTask } = require('../../tools/utils');
 
 describe('legacy_wrappers/admin.js', () => {
   let admin;
@@ -37,7 +37,7 @@ describe('legacy_wrappers/admin.js', () => {
       it('should return void', () => expect(actualReturnValue).to.be.undefined);
 
       it('should call the callback with undefined error and successful result', async () => {
-        await oneMicroTask();
+        await runMicroTask();
         expect(callback).to.have.been.calledOnceWith(undefined, { message: 'success!' });
       });
 
@@ -54,7 +54,7 @@ describe('legacy_wrappers/admin.js', () => {
       it('should return void', () => expect(actualReturnValue).to.be.undefined);
 
       it('should call the callback with undefined error and successful result', async () => {
-        await oneMicroTask();
+        await runMicroTask();
         expect(callback).to.have.been.calledOnceWith(undefined, { message: 'success!' });
       });
 
@@ -71,7 +71,7 @@ describe('legacy_wrappers/admin.js', () => {
       it('should return void', () => expect(actualReturnValue).to.be.undefined);
 
       it('should call the callback with undefined error and successful result', async () => {
-        await oneMicroTask();
+        await runMicroTask();
         expect(callback).to.have.been.calledOnceWith(undefined, { message: 'success!' });
       });
 
@@ -90,7 +90,7 @@ describe('legacy_wrappers/admin.js', () => {
       it('should return void', () => expect(actualReturnValue).to.be.undefined);
 
       it('should call the callback with undefined error and successful result', async () => {
-        await oneMicroTask();
+        await runMicroTask();
         expect(callback).to.have.been.calledOnceWith(undefined, { message: 'success!' });
       });
 

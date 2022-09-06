@@ -10,7 +10,7 @@ const {
 const mongodbDriver = require('mongodb');
 const sinon = require('sinon');
 const { expect } = require('chai');
-const { oneMicroTask } = require('../../tools/utils');
+const { runMicroTask } = require('../../tools/utils');
 
 const iLoveJs = 'mongodb://iLoveJavascript';
 
@@ -70,7 +70,7 @@ describe('legacy_wrappers/collection.js', () => {
 
       it('should call the callback with undefined error and successful result', async () => {
         await superPromise;
-        await oneMicroTask();
+        await runMicroTask();
         const calls = callback.getCalls();
         expect(calls).to.have.lengthOf(1);
         expect(calls[0].args[0]).to.be.undefined;
@@ -91,7 +91,7 @@ describe('legacy_wrappers/collection.js', () => {
 
       it('should call the callback with undefined error and successful result', async () => {
         await superPromise;
-        await oneMicroTask();
+        await runMicroTask();
         const calls = callback.getCalls();
         expect(calls).to.have.lengthOf(1);
         expect(calls[0].args[0]).to.be.undefined;

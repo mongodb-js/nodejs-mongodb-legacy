@@ -7,7 +7,7 @@ const mongodbDriver = require('mongodb');
 const mongodbLegacy = require('../..');
 const { MongoDBNamespace } = require('mongodb/lib/utils');
 const { classNameToMethodList } = require('../tools/api');
-const { byStrings, sorted, oneMicroTask } = require('../tools/utils');
+const { byStrings, sorted, runMicroTask } = require('../tools/utils');
 
 // Dummy data to help with testing
 const iLoveJs = 'mongodb://iLoveJavascript';
@@ -173,7 +173,7 @@ describe('wrapper API', () => {
             it('should return void', () => expect(actualReturnValue).to.be.undefined);
 
             it('should call the callback with undefined error and successful result', async () => {
-              await oneMicroTask();
+              await runMicroTask();
               expect(callback).to.have.been.calledOnceWithExactly(undefined, expectedResult);
             });
 

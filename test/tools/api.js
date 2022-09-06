@@ -125,7 +125,6 @@ const api = [
   { className: 'GridFSBucket', method: 'openUploadStreamWithId', returnType: 'GridFSBucketWriteStream', notAsync: true },
   { className: 'GridFSBucket', method: 'find', returnType: 'FindCursor', notAsync: true },
 
-
   { className: 'GridFSBucketWriteStream', method: 'abort', returnType: 'Promise<void>' },
 
   { className: 'MongoClient', method: 'close', returnType: 'Promise<void>' },
