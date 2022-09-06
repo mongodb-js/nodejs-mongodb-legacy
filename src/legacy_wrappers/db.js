@@ -34,6 +34,7 @@ module.exports.makeLegacyDb = function (baseClass) {
           : password != null && typeof password === 'object'
           ? password
           : undefined;
+      password = typeof password === 'string' ? password : undefined;
       return maybeCallback(super.addUser(username, password, options), callback);
     }
 
@@ -63,6 +64,13 @@ module.exports.makeLegacyDb = function (baseClass) {
     }
 
     dropCollection(name, options, callback) {
+      callback =
+        typeof callback === 'function'
+          ? callback
+          : typeof options === 'function'
+          ? options
+          : undefined;
+      options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.dropCollection(name, options), callback);
     }
 

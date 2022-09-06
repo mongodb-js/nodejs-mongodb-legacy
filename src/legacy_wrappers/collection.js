@@ -389,6 +389,14 @@ module.exports.makeLegacyCollection = function (baseClass) {
       return super.aggregate(pipeline, options)[toLegacy]();
     }
 
+    initializeUnorderedBulkOp(options) {
+      return super.initializeUnorderedBulkOp(options)[toLegacy]();
+    }
+
+    initializeOrderedBulkOp(options) {
+      return super.initializeOrderedBulkOp(options)[toLegacy]();
+    }
+
     find(filter, options) {
       return super.find(filter, options)[toLegacy]();
     }

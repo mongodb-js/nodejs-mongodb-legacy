@@ -8,14 +8,18 @@
   ],
   "main": "src/index.js",
   "types": "mongodb-legacy.d.ts",
+  "engines": {
+    "node": ">=12.9.0"
+  },
   "dependencies": {
     "mongodb": "^4.9.0"
   },
   "scripts": {
+    "check:coverage": "nyc --check-coverage npm run check:test",
     "check:test": "mocha test/unit",
     "check:ts": "tsc",
     "check:types": "tsc mongodb-legacy.d.ts",
-    "check:lint": "eslint --max-warnings=0 src",
+    "check:lint": "eslint --max-warnings=0 src test",
     "release": "standard-version -a -i HISTORY.md"
   },
   "bugs": {
@@ -41,6 +45,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
     "prettier": "^2.7.1",
     "sinon": "^14.0.0",
     "sinon-chai": "^3.7.0",

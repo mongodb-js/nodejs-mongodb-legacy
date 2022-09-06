@@ -23,6 +23,14 @@ module.exports.makeLegacyGridFSBucket = function (baseClass) {
     find(filter, options) {
       return super.find(filter, options)[toLegacy]();
     }
+
+    openUploadStream(filename, options) {
+      return super.openUploadStream(filename, options)[toLegacy]();
+    }
+
+    openUploadStreamWithId(id, filename, options) {
+      return super.openUploadStreamWithId(id, filename, options)[toLegacy]();
+    }
   }
 
   Object.defineProperty(baseClass.prototype, toLegacy, {
@@ -38,7 +46,7 @@ module.exports.makeLegacyGridFSBucket = function (baseClass) {
 module.exports.makeLegacyGridFSBucketWriteStream = function (baseClass) {
   class LegacyGridFSBucketWriteStream extends baseClass {
     abort(callback) {
-      maybeCallback(super.abort(), callback);
+      return maybeCallback(super.abort(), callback);
     }
   }
 
