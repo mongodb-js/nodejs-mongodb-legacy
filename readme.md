@@ -11,7 +11,7 @@ This is a wrapper of the `mongodb` driver, if you are starting a new project you
 
 This package is intended to assist in migrating to promise based APIs.
 We have wrapped every driver method to continue offering the optional callback support some projects may be relying on to incrementally migrate to promises.
-The main driver package `mongodb` will be dropping support in the next major version (v5) for the optional callback behavior in favor of adopting `async`/`await` syntax for native promise support.
+The main driver package `mongodb` will be dropping optional callback support in the next major version (v5) in favor of a pure `async`/`await` syntax.
 
 ```ts
 // Just add '-legacy' to my mongodb import
@@ -58,11 +58,11 @@ Users can expect to be able to upgrade to `v5` adopting the changes and features
 
 ## API
 
-The API is inherited from the driver so you should be able to peruse the API docs
+The API is inherited from the driver, which is documented here:
 
 - [Found here](https://mongodb.github.io/node-mongodb-native/Next/)
 
-The wrappers are implemented as subclasses of each of our driver's classes that you may use building your app that just handles the optional callback behavior. This means any new APIs added to the driver should be automatically be pulled in as long as the updated driver is installed.
+The wrappers are implemented as subclasses of each of the existing driver's classes with extra logic to handle the optional callback behavior. And all other driver exports are re-exported directly from the wrapper. This means any new APIs added to the driver will be automatically pulled in as long as the updated driver is installed.
 
 Take this hypothetical example:
 
@@ -87,7 +87,7 @@ dogCursor.petAll().then(result => {
 ```
 
 The `petAll()` API will be pulled in since we're building off the existing driver API.
-The typescript definitions work the same way so `next()` still reports it's promise and callback variants and the `petAll()` API is pulled in from the driver's definitions.
+The typescript definitions work the same way so `next()` still reports its promise and callback variants and the `petAll()` API is pulled in from the driver's definitions.
 
 ## Bugs or Features
 
