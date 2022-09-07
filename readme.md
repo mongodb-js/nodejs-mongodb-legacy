@@ -11,6 +11,9 @@ This is a wrapper of the `mongodb` driver, if you are starting a new project you
 
 This package is intended to assist in migrating to promise based APIs.
 We have wrapped every driver method to continue offering the optional callback support some projects may be relying on to incrementally migrate to promises.
+Any new APIs added to the driver will not offer optional callback support.
+If callback usage is needed for any new APIs using `.then`/`.catch` or node's [callbackify](https://nodejs.org/dist/latest-v16.x/docs/api/util.html#utilcallbackifyoriginal) is an avenue to get that desired API.
+
 The main driver package `mongodb` will be dropping optional callback support in the next major version (v5) in favor of a pure `async`/`await` syntax.
 
 ```ts
@@ -22,9 +25,14 @@ const collection = db.collection('pets');
 
 // Legacy projects may have intermixed API usage:
 app.get('/endpoint_promises', (req, res) => {
-  collection.findOne({}).then(result => {
-    res.end(JSON.stringify(result));
-  });
+  collection
+    .findOne({})
+    .then(result => {
+      res.end(JSON.stringify(result));
+    })
+    .catch(error => {
+      res.errorHandling(error);
+    });
 });
 
 app.get('/endpoint_callbacks', (req, res) => {
@@ -45,22 +53,17 @@ npm install mongodb-legacy
 
 ### Versioning
 
-There is no one size fits all solution to how your project and policies may require pulling in dependencies, below is one recommended path.
-
-**We recommend you keep `mongodb` in your project's direct dependencies**.
-The package has a direct dependency on the `mongodb` package of `^4.10.0`.
-So when you're ready to upgrade to `v4.10+` and want to start working with this wrapper package keeping `mongodb` in your project's dependencies will allow you to control upgrades explicitly as needed.
-Without `mongodb` specified in your project's dependencies it will be up to `npm` and your `package-lock.json` file updating policy to control when new driver versions are pulled into your project.
+We recommend replacing your `mongodb` dependency with this one.
+This package uses caret semver range (ex. `^4.10.0`) which will adopts minor version bumps as they are released.
 
 The next major release of the driver (v5) will drop support for callbacks.
-This package will also have a major release at that time to update the peerDependency requirement to `v5+`.
+This package will also have a major release at that time to update the dependency requirement to `^5.0.0`.
 Users can expect to be able to upgrade to `v5` adopting the changes and features shipped in that version while using this module to maintain any callback code they still need to work on migrating.
 
-## API
+## [API](https://mongodb.github.io/node-mongodb-native/)
 
-The API is inherited from the driver, which is documented here:
-
-- [Found here](https://mongodb.github.io/node-mongodb-native/Next/)
+The API is inherited from the driver, which is [documented here](https://mongodb.github.io/node-mongodb-native/).
+If it is relevant to inspect the precise differences, you can peruse the [type definitions of wrapped APIs](https://github.com/mongodb-js/nodejs-mongodb-legacy/blob/main/mongodb-legacy.d.ts).
 
 The wrappers are implemented as subclasses of each of the existing driver's classes with extra logic to handle the optional callback behavior. And all other driver exports are re-exported directly from the wrapper. This means any new APIs added to the driver will be automatically pulled in as long as the updated driver is installed.
 
@@ -80,13 +83,15 @@ dogCursor.next((error, dog) => {
   if (error) return handling(error);
   console.log(dog);
 });
-// Brand new api that pets all dogs!
+// Brand new api that pets all dogs! (does not support callbacks)
 dogCursor.petAll().then(result => {
   console.log('all dogs got pats!');
 });
 ```
 
-The `petAll()` API will be pulled in since we're building off the existing driver API.
+> NOTE: The `petAll()` api is brand new in this example and will not support an optional callback. If adopting this API is deep inside code that already relies on eventually calling a callback to indicate the end of an operation it is possible to use `.then`/`.catch` chains to handle the cases that are needed. We recommend offloading this complexity to node's [callbackify utility](https://nodejs.org/dist/latest-v16.x/docs/api/util.html#utilcallbackifyoriginal): `callbackify(() => dogCursor.petAll())(callback)`
+
+The new `petAll()` API will be pulled in since we're building off the existing driver API.
 The typescript definitions work the same way so `next()` still reports its promise and callback variants and the `petAll()` API is pulled in from the driver's definitions.
 
 ## Bugs or Features
