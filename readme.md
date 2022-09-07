@@ -1,6 +1,6 @@
 # MongoDB Node.js Driver with Optional Callback Support Legacy Package
 
-**Attention 📝**
+**Attention :memo:**
 
 This is a wrapper of the `mongodb` driver, if you are starting a new project you likely just want to use the driver directly:
 
@@ -97,3 +97,9 @@ The typescript definitions work the same way so `next()` still reports its promi
 ## Bugs or Features
 
 You can reach out on our JIRA: https://jira.mongodb.org/projects/NODE and let us know any issues your run into while using this package.
+
+## License
+
+[Apache 2.0](https://github.com/mongodb-js/nodejs-mongodb-legacy/blob/main/LICENSE)
+
+:copyright: 2022-present MongoDB
