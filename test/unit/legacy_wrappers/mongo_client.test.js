@@ -24,51 +24,55 @@ describe('legacy_wrappers/mongo_client.js', () => {
     await client.close();
   });
 
-  describe('client metadata', () => {
-    it('should set mongodb-legacy to the client metadata', () => {
-      const client = new LegacyMongoClient(iLoveJs);
-      expect(client.options.metadata).to.have.nested.property(
-        'driver.name',
-        'nodejs|mongodb-legacy'
-      );
-      expect(client.options.metadata)
-        .to.have.property('version')
-        .that.includes(currentLegacyVersion);
-    });
-
-    it('should prepend mongodb-legacy to existing driverInfo.name', () => {
-      const client = new LegacyMongoClient(iLoveJs, { driverInfo: { name: 'mongoose' } });
-      expect(client.options.metadata).to.have.nested.property(
-        'driver.name',
-        'nodejs|mongodb-legacy|mongoose'
-      );
-      expect(client.options.metadata)
-        .to.have.property('version')
-        .that.includes(currentLegacyVersion);
-    });
-
-    it('should prepend mongodb-legacy to existing driverInfo.name and legacy version number', () => {
-      const client = new LegacyMongoClient(iLoveJs, {
-        driverInfo: { name: 'mongoose', version: '99.99.99' }
+  describe('setting client metadata', () => {
+    describe('when no driverInfo is passed to MongoClient()', () => {
+      it('should set mongodb-legacy to the client metadata', () => {
+        const client = new LegacyMongoClient(iLoveJs);
+        expect(client.options.metadata).to.have.nested.property(
+          'driver.name',
+          'nodejs|mongodb-legacy'
+        );
+        expect(client.options.metadata)
+          .to.have.property('version')
+          .that.includes(currentLegacyVersion);
       });
-      expect(client.options.metadata)
-        .to.have.nested.property('driver.name')
-        .that.equals('nodejs|mongodb-legacy|mongoose');
-      expect(client.options.metadata)
-        .to.have.property('version')
-        .that.includes(`${currentLegacyVersion}|99.99.99`);
     });
 
-    it('should prepend legacy version number', () => {
-      const client = new LegacyMongoClient(iLoveJs, {
-        driverInfo: { version: '99.99.99' }
+    describe('when driverInfo is passed to MongoClient()', () => {
+      it('should prepend mongodb-legacy to user passed driverInfo.name', () => {
+        const client = new LegacyMongoClient(iLoveJs, { driverInfo: { name: 'mongoose' } });
+        expect(client.options.metadata).to.have.nested.property(
+          'driver.name',
+          'nodejs|mongodb-legacy|mongoose'
+        );
+        expect(client.options.metadata)
+          .to.have.property('version')
+          .that.includes(currentLegacyVersion);
       });
-      expect(client.options.metadata)
-        .to.have.nested.property('driver.name')
-        .that.equals('nodejs|mongodb-legacy');
-      expect(client.options.metadata)
-        .to.have.property('version')
-        .that.includes(`${currentLegacyVersion}|99.99.99`);
+
+      it('should prepend mongodb-legacy to user passed driverInfo.name and legacy version number to user passed driverInfo.version', () => {
+        const client = new LegacyMongoClient(iLoveJs, {
+          driverInfo: { name: 'mongoose', version: '99.99.99' }
+        });
+        expect(client.options.metadata)
+          .to.have.nested.property('driver.name')
+          .that.equals('nodejs|mongodb-legacy|mongoose');
+        expect(client.options.metadata)
+          .to.have.property('version')
+          .that.includes(`${currentLegacyVersion}|99.99.99`);
+      });
+
+      it('should prepend legacy version number to user passed driverInfo.version', () => {
+        const client = new LegacyMongoClient(iLoveJs, {
+          driverInfo: { version: '99.99.99' }
+        });
+        expect(client.options.metadata)
+          .to.have.nested.property('driver.name')
+          .that.equals('nodejs|mongodb-legacy');
+        expect(client.options.metadata)
+          .to.have.property('version')
+          .that.includes(`${currentLegacyVersion}|99.99.99`);
+      });
     });
   });
 
