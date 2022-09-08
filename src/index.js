@@ -39,24 +39,11 @@ const classesWithAsyncAPIs = new Map([
   ['GridFSBucket', makeLegacyGridFSBucket],
   ['ClientSession', makeLegacyClientSession],
   ['MongoClient', makeLegacyMongoClient],
-
-  // Need to be exported top-level still
   ['ClientSession', makeLegacyClientSession],
   ['GridFSBucketWriteStream', makeLegacyGridFSBucketWriteStream],
   ['OrderedBulkOperation', makeLegacyOrderedBulkOperation],
   ['UnorderedBulkOperation', makeLegacyUnorderedBulkOperation]
 ]);
-
-const TODO_SPECIAL_IMPORTS = new Map([
-  ['ClientSession', '/lib/sessions'],
-  ['GridFSBucketWriteStream', '/lib/gridfs/upload'],
-  ['OrderedBulkOperation', '/lib/bulk/ordered'],
-  ['UnorderedBulkOperation', '/lib/bulk/unordered']
-]);
-
-for (const [missingTopLevelClassName, location] of TODO_SPECIAL_IMPORTS) {
-  mongodb[missingTopLevelClassName] = require(`mongodb${location}`)[missingTopLevelClassName];
-}
 
 for (const [mongodbExportName, mongodbExportValue] of Object.entries(mongodb)) {
   let makeLegacyClass = classesWithAsyncAPIs.get(mongodbExportName);
