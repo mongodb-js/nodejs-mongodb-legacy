@@ -12,7 +12,7 @@ This is a wrapper of the `mongodb` driver, if you are starting a new project you
 This package is intended to assist in migrating to promise based APIs.
 We have wrapped every driver method to continue offering the optional callback support some projects may be relying on to incrementally migrate to promises.
 Any new APIs added to the driver will not offer optional callback support.
-If callback usage is needed for any new APIs using `.then`/`.catch` or node's [callbackify](https://nodejs.org/dist/latest-v16.x/docs/api/util.html#utilcallbackifyoriginal) is an avenue to get that desired API.
+If callback usage is needed for any new APIs, we would suggest using `.then`/`.catch` or node’s [callbackify](https://nodejs.org/dist/latest-v16.x/docs/api/util.html#utilcallbackifyoriginal) to get that desired API.
 
 The main driver package `mongodb` will be dropping optional callback support in the next major version (v5) in favor of a pure `async`/`await` syntax.
 
