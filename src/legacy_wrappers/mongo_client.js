@@ -9,7 +9,9 @@ module.exports.makeLegacyMongoClient = function (baseClass) {
   class LegacyMongoClient extends baseClass {
     // constructor adds client metadata before constructing final client
     constructor(connectionString, options) {
-      options = { ...options };
+      if (options == null) {
+        options = {};
+      }
       addLegacyMetadata(options);
 
       super(connectionString, options);

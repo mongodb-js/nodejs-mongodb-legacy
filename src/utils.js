@@ -27,21 +27,26 @@ module.exports.maybeCallback = (promise, callback) => {
 };
 
 module.exports.addLegacyMetadata = options => {
-  if (options.driverInfo == null) {
-    options.driverInfo = {
-      name: 'mongodb-legacy',
-      version
-    };
-  } else {
-    if (typeof options.driverInfo.name === 'string') {
-      options.driverInfo.name = `mongodb-legacy|${options.driverInfo.name}`;
-    } else {
-      options.driverInfo.name = 'mongodb-legacy';
-    }
-    if (typeof options.driverInfo.version === 'string') {
-      options.driverInfo.version = `${version}|${options.driverInfo.version}`;
-    } else {
-      options.driverInfo.version = version;
-    }
+  if (options.driverInfo != null && typeof options.driverInfo !== 'object') {
+    return;
   }
+
+  options.driverInfo = options.driverInfo == null ? {} : options.driverInfo;
+
+  const infoParts = {
+    name: ['mongodb-legacy'],
+    version: [version]
+  };
+
+  // name handling
+  if (typeof options.driverInfo.name === 'string') {
+    infoParts.name.push(options.driverInfo.name);
+  }
+  options.driverInfo.name = infoParts.name.join('|');
+
+  // version handling
+  if (typeof options.driverInfo.version === 'string') {
+    infoParts.version.push(options.driverInfo.version);
+  }
+  options.driverInfo.version = infoParts.version.join('|');
 };
