@@ -54,7 +54,7 @@ npm install mongodb-legacy
 ### Versioning
 
 We recommend replacing your `mongodb` dependency with this one.
-This package uses caret semver range (ex. `^4.10.0`) which will adopts minor version bumps as they are released.
+This package uses caret semver range for the main `mongodb` package, (ex. `^4.10.0`) which will adopt minor version bumps as they are released.
 
 The next major release of the driver (v5) will drop support for callbacks.
 This package will also have a major release at that time to update the dependency requirement to `^5.0.0`.
