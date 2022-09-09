@@ -1,7 +1,5 @@
 'use strict';
 
-const { version } = require('../package.json');
-
 module.exports = Object.create(null);
 Object.defineProperty(module.exports, '__esModule', { value: true });
 
@@ -24,32 +22,4 @@ module.exports.maybeCallback = (promise, callback) => {
   }
 
   return promise;
-};
-
-module.exports.addLegacyMetadata = options => {
-  const incorrectOptionsType = typeof options !== 'object';
-  const incorrectDriverInfo = options.driverInfo != null && typeof options.driverInfo !== 'object';
-  if (incorrectOptionsType || incorrectDriverInfo) {
-    // Pass this mistake along to the MongoClient constructor
-    return;
-  }
-
-  options.driverInfo = options.driverInfo == null ? {} : options.driverInfo;
-
-  const infoParts = {
-    name: ['mongodb-legacy'],
-    version: [version]
-  };
-
-  // name handling
-  if (typeof options.driverInfo.name === 'string') {
-    infoParts.name.push(options.driverInfo.name);
-  }
-  options.driverInfo.name = infoParts.name.join('|');
-
-  // version handling
-  if (typeof options.driverInfo.version === 'string') {
-    infoParts.version.push(options.driverInfo.version);
-  }
-  options.driverInfo.version = infoParts.version.join('|');
 };

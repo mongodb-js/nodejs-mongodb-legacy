@@ -33,6 +33,18 @@ describe('legacy_wrappers/mongo_client.js', () => {
   });
 
   describe('setting client metadata', () => {
+    it('does not mutate the input options', () => {
+      expect(() => {
+        new LegacyMongoClient(iLoveJs, Object.freeze({}));
+      }).to.not.throw();
+    });
+
+    it('does not mutate the input options.driverInfo', () => {
+      expect(() => {
+        new LegacyMongoClient(iLoveJs, Object.freeze({ driverInfo: Object.freeze({}) }));
+      }).to.not.throw();
+    });
+
     describe('when driverInfo.name is provided', () => {
       const client = new LegacyMongoClient(iLoveJs, { driverInfo: { name: 'mongoose' } });
 
