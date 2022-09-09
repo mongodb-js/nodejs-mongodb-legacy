@@ -24,6 +24,14 @@ describe('legacy_wrappers/mongo_client.js', () => {
     await client.close();
   });
 
+  describe('calling the constructor with invalid types', () => {
+    it('passing boolean to the options', () => {
+      expect(() => {
+        new LegacyMongoClient(iLoveJs, true);
+      }).to.not.throw();
+    });
+  });
+
   describe('setting client metadata', () => {
     describe('when driverInfo.name is provided', () => {
       const client = new LegacyMongoClient(iLoveJs, { driverInfo: { name: 'mongoose' } });

@@ -27,7 +27,10 @@ module.exports.maybeCallback = (promise, callback) => {
 };
 
 module.exports.addLegacyMetadata = options => {
-  if (options.driverInfo != null && typeof options.driverInfo !== 'object') {
+  const incorrectOptionsType = typeof options !== 'object';
+  const incorrectDriverInfo = options.driverInfo != null && typeof options.driverInfo !== 'object';
+  if (incorrectOptionsType || incorrectDriverInfo) {
+    // Pass this mistake along to the MongoClient constructor
     return;
   }
 
