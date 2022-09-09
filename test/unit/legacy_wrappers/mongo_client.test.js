@@ -25,7 +25,7 @@ describe('legacy_wrappers/mongo_client.js', () => {
   });
 
   describe('setting client metadata', () => {
-    describe('when driverInto.name is provided', () => {
+    describe('when driverInfo.name is provided', () => {
       const client = new LegacyMongoClient(iLoveJs, { driverInfo: { name: 'mongoose' } });
 
       it('should prepend mongodb-legacy to user passed driverInfo.name', () =>
@@ -40,7 +40,7 @@ describe('legacy_wrappers/mongo_client.js', () => {
           .that.includes(currentLegacyVersion));
     });
 
-    describe('when driverInto.name is provided and driverInfo.version is provided', () => {
+    describe('when driverInfo.name is provided and driverInfo.version is provided', () => {
       const client = new LegacyMongoClient(iLoveJs, {
         driverInfo: { name: 'mongoose', version: '99.99.99' }
       });
