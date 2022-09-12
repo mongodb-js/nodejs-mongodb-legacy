@@ -89,7 +89,7 @@ dogCursor.petAll().then(result => {
 });
 ```
 
-> NOTE: The `petAll()` api is brand new hypothetical example that would not support an optional callback. If adopting this API is deep inside code that already relies on eventually calling a callback to indicate the end of an operation it is possible to use `.then`/`.catch` chains to handle the cases that are needed. We recommend offloading this complexity to node's [callbackify utility](https://nodejs.org/dist/latest-v16.x/docs/api/util.html#utilcallbackifyoriginal): `callbackify(() => dogCursor.petAll())(callback)`
+> NOTE: The `petAll()` api is brand new in this hypothetical example and so would not support an optional callback. If adopting this API is deep inside code that already relies on eventually calling a callback to indicate the end of an operation it is possible to use `.then`/`.catch` chains to handle the cases that are needed. We recommend offloading this complexity to node's [callbackify utility](https://nodejs.org/dist/latest-v16.x/docs/api/util.html#utilcallbackifyoriginal): `callbackify(() => dogCursor.petAll())(callback)`
 
 The new example `petAll()` API will be pulled in since we're building off the existing driver API.
 The typescript definitions work the same way so `next()` still reports its promise and callback variants and the `petAll()` API is pulled in from the driver's definitions.
