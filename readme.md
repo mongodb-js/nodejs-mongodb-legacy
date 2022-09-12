@@ -83,15 +83,15 @@ dogCursor.next((error, dog) => {
   if (error) return handling(error);
   console.log(dog);
 });
-// Brand new api that pets all dogs! (does not support callbacks)
+// Brand new hypothetical api that pets all dogs! (does not support callbacks)
 dogCursor.petAll().then(result => {
   console.log('all dogs got pats!');
 });
 ```
 
-> NOTE: The `petAll()` api is brand new in this example and will not support an optional callback. If adopting this API is deep inside code that already relies on eventually calling a callback to indicate the end of an operation it is possible to use `.then`/`.catch` chains to handle the cases that are needed. We recommend offloading this complexity to node's [callbackify utility](https://nodejs.org/dist/latest-v16.x/docs/api/util.html#utilcallbackifyoriginal): `callbackify(() => dogCursor.petAll())(callback)`
+> NOTE: The `petAll()` api is brand new hypothetical example that would not support an optional callback. If adopting this API is deep inside code that already relies on eventually calling a callback to indicate the end of an operation it is possible to use `.then`/`.catch` chains to handle the cases that are needed. We recommend offloading this complexity to node's [callbackify utility](https://nodejs.org/dist/latest-v16.x/docs/api/util.html#utilcallbackifyoriginal): `callbackify(() => dogCursor.petAll())(callback)`
 
-The new `petAll()` API will be pulled in since we're building off the existing driver API.
+The new example `petAll()` API will be pulled in since we're building off the existing driver API.
 The typescript definitions work the same way so `next()` still reports its promise and callback variants and the `petAll()` API is pulled in from the driver's definitions.
 
 ## Bugs or Features
