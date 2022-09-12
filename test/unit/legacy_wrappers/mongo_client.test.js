@@ -25,7 +25,10 @@ describe('legacy_wrappers/mongo_client.js', () => {
   });
 
   describe('calling the constructor with invalid types', () => {
-    it('passing boolean to the options', () => {
+    it('should not throw when passing a non-object type as the options', () => {
+      // The driver ignores non-object types in the options arg position
+      // so this confirms our logic for adding metadata or any other handling
+      // does not introduce an error for non-object types
       expect(() => {
         new LegacyMongoClient(iLoveJs, true);
       }).to.not.throw();
