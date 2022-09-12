@@ -16,6 +16,8 @@ If callback usage is needed for any new APIs, we would suggest using `.then`/`.c
 
 The main driver package `mongodb` will be dropping optional callback support in the next major version (v5) in favor of a pure `async`/`await` syntax.
 
+### Example usage of equivalent callback and promise usage
+
 ```ts
 // Just add '-legacy' to my mongodb import
 import { MongoClient } from 'mongodb-legacy';
