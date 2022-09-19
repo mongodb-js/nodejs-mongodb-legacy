@@ -1,7 +1,7 @@
 {
   "name": "mongodb-legacy",
   "description": "The legacy MongoDB driver with callback support for Node.js",
-  "version": "0.0.0",
+  "version": "4.0.0",
   "files": [
     "src",
     "mongodb-legacy.d.ts"
@@ -12,7 +12,7 @@
     "node": ">=12.9.0"
   },
   "dependencies": {
-    "mongodb": "^4.9.0"
+    "mongodb": "^4.10.0"
   },
   "scripts": {
     "check:coverage": "nyc --check-coverage npm run check:test",
