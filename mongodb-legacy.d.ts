@@ -38,7 +38,6 @@ import type {
   CountOptions,
   CreateCollectionOptions,
   CreateIndexesOptions,
-  CursorCloseOptions,
   DbOptions,
   DbStatsOptions,
   DeleteOptions,
@@ -69,8 +68,6 @@ import type {
   ListDatabasesOptions,
   ListDatabasesResult,
   ListIndexesOptions,
-  MapFunction,
-  MapReduceOptions,
   ModifyResult,
   MongoClientOptions,
   ObjectId,
@@ -78,7 +75,6 @@ import type {
   OptionalUnlessRequiredId,
   ProfilingLevel,
   ProfilingLevelOptions,
-  ReduceFunction,
   RemoveUserOptions,
   RenameOptions,
   ReplaceOptions,
@@ -730,19 +726,6 @@ declare class LegacyCollection<TSchema extends Document = Document> extends Coll
    */
   watch<TLocal extends Document = TSchema, TChange extends Document = ChangeStreamDocument<TLocal>>(pipeline?: Document[], options?: ChangeStreamOptions): LegacyChangeStream<TLocal, TChange>;
   /**
-   * Run Map Reduce across a collection. Be aware that the inline option for out will return an array of results not a collection.
-   *
-   * @deprecated collection.mapReduce is deprecated. Use the aggregation pipeline instead. Visit https://docs.mongodb.com/manual/reference/map-reduce-to-aggregation-pipeline for more information on how to translate map-reduce operations to the aggregation pipeline.
-   * @param map - The mapping function.
-   * @param reduce - The reduce function.
-   * @param options - Optional settings for the command
-   * @param callback - An optional callback, a Promise will be returned if none is provided
-   */
-  mapReduce<TKey = any, TValue = any>(map: string | MapFunction<TSchema>, reduce: string | ReduceFunction<TKey, TValue>): Promise<Document | Document[]>;
-  mapReduce<TKey = any, TValue = any>(map: string | MapFunction<TSchema>, reduce: string | ReduceFunction<TKey, TValue>, callback: Callback<Document | Document[]>): void;
-  mapReduce<TKey = any, TValue = any>(map: string | MapFunction<TSchema>, reduce: string | ReduceFunction<TKey, TValue>, options: MapReduceOptions<TKey, TValue>): Promise<Document | Document[]>;
-  mapReduce<TKey = any, TValue = any>(map: string | MapFunction<TSchema>, reduce: string | ReduceFunction<TKey, TValue>, options: MapReduceOptions<TKey, TValue>, callback: Callback<Document | Document[]>): void;
-  /**
    * Inserts a single document or a an array of documents into MongoDB. If documents passed in do not contain the **_id** field,
    * one will be added to each of the documents missing it by the driver, mutating the document. This behavior
    * can be overridden by setting the **forceServerObjectId** flag.
@@ -1111,11 +1094,11 @@ declare class LegacyAbstractCursor<TSchema = any, CursorEvents extends AbstractC
   /**
    * @deprecated options argument is deprecated
    */
-  close(options: CursorCloseOptions): Promise<void>;
+  close(): Promise<void>;
   /**
    * @deprecated options argument is deprecated
    */
-  close(options: CursorCloseOptions, callback: Callback): void;
+  close(callback: Callback): void;
   /**
    * Returns an array of documents. The caller is responsible for making sure that there
    * is enough memory to store the results. Note that the array only contains partial
