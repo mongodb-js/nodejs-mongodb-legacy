@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.1](https://github.com/mongodb-js/nodejs-mongodb-legacy/compare/v4.0.0...v4.0.1) (2023-01-17)
+
+
+### Bug Fixes
+
+* **NODE-4957:** Missing callback typings for insertOne method ([#10](https://github.com/mongodb-js/nodejs-mongodb-legacy/issues/10)) ([613e4b7](https://github.com/mongodb-js/nodejs-mongodb-legacy/commit/613e4b7ec704395478eb2af29b36e982035d154e))
+
 ## [4.0.0](https://github.com/mongodb-js/nodejs-mongodb-legacy/compare/v0.0.0...v4.0.0) (2022-09-19)
 
 
