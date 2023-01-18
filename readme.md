@@ -8,6 +8,7 @@ This is a wrapper of the `mongodb` driver, if you are starting a new project you
 - [Driver NPM Package](https://www.npmjs.com/package/mongodb)
 
 **Upgrading to version 5? Take a look at our [upgrade guide here](https://github.com/mongodb/node-mongodb-native/blob/HEAD/etc/notes/CHANGES_5.0.0.md)!**
+
 ## Purpose
 
 This package is intended to assist in migrating to promise based APIs.
