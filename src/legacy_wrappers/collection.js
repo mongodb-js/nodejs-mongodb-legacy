@@ -238,17 +238,6 @@ module.exports.makeLegacyCollection = function (baseClass) {
       return maybeCallback(super.indexes(options), callback);
     }
 
-    insert(docs, options, callback) {
-      callback =
-        typeof callback === 'function'
-          ? callback
-          : typeof options === 'function'
-          ? options
-          : undefined;
-      options = typeof options !== 'function' ? options : undefined;
-      return maybeCallback(super.insert(docs, options), callback);
-    }
-
     insertMany(docs, options, callback) {
       callback =
         typeof callback === 'function'
@@ -282,17 +271,6 @@ module.exports.makeLegacyCollection = function (baseClass) {
       return maybeCallback(super.isCapped(options), callback);
     }
 
-    mapReduce(map, reduce, options, callback) {
-      callback =
-        typeof callback === 'function'
-          ? callback
-          : typeof options === 'function'
-          ? options
-          : undefined;
-      options = typeof options !== 'function' ? options : undefined;
-      return maybeCallback(super.mapReduce(map, reduce, options), callback);
-    }
-
     options(options, callback) {
       callback =
         typeof callback === 'function'
@@ -302,17 +280,6 @@ module.exports.makeLegacyCollection = function (baseClass) {
           : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.options(options), callback);
-    }
-
-    remove(filter, options, callback) {
-      callback =
-        typeof callback === 'function'
-          ? callback
-          : typeof options === 'function'
-          ? options
-          : undefined;
-      options = typeof options !== 'function' ? options : undefined;
-      return maybeCallback(super.remove(filter, options), callback);
     }
 
     rename(newName, options, callback) {
@@ -349,17 +316,6 @@ module.exports.makeLegacyCollection = function (baseClass) {
           : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.stats(options), callback);
-    }
-
-    update(filter, update, options, callback) {
-      callback =
-        typeof callback === 'function'
-          ? callback
-          : typeof options === 'function'
-          ? options
-          : undefined;
-      options = typeof options !== 'function' ? options : undefined;
-      return maybeCallback(super.update(filter, update, options), callback);
     }
 
     updateMany(filter, update, options, callback) {

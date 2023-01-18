@@ -38,7 +38,6 @@ import type {
   CountOptions,
   CreateCollectionOptions,
   CreateIndexesOptions,
-  CursorCloseOptions,
   DbOptions,
   DbStatsOptions,
   DeleteOptions,
@@ -69,8 +68,6 @@ import type {
   ListDatabasesOptions,
   ListDatabasesResult,
   ListIndexesOptions,
-  MapFunction,
-  MapReduceOptions,
   ModifyResult,
   MongoClientOptions,
   ObjectId,
@@ -78,7 +75,6 @@ import type {
   OptionalUnlessRequiredId,
   ProfilingLevel,
   ProfilingLevelOptions,
-  ReduceFunction,
   RemoveUserOptions,
   RenameOptions,
   ReplaceOptions,
@@ -99,7 +95,7 @@ type NonConstructor<T> = Pick<T, NonConstructorKeys<T>>;
 
 declare const Admin: new () => Omit<MDBAdmin, 'addUser' | 'buildInfo' | 'command' | 'listDatabases' | 'ping' | 'removeUser' | 'replSetGetStatus' | 'serverInfo' | 'serverStatus' | 'validateCollection'>;
 declare const ChangeStream: new <TSchema extends Document = Document, TChange extends Document = ChangeStreamDocument<TSchema>>() => Omit<MDBChangeStream<TSchema, TChange>, 'close' | 'hasNext' | 'next' | 'tryNext'>;
-declare const Collection: new <TSchema>() => Omit<MDBCollection<TSchema>, 'initializeUnorderedBulkOp' | 'initializeOrderedBulkOp' | 'bulkWrite'| 'count'| 'countDocuments'| 'estimatedDocumentCount'| 'createIndex'| 'createIndexes'| 'dropIndex'| 'dropIndexes'| 'deleteMany'| 'deleteOne'| 'distinct'| 'drop'| 'findOne'| 'findOneAndDelete'| 'findOneAndReplace'| 'findOneAndUpdate'| 'indexExists'| 'indexInformation'| 'indexes'| 'insert'| 'insertMany'| 'insertOne'| 'isCapped'| 'mapReduce'| 'options'| 'remove'| 'rename'| 'replaceOne'| 'stats'| 'update'| 'updateMany'| 'updateOne'| 'aggregate'| 'find'| 'listIndexes'| 'watch'>;
+declare const Collection: new <TSchema>() => Omit<MDBCollection<TSchema>, 'initializeUnorderedBulkOp' | 'initializeOrderedBulkOp' | 'bulkWrite'| 'count'| 'countDocuments'| 'estimatedDocumentCount'| 'createIndex'| 'createIndexes'| 'dropIndex'| 'dropIndexes'| 'deleteMany'| 'deleteOne'| 'distinct'| 'drop'| 'findOne'| 'findOneAndDelete'| 'findOneAndReplace'| 'findOneAndUpdate'| 'indexExists'| 'indexInformation'| 'indexes'| 'insertMany'| 'insertOne'| 'isCapped'| 'options'| 'rename'| 'replaceOne'| 'stats'| 'updateMany'| 'updateOne'| 'aggregate'| 'find'| 'listIndexes'| 'watch'>;
 declare const Db: new () => Omit<MDBDb, 'command' | 'addUser' | 'removeUser' | 'createCollection' | 'dropCollection' | 'createIndex' | 'dropDatabase' | 'indexInformation' | 'profilingLevel' | 'setProfilingLevel' | 'renameCollection' | 'stats' | 'collections' | 'collection' | 'admin' | 'aggregate' | 'listCollections' | 'watch'>;
 declare const GridFSBucket: new (db: LegacyDb, options: GridFSBucketOptions) => Omit<NonConstructor<MDBGridFSBucket>, 'delete' | 'rename' | 'drop' | 'find'>;
 declare const MongoClient: new (url: string, options?: MongoClientOptions) => Omit<NonConstructor<MDBMongoClient>, 'connect' | 'close' | 'db' | 'watch' | 'withSession' | 'startSession'>;
@@ -733,49 +729,6 @@ declare class LegacyCollection<TSchema extends Document = Document> extends Coll
    */
   watch<TLocal extends Document = TSchema, TChange extends Document = ChangeStreamDocument<TLocal>>(pipeline?: Document[], options?: ChangeStreamOptions): LegacyChangeStream<TLocal, TChange>;
   /**
-   * Run Map Reduce across a collection. Be aware that the inline option for out will return an array of results not a collection.
-   *
-   * @deprecated collection.mapReduce is deprecated. Use the aggregation pipeline instead. Visit https://docs.mongodb.com/manual/reference/map-reduce-to-aggregation-pipeline for more information on how to translate map-reduce operations to the aggregation pipeline.
-   * @param map - The mapping function.
-   * @param reduce - The reduce function.
-   * @param options - Optional settings for the command
-   * @param callback - An optional callback, a Promise will be returned if none is provided
-   */
-  mapReduce<TKey = any, TValue = any>(map: string | MapFunction<TSchema>, reduce: string | ReduceFunction<TKey, TValue>): Promise<Document | Document[]>;
-  mapReduce<TKey = any, TValue = any>(map: string | MapFunction<TSchema>, reduce: string | ReduceFunction<TKey, TValue>, callback: Callback<Document | Document[]>): void;
-  mapReduce<TKey = any, TValue = any>(map: string | MapFunction<TSchema>, reduce: string | ReduceFunction<TKey, TValue>, options: MapReduceOptions<TKey, TValue>): Promise<Document | Document[]>;
-  mapReduce<TKey = any, TValue = any>(map: string | MapFunction<TSchema>, reduce: string | ReduceFunction<TKey, TValue>, options: MapReduceOptions<TKey, TValue>, callback: Callback<Document | Document[]>): void;
-  /**
-   * Inserts a single document or a an array of documents into MongoDB. If documents passed in do not contain the **_id** field,
-   * one will be added to each of the documents missing it by the driver, mutating the document. This behavior
-   * can be overridden by setting the **forceServerObjectId** flag.
-   *
-   * @deprecated Use insertOne, insertMany or bulkWrite instead.
-   * @param docs - The documents to insert
-   * @param options - Optional settings for the command
-   * @param callback - An optional callback, a Promise will be returned if none is provided
-   */
-  insert(docs: OptionalUnlessRequiredId<TSchema>[], options: BulkWriteOptions, callback: Callback<InsertManyResult<TSchema>>): Promise<InsertManyResult<TSchema>> | void;
-  /**
-   * Updates documents.
-   *
-   * @deprecated use updateOne, updateMany or bulkWrite
-   * @param selector - The selector for the update operation.
-   * @param update - The update operations to be applied to the documents
-   * @param options - Optional settings for the command
-   * @param callback - An optional callback, a Promise will be returned if none is provided
-   */
-  update(selector: Filter<TSchema>, update: UpdateFilter<TSchema>, options: UpdateOptions, callback: Callback<Document>): Promise<UpdateResult> | void;
-  /**
-   * Remove documents.
-   *
-   * @deprecated use deleteOne, deleteMany or bulkWrite
-   * @param selector - The selector for the update operation.
-   * @param options - Optional settings for the command
-   * @param callback - An optional callback, a Promise will be returned if none is provided
-   */
-  remove(selector: Filter<TSchema>, options: DeleteOptions, callback: Callback): Promise<DeleteResult> | void;
-  /**
    * An estimated count of matching documents in the db to a filter.
    *
    * **NOTE:** This method has been deprecated, since it does not provide an accurate count of the documents
@@ -1114,11 +1067,11 @@ declare class LegacyAbstractCursor<TSchema = any, CursorEvents extends AbstractC
   /**
    * @deprecated options argument is deprecated
    */
-  close(options: CursorCloseOptions): Promise<void>;
+  close(): Promise<void>;
   /**
    * @deprecated options argument is deprecated
    */
-  close(options: CursorCloseOptions, callback: Callback): void;
+  close(callback: Callback): void;
   /**
    * Returns an array of documents. The caller is responsible for making sure that there
    * is enough memory to store the results. Note that the array only contains partial
