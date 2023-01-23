@@ -7,6 +7,11 @@ module.exports = Object.create(null);
 Object.defineProperty(module.exports, '__esModule', { value: true });
 
 module.exports.makeLegacyFindCursor = function (baseClass) {
+  function toLegacyHelper(cursor) {
+    Object.setPrototypeOf(cursor, LegacyFindCursor.prototype);
+    return cursor;
+  }
+
   class LegacyFindCursor extends baseClass {
     /** @deprecated Use `collection.estimatedDocumentCount` or `collection.countDocuments` instead */
     count(options, callback) {
@@ -56,12 +61,16 @@ module.exports.makeLegacyFindCursor = function (baseClass) {
     tryNext(callback) {
       return maybeCallback(super.tryNext(), callback);
     }
+    clone() {
+      const cursor = super.clone();
+      return toLegacyHelper(cursor);
+    }
   }
 
   Object.defineProperty(baseClass.prototype, toLegacy, {
     enumerable: false,
     value: function () {
-      return Object.setPrototypeOf(this, LegacyFindCursor.prototype);
+      return toLegacyHelper(this);
     }
   });
 
@@ -69,6 +78,11 @@ module.exports.makeLegacyFindCursor = function (baseClass) {
 };
 
 module.exports.makeLegacyListCollectionsCursor = function (baseClass) {
+  function toLegacyHelper(cursor) {
+    Object.setPrototypeOf(cursor, LegacyListCollectionsCursor.prototype);
+    return cursor;
+  }
+
   class LegacyListCollectionsCursor extends baseClass {
     close(options, callback) {
       callback =
@@ -95,12 +109,16 @@ module.exports.makeLegacyListCollectionsCursor = function (baseClass) {
     tryNext(callback) {
       return maybeCallback(super.tryNext(), callback);
     }
+    clone() {
+      const cursor = super.clone();
+      return toLegacyHelper(cursor);
+    }
   }
 
   Object.defineProperty(baseClass.prototype, toLegacy, {
     enumerable: false,
     value: function () {
-      return Object.setPrototypeOf(this, LegacyListCollectionsCursor.prototype);
+      return toLegacyHelper(this);
     }
   });
 
@@ -108,6 +126,11 @@ module.exports.makeLegacyListCollectionsCursor = function (baseClass) {
 };
 
 module.exports.makeLegacyListIndexesCursor = function (baseClass) {
+  function toLegacyHelper(cursor) {
+    Object.setPrototypeOf(cursor, LegacyListIndexesCursor.prototype);
+    return cursor;
+  }
+
   class LegacyListIndexesCursor extends baseClass {
     close(options, callback) {
       callback =
@@ -134,12 +157,16 @@ module.exports.makeLegacyListIndexesCursor = function (baseClass) {
     tryNext(callback) {
       return maybeCallback(super.tryNext(), callback);
     }
+    clone() {
+      const cursor = super.clone();
+      return toLegacyHelper(cursor);
+    }
   }
 
   Object.defineProperty(baseClass.prototype, toLegacy, {
     enumerable: false,
     value: function () {
-      return Object.setPrototypeOf(this, LegacyListIndexesCursor.prototype);
+      return toLegacyHelper(this);
     }
   });
 
@@ -147,6 +174,11 @@ module.exports.makeLegacyListIndexesCursor = function (baseClass) {
 };
 
 module.exports.makeLegacyAggregationCursor = function (baseClass) {
+  function toLegacyHelper(cursor) {
+    Object.setPrototypeOf(cursor, LegacyAggregationCursor.prototype);
+    return cursor;
+  }
+
   class LegacyAggregationCursor extends baseClass {
     explain(verbosity, callback) {
       callback =
@@ -184,12 +216,16 @@ module.exports.makeLegacyAggregationCursor = function (baseClass) {
     tryNext(callback) {
       return maybeCallback(super.tryNext(), callback);
     }
+    clone() {
+      const cursor = super.clone();
+      return toLegacyHelper(cursor);
+    }
   }
 
   Object.defineProperty(baseClass.prototype, toLegacy, {
     enumerable: false,
     value: function () {
-      return Object.setPrototypeOf(this, LegacyAggregationCursor.prototype);
+      return toLegacyHelper(this);
     }
   });
 

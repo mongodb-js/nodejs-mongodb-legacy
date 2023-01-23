@@ -28,6 +28,10 @@ describe('legacy_wrappers/db.js', () => {
     expect(db.listCollections()).to.be.instanceOf(LegacyListCollectionsCursor);
   });
 
+  it('collection.listCollections().clone() should return legacy listCollections cursor', () => {
+    expect(db.listCollections().clone()).to.be.instanceOf(LegacyListCollectionsCursor);
+  });
+
   it('should return legacy ChangeStream', () => {
     expect(db.watch()).to.be.instanceOf(LegacyChangeStream);
   });
