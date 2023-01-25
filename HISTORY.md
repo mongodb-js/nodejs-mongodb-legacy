@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.2](https://github.com/mongodb-js/nodejs-mongodb-legacy/compare/v4.0.1...v4.0.2) (2023-01-25)
+
+
+### Bug Fixes
+
+* **NODE-5003:** cloned cursors are not legacy api ([#12](https://github.com/mongodb-js/nodejs-mongodb-legacy/issues/12)) ([583741a](https://github.com/mongodb-js/nodejs-mongodb-legacy/commit/583741afe9cb09750fc2e608a517a77d05309eed))
+
 ### [4.0.1](https://github.com/mongodb-js/nodejs-mongodb-legacy/compare/v4.0.0...v4.0.1) (2023-01-17)
 
 
