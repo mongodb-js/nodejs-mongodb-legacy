@@ -40,6 +40,12 @@ const api = [
   { className: 'Admin', method: 'validateCollection', returnType: 'Promise<Document>' },
 
   { className: 'AggregationCursor', method: 'explain', returnType: 'Promise<Document>' },
+  { className: 'AggregationCursor', method: 'clone', returnType: 'AggregationCursor', notAsync: true },
+
+  { className: 'FindCursor', method: 'clone', returnType: 'FindCursor', notAsync: true },
+  { className: 'ListIndexesCursor', method: 'clone', returnType: 'ListIndexesCursor', notAsync: true },
+  { className: 'ListCollectionsCursor', method: 'clone', returnType: 'ListCollectionsCursor', notAsync: true },
+
 
   // Super class of Unordered/Ordered Bulk operations
   // This is listed here as a reference for completeness, but it is tested by the subclass overrides of execute
