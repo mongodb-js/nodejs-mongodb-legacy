@@ -43,6 +43,18 @@ describe('legacy_wrappers/collection.js', () => {
     expect(collection.find()).to.be.instanceOf(LegacyFindCursor);
   });
 
+  it('collection.listIndexes().clone() should return legacy listIndexes cursor', () => {
+    expect(collection.listIndexes().clone()).to.be.instanceOf(LegacyListIndexesCursor);
+  });
+
+  it('collection.aggregate().clone() should return legacy AggregationCursor', () => {
+    expect(collection.aggregate().clone()).to.be.instanceOf(LegacyAggregationCursor);
+  });
+
+  it('collection.find().clone() should return legacy FindCursor', () => {
+    expect(collection.find().clone()).to.be.instanceOf(LegacyFindCursor);
+  });
+
   describe('rename()', () => {
     let client;
     let collection;
