@@ -47,7 +47,7 @@ describe('legacy_wrappers/collection.js', () => {
     expect(collection.listIndexes().clone()).to.be.instanceOf(LegacyListIndexesCursor);
   });
 
-  it('collection.aggregate().clone() should return legacy ChangeStream', () => {
+  it('collection.aggregate().clone() should return legacy AggregationCursor', () => {
     expect(collection.aggregate().clone()).to.be.instanceOf(LegacyAggregationCursor);
   });
 
