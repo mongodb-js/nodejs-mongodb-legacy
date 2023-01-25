@@ -28,7 +28,7 @@ describe('legacy_wrappers/db.js', () => {
     expect(db.listCollections()).to.be.instanceOf(LegacyListCollectionsCursor);
   });
 
-  it('collection.listCollections().clone() should return legacy listCollections cursor', () => {
+  it('db.listCollections().clone() should return legacy listCollections cursor', () => {
     expect(db.listCollections().clone()).to.be.instanceOf(LegacyListCollectionsCursor);
   });
 
