@@ -21,9 +21,9 @@ The main driver package `mongodb` will be dropping optional callback support in 
 ### Drawbacks
 
 - The legacy driver wraps the native driver, which may lead to a slight performance penalty.
-- As discussed in the versioning section, it is recommended that `mongodb-legacy` replace the direct dependency on `mongodb`.  This allows for
+- As discussed in the versioning section below, it is recommended that `mongodb-legacy` replace the direct dependency on `mongodb`.  This allows for
 the legacy driver to automatically pull in features and fixes from the native driver.  However, this also removes control
-of which version of mongodb is installed.  If users wish to control the version of mongodb directly, the lockfile will need edited manually.
+of which version of `mongodb` is installed.  If users wish to control the version of `mongodb` directly, the lockfile will need to be edited manually.
 
 ### Example usage of equivalent callback and promise usage
 
