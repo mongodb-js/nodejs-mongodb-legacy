@@ -9,10 +9,10 @@
   "main": "src/index.js",
   "types": "mongodb-legacy.d.ts",
   "engines": {
-    "node": ">=12.9.0"
+    "node": ">=14.20.1"
   },
   "dependencies": {
-    "mongodb": "^4.10.0"
+    "mongodb": "^5.0.0"
   },
   "scripts": {
     "check:coverage": "nyc --check-coverage npm run check:test",
