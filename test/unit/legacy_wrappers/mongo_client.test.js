@@ -124,10 +124,17 @@ describe('legacy_wrappers/mongo_client.js', () => {
           .to.have.nested.property('driver.name')
           .that.equals('nodejs|mongodb-legacy'));
 
-      it('should include version in package.json in client metadata', () =>
+      it('should include version in package.json in client metadata', () => {
+        if (client.options.metadata.version == null) {
+          expect(client.options.metadata)
+            .to.have.nested.property('driver.version')
+            .that.includes(`${currentLegacyVersion}|99.99.99`);
+          return;
+        }
         expect(client.options.metadata)
           .to.have.property('version')
-          .that.includes(currentLegacyVersion));
+          .that.includes(`${currentLegacyVersion}|99.99.99`);
+      });
     });
   });
 
