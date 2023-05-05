@@ -59,6 +59,7 @@ describe('legacy_wrappers/mongo_client.js', () => {
 
       it('should include version in package.json in client metadata', () => {
         if (client.options.metadata.version == null) {
+          // Driver 5.3.0 corrected the position of version https://github.com/mongodb/node-mongodb-native/pull/3626
           expect(client.options.metadata)
             .to.have.nested.property('driver.version')
             .that.includes(currentLegacyVersion);
@@ -82,6 +83,7 @@ describe('legacy_wrappers/mongo_client.js', () => {
 
       it('should prepend version in package.json to user driverInfo.version', () => {
         if (client.options.metadata.version == null) {
+          // Driver 5.3.0 corrected the position of version https://github.com/mongodb/node-mongodb-native/pull/3626
           expect(client.options.metadata)
             .to.have.nested.property('driver.version')
             .that.includes(`${currentLegacyVersion}|99.99.99`);
@@ -105,6 +107,7 @@ describe('legacy_wrappers/mongo_client.js', () => {
 
       it('should prepend version in package.json to user driverInfo.version', () => {
         if (client.options.metadata.version == null) {
+          // Driver 5.3.0 corrected the position of version https://github.com/mongodb/node-mongodb-native/pull/3626
           expect(client.options.metadata)
             .to.have.nested.property('driver.version')
             .that.includes(`${currentLegacyVersion}|99.99.99`);
@@ -126,6 +129,7 @@ describe('legacy_wrappers/mongo_client.js', () => {
 
       it('should include version in package.json in client metadata', () => {
         if (client.options.metadata.version == null) {
+          // Driver 5.3.0 corrected the position of version https://github.com/mongodb/node-mongodb-native/pull/3626
           expect(client.options.metadata)
             .to.have.nested.property('driver.version')
             .that.includes(currentLegacyVersion);
