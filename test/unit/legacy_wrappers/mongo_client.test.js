@@ -128,12 +128,12 @@ describe('legacy_wrappers/mongo_client.js', () => {
         if (client.options.metadata.version == null) {
           expect(client.options.metadata)
             .to.have.nested.property('driver.version')
-            .that.includes(`${currentLegacyVersion}|99.99.99`);
+            .that.includes(currentLegacyVersion);
           return;
         }
         expect(client.options.metadata)
           .to.have.property('version')
-          .that.includes(`${currentLegacyVersion}|99.99.99`);
+          .that.includes(currentLegacyVersion);
       });
     });
   });
