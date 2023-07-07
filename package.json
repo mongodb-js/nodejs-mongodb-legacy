@@ -9,7 +9,7 @@
   "main": "src/index.js",
   "types": "mongodb-legacy.d.ts",
   "engines": {
-    "node": ">=14.20.1"
+    "node": ">=16.20.1"
   },
   "dependencies": {
     "mongodb": "^5.0.0"
