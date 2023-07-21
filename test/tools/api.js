@@ -28,7 +28,6 @@ const api = [
   // Super class of cursors, we do not directly override these but override them in the inherited classes
   ...commonCursorApis.flatMap(({ method, returnType, possibleCallbackPositions }) => cursorClasses.map(cursorClass => ({ className: cursorClass, method, returnType, possibleCallbackPositions }))),
 
-  { className: 'Admin', method: 'addUser', returnType: 'Promise<Document>', special: 'addUser takes 4 arguments: [username, password, options, callback] the last 3 are optional, unlike other functions with this length password needs to be filtered to only be a string, this is the only case where we make a decision to pass an argument based on its type (instead of what type it is not)' },
   { className: 'Admin', method: 'buildInfo', returnType: 'Promise<Document>' },
   { className: 'Admin', method: 'command', returnType: 'Promise<Document>' },
   { className: 'Admin', method: 'listDatabases', returnType: 'Promise<ListDatabasesResult>' },
@@ -88,7 +87,6 @@ const api = [
   { className: 'Collection', method: 'options', returnType: 'Promise<Document>' },
   { className: 'Collection', method: 'rename', returnType: 'Promise<Collection>', changesPromise: true },
   { className: 'Collection', method: 'replaceOne', returnType: 'Promise<UpdateResult | Document>' },
-  { className: 'Collection', method: 'stats', returnType: 'Promise<CollStats>' },
   { className: 'Collection', method: 'updateMany', returnType: 'Promise<UpdateResult | Document>' },
   { className: 'Collection', method: 'updateOne', returnType: 'Promise<UpdateResult>' },
   { className: 'Collection', method: 'initializeOrderedBulkOp', returnType: 'OrderedBulkOperation', notAsync: true },
@@ -98,7 +96,6 @@ const api = [
   { className: 'Collection', method: 'listIndexes', returnType: 'ListIndexesCursor', notAsync: true },
   { className: 'Collection', method: 'watch', returnType: 'ChangeStream', notAsync: true },
 
-  { className: 'Db', method: 'addUser', returnType: 'Promise<Document>', special: 'see Admin.addUser' },
   { className: 'Db', method: 'collections', returnType: 'Promise<Collection[]>', changesPromise: true },
   { className: 'Db', method: 'command', returnType: 'Promise<Document>' },
   { className: 'Db', method: 'createCollection', returnType: 'Promise<Collection<TSchema>>', changesPromise: true },

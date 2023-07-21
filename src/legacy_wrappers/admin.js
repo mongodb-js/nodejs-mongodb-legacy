@@ -7,25 +7,6 @@ Object.defineProperty(module.exports, '__esModule', { value: true });
 
 module.exports.makeLegacyAdmin = function (baseClass) {
   class LegacyAdmin extends baseClass {
-    addUser(username, password, options, callback) {
-      callback =
-        typeof callback === 'function'
-          ? callback
-          : typeof options === 'function'
-          ? options
-          : typeof password === 'function'
-          ? password
-          : undefined;
-      options =
-        options != null && typeof options === 'object'
-          ? options
-          : password != null && typeof password === 'object'
-          ? password
-          : undefined;
-      password = typeof password === 'string' ? password : undefined;
-      return maybeCallback(super.addUser(username, password, options), callback);
-    }
-
     buildInfo(options, callback) {
       callback =
         typeof callback === 'function'
