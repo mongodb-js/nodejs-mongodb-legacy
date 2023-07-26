@@ -307,17 +307,6 @@ module.exports.makeLegacyCollection = function (baseClass) {
       return maybeCallback(super.replaceOne(filter, replacement, options), callback);
     }
 
-    stats(options, callback) {
-      callback =
-        typeof callback === 'function'
-          ? callback
-          : typeof options === 'function'
-          ? options
-          : undefined;
-      options = typeof options !== 'function' ? options : undefined;
-      return maybeCallback(super.stats(options), callback);
-    }
-
     updateMany(filter, update, options, callback) {
       callback =
         typeof callback === 'function'

@@ -18,26 +18,6 @@ module.exports.makeLegacyDb = function (baseClass) {
       return maybeCallback(super.command(command, options), callback);
     }
 
-    // Async APIs
-    addUser(username, password, options, callback) {
-      callback =
-        typeof callback === 'function'
-          ? callback
-          : typeof options === 'function'
-          ? options
-          : typeof password === 'function'
-          ? password
-          : undefined;
-      options =
-        options != null && typeof options === 'object'
-          ? options
-          : password != null && typeof password === 'object'
-          ? password
-          : undefined;
-      password = typeof password === 'string' ? password : undefined;
-      return maybeCallback(super.addUser(username, password, options), callback);
-    }
-
     removeUser(username, options, callback) {
       callback =
         typeof callback === 'function'

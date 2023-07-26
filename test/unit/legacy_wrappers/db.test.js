@@ -4,7 +4,8 @@ const {
   MongoClient: LegacyMongoClient,
   ListCollectionsCursor: LegacyListCollectionsCursor,
   ChangeStream: LegacyChangeStream,
-  AggregationCursor: LegacyAggregationCursor
+  AggregationCursor: LegacyAggregationCursor,
+  Admin: LegacyAdmin
 } = require('../../../src/index');
 const { Db } = require('mongodb');
 const sinon = require('sinon');
@@ -40,151 +41,8 @@ describe('legacy_wrappers/db.js', () => {
     expect(db.aggregate()).to.be.instanceOf(LegacyAggregationCursor);
   });
 
-  describe('addUser()', () => {
-    let db;
-    let stubbedMethod;
-    let callback;
-    let superPromise;
-    let actualReturnValue;
-
-    beforeEach(async () => {
-      client = new LegacyMongoClient('mongodb://iLoveJs');
-      db = client.db();
-      superPromise = Promise.resolve({ message: 'success!' });
-      stubbedMethod = sinon.stub(Db.prototype, 'addUser').returns(superPromise);
-      callback = sinon.stub();
-    });
-
-    describe(`and addUser is called with ('name', callback)`, () => {
-      beforeEach(() => {
-        actualReturnValue = db.addUser('name', callback);
-      });
-
-      it('should return void', () => expect(actualReturnValue).to.be.undefined);
-
-      it('should call the callback with undefined error and successful result', async () => {
-        await runMicroTask();
-        expect(callback).to.have.been.calledOnceWith(undefined, { message: 'success!' });
-      });
-
-      it(`should pass only ('name') to the driver api`, () => {
-        expect(stubbedMethod).to.have.been.calledOnceWithExactly('name', undefined, undefined);
-      });
-    });
-
-    describe(`and addUser is called with ('name', 'pass', callback)`, () => {
-      beforeEach(() => {
-        actualReturnValue = db.addUser('name', 'pass', callback);
-      });
-
-      it('should return void', () => expect(actualReturnValue).to.be.undefined);
-
-      it('should call the callback with undefined error and successful result', async () => {
-        await runMicroTask();
-        expect(callback).to.have.been.calledOnceWith(undefined, { message: 'success!' });
-      });
-
-      it(`should pass only ('name', 'pass') to the driver api`, () => {
-        expect(stubbedMethod).to.have.been.calledOnceWithExactly('name', 'pass', undefined);
-      });
-    });
-
-    describe(`and addUser is called with ('name', 'pass', options, callback)`, () => {
-      beforeEach(() => {
-        actualReturnValue = db.addUser('name', 'pass', { options: true }, callback);
-      });
-
-      it('should return void', () => expect(actualReturnValue).to.be.undefined);
-
-      it('should call the callback with undefined error and successful result', async () => {
-        await runMicroTask();
-        expect(callback).to.have.been.calledOnceWith(undefined, { message: 'success!' });
-      });
-
-      it(`should pass only ('name', 'pass', options) to the driver api`, () => {
-        expect(stubbedMethod).to.have.been.calledOnceWithExactly('name', 'pass', {
-          options: true
-        });
-      });
-    });
-
-    describe(`and addUser is called with ('name', options, callback)`, () => {
-      beforeEach(() => {
-        actualReturnValue = db.addUser('name', { options: true }, callback);
-      });
-
-      it('should return void', () => expect(actualReturnValue).to.be.undefined);
-
-      it('should call the callback with undefined error and successful result', async () => {
-        await runMicroTask();
-        expect(callback).to.have.been.calledOnceWith(undefined, { message: 'success!' });
-      });
-
-      it(`should pass only ('name', undefined, options) to the driver api`, () => {
-        expect(stubbedMethod).to.have.been.calledOnceWithExactly('name', undefined, {
-          options: true
-        });
-      });
-    });
-
-    describe(`and addUser is called with ('name')`, () => {
-      beforeEach(() => {
-        actualReturnValue = db.addUser('name');
-      });
-
-      it('should return the same promise the driver returns', async () => {
-        expect(actualReturnValue).to.equal(superPromise);
-      });
-
-      it('should return a resolved promise', async () => {
-        const result = await actualReturnValue;
-        expect(result).to.have.property('message', 'success!');
-      });
-
-      it(`should pass only ('name') to the driver api`, () => {
-        expect(stubbedMethod).to.have.been.calledOnceWithExactly('name', undefined, undefined);
-      });
-    });
-
-    describe(`and addUser is called with ('name', 'pass')`, () => {
-      beforeEach(() => {
-        actualReturnValue = db.addUser('name', 'pass');
-      });
-
-      it('should return the same promise the driver returns', async () => {
-        expect(actualReturnValue).to.equal(superPromise);
-      });
-
-      it('should return a resolved promise', async () => {
-        const result = await actualReturnValue;
-        expect(result).to.have.property('message', 'success!');
-      });
-
-      it(`should pass only ('name', 'pass') to the driver api`, () => {
-        expect(stubbedMethod).to.have.been.calledOnceWithExactly('name', 'pass', undefined);
-      });
-    });
-
-    describe(`and addUser is called with ('name', 'pass', options)`, () => {
-      beforeEach(() => {
-        actualReturnValue = db.addUser('name', 'pass', { options: true });
-      });
-
-      it('should return the same promise the driver returns', async () => {
-        expect(actualReturnValue).to.equal(superPromise);
-      });
-
-      it('should return a resolved promise', async () => {
-        const result = await actualReturnValue;
-        expect(result).to.have.property('message', 'success!');
-      });
-
-      it(`should pass only ('name', 'pass', options) to the driver api`, () => {
-        expect(stubbedMethod).to.have.been.calledOnceWithExactly('name', 'pass', {
-          options: true
-        });
-      });
-    });
+  it('should return legacy Admin', () => {
+    expect(db.admin()).to.be.instanceOf(LegacyAdmin);
   });
 
   describe('renameCollection()', () => {

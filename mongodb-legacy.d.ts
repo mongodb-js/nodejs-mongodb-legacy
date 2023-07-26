@@ -20,7 +20,6 @@ import {
 // Dependencies (options, etc.)
 import type {
   AbstractCursorEvents,
-  AddUserOptions,
   AggregateOptions,
   AnyBulkWriteOperation,
   BulkWriteOptions,
@@ -31,8 +30,6 @@ import type {
   ClientSessionOptions,
   CollectionInfo,
   CollectionOptions,
-  CollStats,
-  CollStatsOptions,
   CommandOperationOptions,
   CountDocumentsOptions,
   CountOptions,
@@ -93,10 +90,10 @@ import type {
 type NonConstructorKeys<T> = { [P in keyof T]: T[P] extends new () => any ? never : P }[keyof T];
 type NonConstructor<T> = Pick<T, NonConstructorKeys<T>>;
 
-declare const Admin: new () => Omit<MDBAdmin, 'addUser' | 'buildInfo' | 'command' | 'listDatabases' | 'ping' | 'removeUser' | 'replSetGetStatus' | 'serverInfo' | 'serverStatus' | 'validateCollection'>;
+declare const Admin: new () => Omit<MDBAdmin, 'buildInfo' | 'command' | 'listDatabases' | 'ping' | 'removeUser' | 'replSetGetStatus' | 'serverInfo' | 'serverStatus' | 'validateCollection'>;
 declare const ChangeStream: new <TSchema extends Document = Document, TChange extends Document = ChangeStreamDocument<TSchema>>() => Omit<MDBChangeStream<TSchema, TChange>, 'close' | 'hasNext' | 'next' | 'tryNext'>;
-declare const Collection: new <TSchema>() => Omit<MDBCollection<TSchema>, 'initializeUnorderedBulkOp' | 'initializeOrderedBulkOp' | 'bulkWrite'| 'count'| 'countDocuments'| 'estimatedDocumentCount'| 'createIndex'| 'createIndexes'| 'dropIndex'| 'dropIndexes'| 'deleteMany'| 'deleteOne'| 'distinct'| 'drop'| 'findOne'| 'findOneAndDelete'| 'findOneAndReplace'| 'findOneAndUpdate'| 'indexExists'| 'indexInformation'| 'indexes'| 'insertMany'| 'insertOne'| 'isCapped'| 'options'| 'rename'| 'replaceOne'| 'stats'| 'updateMany'| 'updateOne'| 'aggregate'| 'find'| 'listIndexes'| 'watch'>;
-declare const Db: new () => Omit<MDBDb, 'command' | 'addUser' | 'removeUser' | 'createCollection' | 'dropCollection' | 'createIndex' | 'dropDatabase' | 'indexInformation' | 'profilingLevel' | 'setProfilingLevel' | 'renameCollection' | 'stats' | 'collections' | 'collection' | 'admin' | 'aggregate' | 'listCollections' | 'watch'>;
+declare const Collection: new <TSchema>() => Omit<MDBCollection<TSchema>, 'initializeUnorderedBulkOp' | 'initializeOrderedBulkOp' | 'bulkWrite'| 'count'| 'countDocuments'| 'estimatedDocumentCount'| 'createIndex'| 'createIndexes'| 'dropIndex'| 'dropIndexes'| 'deleteMany'| 'deleteOne'| 'distinct'| 'drop'| 'findOne'| 'findOneAndDelete'| 'findOneAndReplace'| 'findOneAndUpdate'| 'indexExists'| 'indexInformation'| 'indexes'| 'insertMany'| 'insertOne'| 'isCapped'| 'options'| 'rename'| 'replaceOne'| 'updateMany'| 'updateOne'| 'aggregate'| 'find'| 'listIndexes'| 'watch'>;
+declare const Db: new () => Omit<MDBDb, 'command' | 'removeUser' | 'createCollection' | 'dropCollection' | 'createIndex' | 'dropDatabase' | 'indexInformation' | 'profilingLevel' | 'setProfilingLevel' | 'renameCollection' | 'stats' | 'collections' | 'collection' | 'admin' | 'aggregate' | 'listCollections' | 'watch'>;
 declare const GridFSBucket: new (db: LegacyDb, options: GridFSBucketOptions) => Omit<NonConstructor<MDBGridFSBucket>, 'delete' | 'rename' | 'drop' | 'find'>;
 declare const MongoClient: new (url: string, options?: MongoClientOptions) => Omit<NonConstructor<MDBMongoClient>, 'connect' | 'close' | 'db' | 'watch' | 'withSession' | 'startSession'>;
 declare const ClientSession: new () => Omit<MDBClientSession, 'endSession' | 'abortTransaction' | 'commitTransaction' | 'withTransaction'>
@@ -156,22 +153,6 @@ declare class LegacyAdmin extends Admin {
   ping(callback: Callback<Document>): void;
   ping(options: CommandOperationOptions): Promise<Document>;
   ping(options: CommandOperationOptions, callback: Callback<Document>): void;
-  /**
-   * Add a user to the database
-   *
-   * @param username - The username for the new user
-   * @param password - An optional password for the new user
-   * @param options - Optional settings for the command
-   * @param callback - An optional callback, a Promise will be returned if none is provided
-   */
-  addUser(username: string): Promise<Document>;
-  addUser(username: string, callback: Callback<Document>): void;
-  addUser(username: string, password: string): Promise<Document>;
-  addUser(username: string, password: string, callback: Callback<Document>): void;
-  addUser(username: string, options: AddUserOptions): Promise<Document>;
-  addUser(username: string, options: AddUserOptions, callback: Callback<Document>): void;
-  addUser(username: string, password: string, options: AddUserOptions): Promise<Document>;
-  addUser(username: string, password: string, options: AddUserOptions, callback: Callback<Document>): void;
   /**
    * Remove a user from a database
    *
@@ -638,16 +619,6 @@ declare class LegacyCollection<TSchema extends Document = Document> extends Coll
   indexes(options: IndexInformationOptions): Promise<Document[]>;
   indexes(options: IndexInformationOptions, callback: Callback<Document[]>): void;
   /**
-   * Get all the collection statistics.
-   *
-   * @param options - Optional settings for the command
-   * @param callback - An optional callback, a Promise will be returned if none is provided
-   */
-  stats(): Promise<CollStats>;
-  stats(callback: Callback<CollStats>): void;
-  stats(options: CollStatsOptions): Promise<CollStats>;
-  stats(options: CollStatsOptions, callback: Callback<CollStats>): void;
-  /**
    * Find a document and delete it in one atomic operation. Requires a write lock for the duration of the operation.
    *
    * @param filter - The filter used to select the document to remove
@@ -868,22 +839,6 @@ declare class LegacyDb extends Db {
   createIndex(name: string, indexSpec: IndexSpecification, callback?: Callback<string>): void;
   createIndex(name: string, indexSpec: IndexSpecification, options: CreateIndexesOptions): Promise<string>;
   createIndex(name: string, indexSpec: IndexSpecification, options: CreateIndexesOptions, callback: Callback<string>): void;
-  /**
-   * Add a user to the database
-   *
-   * @param username - The username for the new user
-   * @param password - An optional password for the new user
-   * @param options - Optional settings for the command
-   * @param callback - An optional callback, a Promise will be returned if none is provided
-   */
-  addUser(username: string): Promise<Document>;
-  addUser(username: string, callback: Callback<Document>): void;
-  addUser(username: string, password: string): Promise<Document>;
-  addUser(username: string, password: string, callback: Callback<Document>): void;
-  addUser(username: string, options: AddUserOptions): Promise<Document>;
-  addUser(username: string, options: AddUserOptions, callback: Callback<Document>): void;
-  addUser(username: string, password: string, options: AddUserOptions): Promise<Document>;
-  addUser(username: string, password: string, options: AddUserOptions, callback: Callback<Document>): void;
   /**
    * Remove a user from a database
    *
