@@ -12,7 +12,7 @@
     "node": ">=16.20.1"
   },
   "dependencies": {
-    "mongodb": "^5.0.0"
+    "mongodb": "^5.7.0"
   },
   "scripts": {
     "check:coverage": "nyc --check-coverage npm run check:test",
@@ -38,7 +38,7 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@microsoft/api-extractor-model": "^7.26.7",
+    "@microsoft/api-extractor-model": "^7.27.6",
     "@octokit/core": "^4.2.4",
     "@typescript-eslint/eslint-plugin": "^5.59.2",
     "@typescript-eslint/parser": "^5.59.2",
@@ -48,7 +48,7 @@
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "prettier": "^2.8.8",
-    "sinon": "^15.0.4",
+    "sinon": "^15.2.0",
     "sinon-chai": "^3.7.0",
     "source-map-support": "^0.5.21",
     "standard-version": "^9.5.0",
