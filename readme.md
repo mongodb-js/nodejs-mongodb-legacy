@@ -67,9 +67,18 @@ npm install mongodb-legacy
 We recommend replacing your `mongodb` dependency with this one.
 This package uses caret semver range for the main `mongodb` package, (ex. `^4.10.0`) which will adopt minor version bumps as they are released.
 
-The next major release of the driver (v5) will drop support for callbacks.
-This package will also have a major release at that time to update the dependency requirement to `^5.0.0`.
-Users can expect to be able to upgrade to `v5` adopting the changes and features shipped in that version while using this module to maintain any callback code they still need to work on migrating.
+Users can expect to be able to upgrade to `v5` or later adopting the changes and features shipped in that version while using this module to maintain any callback code they still need to work on migrating.
+
+#### MongoDB Node.js Driver Version Compatibility Table
+
+The following version combinations with the [MongoDB Node.js Driver](https://github.com/mongodb/node-mongodb-native) are considered stable.
+
+|               | `mongodb-legacy@4.x` | `mongodb-legacy@5.x` | `mongodb-legacy@6.x` |
+| ------------- | -------------------- | -------------------- | -------------------- |
+| `mongodb@6.x` | N/A                  | N/A                  | ✓                    |
+| `mongodb@5.x` | N/A                  | ✓                    | N/A                  |
+| `mongodb@4.x` | ✓                    | N/A                  | N/A                  |
+| `mongodb@3.x` | N/A                  | N/A                  | N/A                  |
 
 ## [API](https://mongodb.github.io/node-mongodb-native/)
 
