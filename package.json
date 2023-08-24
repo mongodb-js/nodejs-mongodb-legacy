@@ -12,7 +12,7 @@
     "node": ">=16.20.1"
   },
   "dependencies": {
-    "mongodb": "^5.0.0"
+    "mongodb": "^6.0.0-alpha.2"
   },
   "scripts": {
     "check:coverage": "nyc --check-coverage npm run check:test",
