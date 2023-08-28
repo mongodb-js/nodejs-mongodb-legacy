@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/mongodb-js/nodejs-mongodb-legacy/compare/v5.0.0...v6.0.0) (2023-08-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **NODE-5585:** adopt mongodb driver v6 ([#26](https://github.com/mongodb-js/nodejs-mongodb-legacy/issues/26))
+* **NODE-5432:** remove addUser and collection.stats ([#22](https://github.com/mongodb-js/nodejs-mongodb-legacy/issues/22))
+* **NODE-5416:** bump minimum Node.js version to v16.20.1 ([#18](https://github.com/mongodb-js/nodejs-mongodb-legacy/issues/18))
+
+### Features
+
+* **NODE-5416:** bump minimum Node.js version to v16.20.1 ([#18](https://github.com/mongodb-js/nodejs-mongodb-legacy/issues/18)) ([b176e49](https://github.com/mongodb-js/nodejs-mongodb-legacy/commit/b176e49af493dc9365842dceba9d7ad6b21b6499))
+* **NODE-5432:** remove addUser and collection.stats ([#22](https://github.com/mongodb-js/nodejs-mongodb-legacy/issues/22)) ([0a3b91d](https://github.com/mongodb-js/nodejs-mongodb-legacy/commit/0a3b91ddcd0fbc52dc837a445a6d26fedbff49df))
+* **NODE-5585:** adopt mongodb driver v6 ([#26](https://github.com/mongodb-js/nodejs-mongodb-legacy/issues/26)) ([0f086ce](https://github.com/mongodb-js/nodejs-mongodb-legacy/commit/0f086ce23d96fe8901556bf61b239a2074de821a))
+
 ## [5.0.0](https://github.com/mongodb-js/nodejs-mongodb-legacy/compare/v4.0.1...v5.0.0) (2023-01-31)
 
 
