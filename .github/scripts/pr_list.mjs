@@ -12,11 +12,15 @@ const historyFilePath = path.join(__dirname, '..', '..', 'HISTORY.md');
  * @returns {string[]}
  */
 function parsePRList(history) {
-  const prRegexp = /mongodb-legacy/issues\/(?<prNum>\d+)\)/iu;
-  return history
-    .split('\n')
-    .map(line => prRegexp.exec(line)?.groups?.prNum ?? '')
-    .filter(prNum => prNum !== '');
+  const prRegexp = /mongodb-legacy\/issues\/(?<prNum>\d+)\)/iu;
+  return Array.from(
+    new Set(
+      history
+        .split('\n')
+        .map(line => prRegexp.exec(line)?.groups?.prNum ?? '')
+        .filter(prNum => prNum !== '')
+    )
+  );
 }
 
 const historyContents = await fs.readFile(historyFilePath, { encoding: 'utf8' });
