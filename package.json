@@ -6,6 +6,10 @@
     "src",
     "mongodb-legacy.d.ts"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mongodb-js/nodejs-mongodb-legacy.git"
+  },
   "main": "src/index.js",
   "types": "mongodb-legacy.d.ts",
   "engines": {
