@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.1](https://github.com/mongodb-js/nodejs-mongodb-legacy/compare/v6.0.0...v6.0.1) (2023-10-18)
+
+
+### Bug Fixes
+
+* **NODE-5593:** add repository field ([#28](https://github.com/mongodb-js/nodejs-mongodb-legacy/issues/28)) ([dfe8892](https://github.com/mongodb-js/nodejs-mongodb-legacy/commit/dfe88928673f687575025c134322ad90adf592e6))
+
 ## [6.0.0](https://github.com/mongodb-js/nodejs-mongodb-legacy/compare/v5.0.0...v6.0.0) (2023-08-28)
 
 
