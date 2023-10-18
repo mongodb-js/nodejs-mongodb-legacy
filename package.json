@@ -1,7 +1,7 @@
 {
   "name": "mongodb-legacy",
   "description": "The legacy MongoDB driver with callback support for Node.js",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "files": [
     "src",
     "mongodb-legacy.d.ts"
