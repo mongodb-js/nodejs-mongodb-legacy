@@ -66,18 +66,18 @@ npm install mongodb-legacy
 ### Release Integrity
 
 The GitHub release contains a detached signature file for the NPM package (named
-`bson-X.Y.Z.tgz.sig`).
+`mongodb-legacy-X.Y.Z.tgz.sig`).
 
 The following command returns the link npm package. 
 ```shell
-npm view mongodb@vX.Y.Z dist.tarball 
+npm view mongodb-legacy@vX.Y.Z dist.tarball 
 ```
 
 Using the result of the above command, a `curl` command can return the official npm package for the release.
 
 To verify the integrity of the downloaded package, run the following command:
 ```shell
-gpg --verify mongodb-X.Y.Z.tgz.sig mongodb-X.Y.Z.tgz
+gpg --verify mongodb-legacy-X.Y.Z.tgz.sig mongodb-legacy-X.Y.Z.tgz
 ```
 
 ### Versioning
