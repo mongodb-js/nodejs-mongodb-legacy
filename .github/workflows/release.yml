@@ -53,19 +53,19 @@ jobs:
       - name: Generate authorized pub report
         uses: mongodb-labs/drivers-github-tools/full-report@v2
         with:
-          release_version: ${{ steps.get_version.outputs.package_version }}
+          release_version: ${{ env.package_version }}
           product_name: mongodb-legacy
           sarif_report_target_ref: main
           third_party_dependency_tool: n/a
           # <package> and <package>.sig
-          dist_filenames: ${{ steps.get_vars.outputs.package_file }}*
+          dist_filenames: ${{ env.package_file }}*
           token:  ${{ github.token }}
           sbom_file_name: sbom.json
 
       - uses: mongodb-labs/drivers-github-tools/upload-s3-assets@v2
         with:
-          version: ${{ inputs.version }}
-          product_name: ${{ inputs.product_name }}
+          version: ${{ env.package_version }}
+          product_name: mongodb-legacy
           dry_run:  false
 
   publish:
