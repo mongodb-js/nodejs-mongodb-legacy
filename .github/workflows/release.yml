@@ -69,7 +69,7 @@ jobs:
         with:
           version: ${{ inputs.version }}
           product_name: ${{ inputs.product_name }}
-          dry_run:  ${{ needs.release_please.outputs.release_created == '' }}
+          dry_run:  false
 
   publish:
     needs: [release_please, ssdlc]
