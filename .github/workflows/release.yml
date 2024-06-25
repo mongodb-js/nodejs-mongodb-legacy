@@ -8,7 +8,7 @@ permissions:
   pull-requests: write
   id-token: write
 
-name: release
+name: release-latest
 
 jobs:
   release_please:
@@ -18,6 +18,8 @@ jobs:
     steps:
       - id: release
         uses: googleapis/release-please-action@v4
+        with:
+          target-branch: main
 
   ssdlc:
     needs: [release_please]
@@ -31,8 +33,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: actions/setup
-        uses: ./.github/actions/setup
+      - name: Install Node and dependencies
+        uses: baileympearson/drivers-github-tools/node/setup@add-signing-env-action-for-node
 
       - name: Load version and package info
         uses: baileympearson/drivers-github-tools/node/get_version_info@add-signing-env-action-for-node
@@ -74,8 +76,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: actions/setup
-        uses: ./.github/actions/setup
+
+      - name: Install Node and dependencies
+        uses: baileympearson/drivers-github-tools/node/setup@add-signing-env-action-for-node
 
       - run: npm publish --provenance --tag=latest
         if: ${{ needs.release_please.outputs.release_created }}
