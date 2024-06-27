@@ -85,7 +85,7 @@ To verify the integrity of the downloaded package, run the following command:
 ```shell
 gpg --verify mongodb-legacy-X.Y.Z.tgz.sig mongodb-legacy-X.Y.Z.tgz
 
->[!Note]
+[!Note]
 No verification is done when using npm to install the package. The contents of the Github tarball and npm's tarball are identical.
 
 ```
