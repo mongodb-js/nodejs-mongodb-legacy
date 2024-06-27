@@ -65,6 +65,12 @@ npm install mongodb-legacy
 	
 ### Release Integrity
 
+Releases are created automatically and signed using the [Node team's GPG key](https://pgp.mongodb.com/node-driver.asc). This applies to the git tag as well as all release packages provided as part of a GitHub release. To verify the provided packages, download the key and import it using gpg:
+
+```
+gpg --import node-driver.asc
+```
+
 The GitHub release contains a detached signature file for the NPM package (named
 `mongodb-legacy-X.Y.Z.tgz.sig`).
 
@@ -78,6 +84,11 @@ Using the result of the above command, a `curl` command can return the official 
 To verify the integrity of the downloaded package, run the following command:
 ```shell
 gpg --verify mongodb-legacy-X.Y.Z.tgz.sig mongodb-legacy-X.Y.Z.tgz
+```
+
+>[!Note]
+No verification is done when using npm to install the package. The contents of the Github tarball and npm's tarball are identical.
+
 ```
 
 ### Versioning
