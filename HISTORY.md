@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.1.0](https://github.com/mongodb-js/nodejs-mongodb-legacy/compare/v6.0.1...v6.1.0) (2024-06-27)
+
+
+### Features
+
+* **NODE-6158:** add signature to github releases ([#37](https://github.com/mongodb-js/nodejs-mongodb-legacy/issues/37)) ([0e007f5](https://github.com/mongodb-js/nodejs-mongodb-legacy/commit/0e007f5d4f776fc80d037c58931c083423dc0291))
+
 ## [6.0.1](https://github.com/mongodb-js/nodejs-mongodb-legacy/compare/v6.0.0...v6.0.1) (2023-10-18)
 
 
