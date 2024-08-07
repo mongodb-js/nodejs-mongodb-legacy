@@ -19,8 +19,8 @@ module.exports.makeLegacyFindCursor = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.count(options), callback);
     }
@@ -30,8 +30,8 @@ module.exports.makeLegacyFindCursor = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof verbosity === 'function'
-          ? verbosity
-          : undefined;
+            ? verbosity
+            : undefined;
       verbosity = typeof verbosity !== 'function' ? verbosity : undefined;
       return maybeCallback(super.explain(verbosity), callback);
     }
@@ -41,8 +41,8 @@ module.exports.makeLegacyFindCursor = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.close(options), callback);
     }
@@ -89,8 +89,8 @@ module.exports.makeLegacyListCollectionsCursor = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.close(options), callback);
     }
@@ -137,8 +137,8 @@ module.exports.makeLegacyListIndexesCursor = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.close(options), callback);
     }
@@ -185,8 +185,8 @@ module.exports.makeLegacyAggregationCursor = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof verbosity === 'function'
-          ? verbosity
-          : undefined;
+            ? verbosity
+            : undefined;
       verbosity = typeof verbosity !== 'function' ? verbosity : undefined;
       return maybeCallback(super.explain(verbosity), callback);
     }
@@ -196,8 +196,8 @@ module.exports.makeLegacyAggregationCursor = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.close(options), callback);
     }

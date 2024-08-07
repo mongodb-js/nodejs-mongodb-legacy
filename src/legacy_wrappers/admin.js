@@ -12,8 +12,8 @@ module.exports.makeLegacyAdmin = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.buildInfo(options), callback);
     }
@@ -23,8 +23,8 @@ module.exports.makeLegacyAdmin = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.command(command, options), callback);
     }
@@ -34,8 +34,8 @@ module.exports.makeLegacyAdmin = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.listDatabases(options), callback);
     }
@@ -45,8 +45,8 @@ module.exports.makeLegacyAdmin = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.ping(options), callback);
     }
@@ -56,8 +56,8 @@ module.exports.makeLegacyAdmin = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.removeUser(username, options), callback);
     }
@@ -67,8 +67,8 @@ module.exports.makeLegacyAdmin = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.replSetGetStatus(options), callback);
     }
@@ -78,8 +78,8 @@ module.exports.makeLegacyAdmin = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.serverInfo(options), callback);
     }
@@ -89,8 +89,8 @@ module.exports.makeLegacyAdmin = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.serverStatus(options), callback);
     }
@@ -100,8 +100,8 @@ module.exports.makeLegacyAdmin = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.validateCollection(name, options), callback);
     }

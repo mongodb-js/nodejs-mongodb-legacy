@@ -13,8 +13,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.bulkWrite(operations, options), callback);
     }
@@ -24,10 +24,10 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : typeof filter === 'function'
-          ? filter
-          : undefined;
+            ? options
+            : typeof filter === 'function'
+              ? filter
+              : undefined;
       options = typeof options !== 'function' ? options : undefined;
       filter = typeof filter !== 'function' ? filter : undefined;
       return maybeCallback(super.count(filter, options), callback);
@@ -38,10 +38,10 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : typeof filter === 'function'
-          ? filter
-          : undefined;
+            ? options
+            : typeof filter === 'function'
+              ? filter
+              : undefined;
       options = typeof options !== 'function' ? options : undefined;
       filter = typeof filter !== 'function' ? filter : undefined;
       return maybeCallback(super.countDocuments(filter, options), callback);
@@ -52,8 +52,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.estimatedDocumentCount(options), callback);
     }
@@ -63,8 +63,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.createIndex(indexSpec, options), callback);
     }
@@ -74,8 +74,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.createIndexes(indexSpecs, options), callback);
     }
@@ -85,8 +85,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.dropIndex(indexName, options), callback);
     }
@@ -96,8 +96,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.dropIndexes(options), callback);
     }
@@ -107,10 +107,10 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : typeof filter === 'function'
-          ? filter
-          : undefined;
+            ? options
+            : typeof filter === 'function'
+              ? filter
+              : undefined;
       options = typeof options !== 'function' ? options : undefined;
       filter = typeof filter !== 'function' ? filter : undefined;
       return maybeCallback(super.deleteMany(filter, options), callback);
@@ -121,10 +121,10 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : typeof filter === 'function'
-          ? filter
-          : undefined;
+            ? options
+            : typeof filter === 'function'
+              ? filter
+              : undefined;
       options = typeof options !== 'function' ? options : undefined;
       filter = typeof filter !== 'function' ? filter : undefined;
       return maybeCallback(super.deleteOne(filter, options), callback);
@@ -135,10 +135,10 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : typeof filter === 'function'
-          ? filter
-          : undefined;
+            ? options
+            : typeof filter === 'function'
+              ? filter
+              : undefined;
       options = typeof options !== 'function' ? options : undefined;
       filter = typeof filter !== 'function' ? filter : undefined;
       return maybeCallback(super.distinct(key, filter, options), callback);
@@ -149,8 +149,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.drop(options), callback);
     }
@@ -160,10 +160,10 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : typeof filter === 'function'
-          ? filter
-          : undefined;
+            ? options
+            : typeof filter === 'function'
+              ? filter
+              : undefined;
       options = typeof options !== 'function' ? options : undefined;
       filter = typeof filter !== 'function' ? filter : undefined;
       return maybeCallback(super.findOne(filter, options), callback);
@@ -174,10 +174,10 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : typeof filter === 'function'
-          ? filter
-          : undefined;
+            ? options
+            : typeof filter === 'function'
+              ? filter
+              : undefined;
       options = typeof options !== 'function' ? options : undefined;
       filter = typeof filter !== 'function' ? filter : undefined;
       return maybeCallback(super.findOneAndDelete(filter, options), callback);
@@ -188,8 +188,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.findOneAndReplace(filter, replacement, options), callback);
     }
@@ -199,8 +199,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.findOneAndUpdate(filter, update, options), callback);
     }
@@ -210,8 +210,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.indexExists(indexes, options), callback);
     }
@@ -221,8 +221,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.indexInformation(options), callback);
     }
@@ -232,8 +232,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.indexes(options), callback);
     }
@@ -243,8 +243,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.insertMany(docs, options), callback);
     }
@@ -254,8 +254,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.insertOne(doc, options), callback);
     }
@@ -265,8 +265,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.isCapped(options), callback);
     }
@@ -276,8 +276,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.options(options), callback);
     }
@@ -287,8 +287,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(
         super.rename(newName, options).then(collection => collection[toLegacy]()),
@@ -301,8 +301,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.replaceOne(filter, replacement, options), callback);
     }
@@ -312,8 +312,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.updateMany(filter, update, options), callback);
     }
@@ -323,8 +323,8 @@ module.exports.makeLegacyCollection = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.updateOne(filter, update, options), callback);
     }
