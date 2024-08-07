@@ -42,8 +42,8 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/node": "^22.1.0",
     "@microsoft/api-extractor-model": "^7.29.4",
+    "@types/node": "^22.1.0",
     "@typescript-eslint/eslint-plugin": "^8.0.1",
     "@typescript-eslint/parser": "^8.0.1",
     "chai": "^4.4.1",
@@ -58,6 +58,6 @@
     "source-map-support": "^0.5.21",
     "standard-version": "^9.5.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.0.4"
+    "typescript": "^5.5.4"
   }
 }
