@@ -5,9 +5,12 @@
         ],
         "lib": [
             "ES2021"
-        ]
+        ],
     },
     "ts-node": {
         "transpileOnly": true,
     },
+    "exclude": [
+        "etc"
+    ]
 }

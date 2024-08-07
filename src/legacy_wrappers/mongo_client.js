@@ -54,8 +54,8 @@ module.exports.makeLegacyMongoClient = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       try {
         const client = new this(url, options);
@@ -97,8 +97,8 @@ module.exports.makeLegacyMongoClient = function (baseClass) {
         typeof executeWithSession === 'function'
           ? executeWithSession
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return super.withSession(options, session => executeWithSession(session[toLegacy]()));
     }

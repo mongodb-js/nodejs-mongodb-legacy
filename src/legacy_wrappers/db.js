@@ -12,8 +12,8 @@ module.exports.makeLegacyDb = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.command(command, options), callback);
     }
@@ -23,8 +23,8 @@ module.exports.makeLegacyDb = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.removeUser(username, options), callback);
     }
@@ -34,8 +34,8 @@ module.exports.makeLegacyDb = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(
         super.createCollection(name, options).then(collection => collection[toLegacy]()),
@@ -48,8 +48,8 @@ module.exports.makeLegacyDb = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.dropCollection(name, options), callback);
     }
@@ -59,8 +59,8 @@ module.exports.makeLegacyDb = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.createIndex(name, indexSpec, options), callback);
     }
@@ -70,8 +70,8 @@ module.exports.makeLegacyDb = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.dropDatabase(options), callback);
     }
@@ -81,8 +81,8 @@ module.exports.makeLegacyDb = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.indexInformation(name, options), callback);
     }
@@ -92,8 +92,8 @@ module.exports.makeLegacyDb = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.profilingLevel(options), callback);
     }
@@ -103,8 +103,8 @@ module.exports.makeLegacyDb = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.setProfilingLevel(level, options), callback);
     }
@@ -114,8 +114,8 @@ module.exports.makeLegacyDb = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(
         super.renameCollection(from, to, options).then(collection => collection[toLegacy]()),
@@ -128,8 +128,8 @@ module.exports.makeLegacyDb = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.stats(options), callback);
     }
@@ -140,8 +140,8 @@ module.exports.makeLegacyDb = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(
         super

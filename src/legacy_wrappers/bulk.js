@@ -12,8 +12,8 @@ module.exports.makeLegacyOrderedBulkOperation = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.execute(options), callback);
     }
@@ -36,8 +36,8 @@ module.exports.makeLegacyUnorderedBulkOperation = function (baseClass) {
         typeof callback === 'function'
           ? callback
           : typeof options === 'function'
-          ? options
-          : undefined;
+            ? options
+            : undefined;
       options = typeof options !== 'function' ? options : undefined;
       return maybeCallback(super.execute(options), callback);
     }

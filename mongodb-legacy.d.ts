@@ -206,8 +206,8 @@ declare class LegacyChangeStream<TSchema extends Document = Document, TChange ex
   /**
    * Try to get the next available document from the Change Stream's cursor or `null` if an empty batch is returned
    */
-  tryNext(): Promise<Document | null>;
-  tryNext(callback: Callback<Document | null>): void;
+  tryNext(): Promise<TChange | null>;
+  tryNext(callback: Callback<TChange | null>): void;
   /** Close the Change Stream */
   close(): Promise<void>;
   close(callback: Callback): void;

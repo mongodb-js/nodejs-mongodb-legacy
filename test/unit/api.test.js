@@ -137,8 +137,8 @@ describe('wrapper API', () => {
         possibleCallbackPositions != null
           ? possibleCallbackPositions
           : functionLength < 2
-          ? [1]
-          : [1, 2];
+            ? [1]
+            : [1, 2];
 
       for (const argumentDecrement of callbackPositions) {
         // For each callback position, we construct an array of arguments that contains the callback
