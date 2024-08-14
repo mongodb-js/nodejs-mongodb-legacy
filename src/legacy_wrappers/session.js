@@ -7,12 +7,28 @@ Object.defineProperty(module.exports, '__esModule', { value: true });
 
 module.exports.makeLegacyClientSession = function (baseClass) {
   class LegacyClientSession extends baseClass {
-    abortTransaction(callback) {
-      return maybeCallback(super.abortTransaction(), callback);
+    abortTransaction(options, callback) {
+      callback =
+        typeof callback === 'function'
+          ? callback
+          : typeof options === 'function'
+            ? options
+            : undefined;
+      options = typeof options !== 'function' ? options : undefined;
+
+      return maybeCallback(super.abortTransaction(options), callback);
     }
 
-    commitTransaction(callback) {
-      return maybeCallback(super.commitTransaction(), callback);
+    commitTransaction(options, callback) {
+      callback =
+        typeof callback === 'function'
+          ? callback
+          : typeof options === 'function'
+            ? options
+            : undefined;
+      options = typeof options !== 'function' ? options : undefined;
+
+      return maybeCallback(super.commitTransaction(options), callback);
     }
 
     endSession(options, callback) {

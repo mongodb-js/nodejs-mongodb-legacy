@@ -57,8 +57,8 @@ const api = [
   { className: 'ChangeStream', method: 'next', returnType: 'Promise<TChange>' },
   { className: 'ChangeStream', method: 'tryNext', returnType: 'Promise<Document | null>' },
 
-  { className: 'ClientSession', method: 'abortTransaction', returnType: 'Promise<Document>' },
-  { className: 'ClientSession', method: 'commitTransaction', returnType: 'Promise<Document>' },
+  { className: 'ClientSession', method: 'abortTransaction', returnType: 'Promise<Document>', possibleCallbackPositions: [1, 2] },
+  { className: 'ClientSession', method: 'commitTransaction', returnType: 'Promise<Document>', possibleCallbackPositions: [1, 2] },
   { className: 'ClientSession', method: 'endSession', returnType: 'Promise<void>' },
   { className: 'ClientSession', method: 'withTransaction', returnType: 'Promise<void>', notAsync: true },
 
