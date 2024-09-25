@@ -7,16 +7,37 @@ Object.defineProperty(module.exports, '__esModule', { value: true });
 
 module.exports.makeLegacyGridFSBucket = function (baseClass) {
   class LegacyGridFSBucket extends baseClass {
-    delete(id, callback) {
-      return maybeCallback(super.delete(id), callback);
+    delete(id, options, callback) {
+      callback =
+        typeof callback === 'function'
+          ? callback
+          : typeof options === 'function'
+            ? options
+            : undefined;
+      options = typeof options !== 'function' ? options : undefined;
+      return maybeCallback(super.delete(id, options), callback);
     }
 
-    rename(id, filename, callback) {
-      return maybeCallback(super.rename(id, filename), callback);
+    rename(id, filename, options, callback) {
+      callback =
+        typeof callback === 'function'
+          ? callback
+          : typeof options === 'function'
+            ? options
+            : undefined;
+      options = typeof options !== 'function' ? options : undefined;
+      return maybeCallback(super.rename(id, filename, options), callback);
     }
 
-    drop(callback) {
-      return maybeCallback(super.drop(), callback);
+    drop(options, callback) {
+      callback =
+        typeof callback === 'function'
+          ? callback
+          : typeof options === 'function'
+            ? options
+            : undefined;
+      options = typeof options !== 'function' ? options : undefined;
+      return maybeCallback(super.drop(options), callback);
     }
 
     // conversion

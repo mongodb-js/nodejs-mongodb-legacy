@@ -48,4 +48,52 @@ describe('legacy_wrappers/gridfs.js', () => {
       LegacyGridFSBucketWriteStream
     );
   });
+
+  context('delete', function () {
+    it('correctly handles parameters when options are provided', function () {
+      const spy = sinon.spy(mongodbDriver.GridFSBucket.prototype, 'delete');
+      const opts = { timeoutMS: 10 };
+      const oid = new mongodbDriver.ObjectId();
+      bucket.delete(oid, opts, () => {});
+      expect(spy).to.be.calledWithExactly(oid, opts);
+    });
+    it('correctly handles parameters when options are not provided', function () {
+      const spy = sinon.spy(mongodbDriver.GridFSBucket.prototype, 'delete');
+      const oid = new mongodbDriver.ObjectId();
+      bucket.delete(oid, () => {});
+      expect(spy).to.be.calledWithExactly(oid, undefined);
+    });
+  });
+
+  context('rename', function () {
+    it('correctly handles parameters when options are provided', function () {
+      const spy = sinon.spy(mongodbDriver.GridFSBucket.prototype, 'rename');
+      const opts = { timeoutMS: 10 };
+      const oid = new mongodbDriver.ObjectId();
+      bucket.rename(oid, 'name', opts, () => {});
+      expect(spy).to.be.calledWithExactly(oid, 'name', opts);
+    });
+
+    it('correctly handles parameters when options are not provided', function () {
+      const spy = sinon.spy(mongodbDriver.GridFSBucket.prototype, 'rename');
+      const oid = new mongodbDriver.ObjectId();
+      bucket.rename(oid, 'name', () => {});
+      expect(spy).to.be.calledWithExactly(oid, 'name', undefined);
+    });
+  });
+
+  context('drop', function () {
+    it('correctly handles parameters when options are provided', function () {
+      const spy = sinon.spy(mongodbDriver.GridFSBucket.prototype, 'drop');
+      const opts = { timeoutMS: 10 };
+      bucket.drop(opts, () => {});
+      expect(spy).to.be.calledWithExactly(opts);
+    });
+
+    it('correctly handles parameters when options are not provided', function () {
+      const spy = sinon.spy(mongodbDriver.GridFSBucket.prototype, 'drop');
+      bucket.drop(() => {});
+      expect(spy).to.be.calledWithExactly(undefined);
+    });
+  });
 });
