@@ -7,8 +7,15 @@ Object.defineProperty(module.exports, '__esModule', { value: true });
 
 module.exports.makeLegacyChangeStream = function (baseClass) {
   class LegacyChangeStream extends baseClass {
-    close(callback) {
-      return maybeCallback(super.close(), callback);
+    close(options, callback) {
+      callback =
+        typeof callback === 'function'
+          ? callback
+          : typeof options === 'function'
+            ? options
+            : undefined;
+      options = typeof options !== 'function' ? options : undefined;
+      return maybeCallback(super.close(options), callback);
     }
     hasNext(callback) {
       return maybeCallback(super.hasNext(), callback);
