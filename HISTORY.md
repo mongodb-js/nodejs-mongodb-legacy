@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.1.2](https://github.com/mongodb-js/nodejs-mongodb-legacy/compare/v6.1.1...v6.1.2) (2024-09-27)
+
+
+### Bug Fixes
+
+* **NODE-6399:** support new options arguments ([#48](https://github.com/mongodb-js/nodejs-mongodb-legacy/issues/48)) ([225cb64](https://github.com/mongodb-js/nodejs-mongodb-legacy/commit/225cb64f17841e26d075c916fcbe502193532246))
+
 ## [6.1.1](https://github.com/mongodb-js/nodejs-mongodb-legacy/compare/v6.1.0...v6.1.1) (2024-08-14)
 
 
