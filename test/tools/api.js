@@ -52,7 +52,7 @@ const api = [
   { className: 'OrderedBulkOperation', method: 'execute', returnType: 'Promise<BulkWriteResult>' },
   { className: 'UnorderedBulkOperation', method: 'execute', returnType: 'Promise<BulkWriteResult>' },
 
-  { className: 'ChangeStream', method: 'close', returnType: 'Promise<void>' },
+  { className: 'ChangeStream', method: 'close', returnType: 'Promise<void>', possibleCallbackPositions: [1, 2]},
   { className: 'ChangeStream', method: 'hasNext', returnType: 'Promise<boolean>' },
   { className: 'ChangeStream', method: 'next', returnType: 'Promise<TChange>' },
   { className: 'ChangeStream', method: 'tryNext', returnType: 'Promise<Document | null>' },
@@ -117,9 +117,9 @@ const api = [
   { className: 'FindCursor', method: 'count', returnType: 'Promise<number>' },
   { className: 'FindCursor', method: 'explain', returnType: 'Promise<Document>' },
 
-  { className: 'GridFSBucket', method: 'delete', returnType: 'Promise<void>', possibleCallbackPositions: [1] },
-  { className: 'GridFSBucket', method: 'drop', returnType: 'Promise<void>' },
-  { className: 'GridFSBucket', method: 'rename', returnType: 'Promise<void>', possibleCallbackPositions: [1] },
+  { className: 'GridFSBucket', method: 'delete', returnType: 'Promise<void>', possibleCallbackPositions: [1, 2] },
+  { className: 'GridFSBucket', method: 'drop', returnType: 'Promise<void>', possibleCallbackPositions: [1, 2] },
+  { className: 'GridFSBucket', method: 'rename', returnType: 'Promise<void>', possibleCallbackPositions: [1, 2] },
   { className: 'GridFSBucket', method: 'openUploadStream', returnType: 'GridFSBucketWriteStream', notAsync: true },
   { className: 'GridFSBucket', method: 'openUploadStreamWithId', returnType: 'GridFSBucketWriteStream', notAsync: true },
   { className: 'GridFSBucket', method: 'find', returnType: 'FindCursor', notAsync: true },
@@ -141,7 +141,7 @@ const api = [
 ];
 
 module.exports.api = api;
-module.exports.classNames = new Set(api.map(({className}) => className))
+module.exports.classNames = new Set(api.map(({ className }) => className))
 module.exports.classNameToMethodList = new Map(api.map((api, _, array) =>
   [api.className, sorted(Array.from(new Set(Array.from(array.filter(v => v.className === api.className), method => method))), (a, b) => byStrings(a.method, b.method))]
 ));
