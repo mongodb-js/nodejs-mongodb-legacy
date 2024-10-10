@@ -9,8 +9,14 @@
     "node": true,
     "es6": true
   },
-  "plugins": ["prettier", "@typescript-eslint"],
-  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "plugins": [
+    "prettier",
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended"
+  ],
   "rules": {
     "strict": "error",
     "prettier/prettier": "error",
@@ -24,6 +30,9 @@
       }
     ],
     "no-implicit-coercion": "error",
-    "@typescript-eslint/strict-boolean-expressions": "error"
+    "@typescript-eslint/strict-boolean-expressions": "error",
+    "no-unused-vars": ["error", {
+      "argsIgnorePattern": "^_"
+    }]
   }
 }
