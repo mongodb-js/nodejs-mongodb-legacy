@@ -26,7 +26,9 @@ module.exports.makeLegacyFindCursor = function (baseClass) {
     }
 
     explain(_verbosity, _options, _callback) {
-      const callback = Array.from(arguments).find(argument => typeof argument === 'function');
+      const argumentsArray = Array.from(arguments);
+      const callback = argumentsArray.find(argument => typeof argument === 'function');
+      callback != null && argumentsArray.pop();
       return maybeCallback(super.explain(...arguments), callback);
     }
 
@@ -175,7 +177,9 @@ module.exports.makeLegacyAggregationCursor = function (baseClass) {
 
   class LegacyAggregationCursor extends baseClass {
     explain(_verbosity, _options, _callback) {
-      const callback = Array.from(arguments).find(argument => typeof argument === 'function');
+      const argumentsArray = Array.from(arguments);
+      const callback = argumentsArray.find(argument => typeof argument === 'function');
+      callback != null && argumentsArray.pop();
       return maybeCallback(super.explain(...arguments), callback);
     }
 
