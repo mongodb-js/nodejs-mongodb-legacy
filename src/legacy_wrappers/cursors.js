@@ -29,7 +29,7 @@ module.exports.makeLegacyFindCursor = function (baseClass) {
       const argumentsArray = Array.from(arguments);
       const callback = argumentsArray.find(argument => typeof argument === 'function');
       callback != null && argumentsArray.pop();
-      return maybeCallback(super.explain(...arguments), callback);
+      return maybeCallback(super.explain(...argumentsArray), callback);
     }
 
     close(options, callback) {
@@ -180,7 +180,7 @@ module.exports.makeLegacyAggregationCursor = function (baseClass) {
       const argumentsArray = Array.from(arguments);
       const callback = argumentsArray.find(argument => typeof argument === 'function');
       callback != null && argumentsArray.pop();
-      return maybeCallback(super.explain(...arguments), callback);
+      return maybeCallback(super.explain(...argumentsArray), callback);
     }
 
     close(options, callback) {
