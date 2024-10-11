@@ -36,7 +36,7 @@ module.exports.makeLegacyFindCursor = function (baseClass) {
               : undefined;
       options = typeof options !== 'function' ? options : undefined;
       verbosity = typeof verbosity !== 'function' ? verbosity : undefined;
-      return maybeCallback(super.explain(...arguments), callback);
+      return maybeCallback(super.explain(verbosity, options), callback);
     }
 
     close(options, callback) {
@@ -194,7 +194,7 @@ module.exports.makeLegacyAggregationCursor = function (baseClass) {
               : undefined;
       options = typeof options !== 'function' ? options : undefined;
       verbosity = typeof verbosity !== 'function' ? verbosity : undefined;
-      return maybeCallback(super.explain(...arguments), callback);
+      return maybeCallback(super.explain(verbosity, options), callback);
     }
 
     close(options, callback) {
