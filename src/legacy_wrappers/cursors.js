@@ -25,11 +25,18 @@ module.exports.makeLegacyFindCursor = function (baseClass) {
       return maybeCallback(super.count(options), callback);
     }
 
-    explain(_verbosity, _options, _callback) {
-      const argumentsArray = Array.from(arguments);
-      const callback = argumentsArray.find(argument => typeof argument === 'function');
-      callback != null && argumentsArray.pop();
-      return maybeCallback(super.explain(...argumentsArray), callback);
+    explain(verbosity, options, callback) {
+      callback =
+        typeof callback === 'function'
+          ? callback
+          : typeof options === 'function'
+            ? options
+            : typeof verbosity === 'function'
+              ? verbosity
+              : undefined;
+      options = typeof options !== 'function' ? options : undefined;
+      verbosity = typeof verbosity !== 'function' ? verbosity : undefined;
+      return maybeCallback(super.explain(...arguments), callback);
     }
 
     close(options, callback) {
@@ -176,11 +183,18 @@ module.exports.makeLegacyAggregationCursor = function (baseClass) {
   }
 
   class LegacyAggregationCursor extends baseClass {
-    explain(_verbosity, _options, _callback) {
-      const argumentsArray = Array.from(arguments);
-      const callback = argumentsArray.find(argument => typeof argument === 'function');
-      callback != null && argumentsArray.pop();
-      return maybeCallback(super.explain(...argumentsArray), callback);
+    explain(verbosity, options, callback) {
+      callback =
+        typeof callback === 'function'
+          ? callback
+          : typeof options === 'function'
+            ? options
+            : typeof verbosity === 'function'
+              ? verbosity
+              : undefined;
+      options = typeof options !== 'function' ? options : undefined;
+      verbosity = typeof verbosity !== 'function' ? verbosity : undefined;
+      return maybeCallback(super.explain(...arguments), callback);
     }
 
     close(options, callback) {
