@@ -25,15 +25,18 @@ module.exports.makeLegacyFindCursor = function (baseClass) {
       return maybeCallback(super.count(options), callback);
     }
 
-    explain(verbosity, callback) {
+    explain(verbosity, options, callback) {
       callback =
         typeof callback === 'function'
           ? callback
-          : typeof verbosity === 'function'
-            ? verbosity
-            : undefined;
+          : typeof options === 'function'
+            ? options
+            : typeof verbosity === 'function'
+              ? verbosity
+              : undefined;
+      options = typeof options !== 'function' ? options : undefined;
       verbosity = typeof verbosity !== 'function' ? verbosity : undefined;
-      return maybeCallback(super.explain(verbosity), callback);
+      return maybeCallback(super.explain(verbosity, options), callback);
     }
 
     close(options, callback) {
@@ -180,15 +183,18 @@ module.exports.makeLegacyAggregationCursor = function (baseClass) {
   }
 
   class LegacyAggregationCursor extends baseClass {
-    explain(verbosity, callback) {
+    explain(verbosity, options, callback) {
       callback =
         typeof callback === 'function'
           ? callback
-          : typeof verbosity === 'function'
-            ? verbosity
-            : undefined;
+          : typeof options === 'function'
+            ? options
+            : typeof verbosity === 'function'
+              ? verbosity
+              : undefined;
+      options = typeof options !== 'function' ? options : undefined;
       verbosity = typeof verbosity !== 'function' ? verbosity : undefined;
-      return maybeCallback(super.explain(verbosity), callback);
+      return maybeCallback(super.explain(verbosity, options), callback);
     }
 
     close(options, callback) {

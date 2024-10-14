@@ -38,7 +38,7 @@ const api = [
   { className: 'Admin', method: 'serverStatus', returnType: 'Promise<Document>' },
   { className: 'Admin', method: 'validateCollection', returnType: 'Promise<Document>' },
 
-  { className: 'AggregationCursor', method: 'explain', returnType: 'Promise<Document>' },
+  { className: 'AggregationCursor', method: 'explain', returnType: 'Promise<Document>', possibleCallbackPositions: [1, 2, 3] },
   { className: 'AggregationCursor', method: 'clone', returnType: 'AggregationCursor', notAsync: true },
 
   { className: 'FindCursor', method: 'clone', returnType: 'FindCursor', notAsync: true },
@@ -115,7 +115,7 @@ const api = [
   { className: 'Db', method: 'watch', returnType: 'ChangeStream', notAsync: true },
 
   { className: 'FindCursor', method: 'count', returnType: 'Promise<number>' },
-  { className: 'FindCursor', method: 'explain', returnType: 'Promise<Document>' },
+  { className: 'FindCursor', method: 'explain', returnType: 'Promise<Document>', possibleCallbackPositions: [1,2,3] },
 
   { className: 'GridFSBucket', method: 'delete', returnType: 'Promise<void>', possibleCallbackPositions: [1, 2] },
   { className: 'GridFSBucket', method: 'drop', returnType: 'Promise<void>', possibleCallbackPositions: [1, 2] },
