@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.1.3](https://github.com/mongodb-js/nodejs-mongodb-legacy/compare/v6.1.2...v6.1.3) (2024-10-14)
+
+
+### Bug Fixes
+
+* **NODE-6420:** support options for aggregationcursor/findcursor.explain() ([#52](https://github.com/mongodb-js/nodejs-mongodb-legacy/issues/52)) ([99bd9ed](https://github.com/mongodb-js/nodejs-mongodb-legacy/commit/99bd9ed5ce8e0192b5a729747018cb94d4311cd8))
+
 ## [6.1.2](https://github.com/mongodb-js/nodejs-mongodb-legacy/compare/v6.1.1...v6.1.2) (2024-09-27)
 
 
