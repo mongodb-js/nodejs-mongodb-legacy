@@ -13,7 +13,7 @@ const { byStrings, sorted, runMicroTask } = require('../tools/utils');
 const iLoveJs = 'mongodb://iLoveJavascript';
 const client = new mongodbLegacy.MongoClient(iLoveJs);
 const db = new mongodbLegacy.Db(client, 'animals');
-const collection = new mongodbLegacy.Collection(db, 'pets');
+const collection = new mongodbLegacy.Collection(db, 'pets', {});
 const namespace = MongoDBNamespace.fromString('animals.pets');
 
 // A map to helpers that can create instances of the overridden classes for testing
