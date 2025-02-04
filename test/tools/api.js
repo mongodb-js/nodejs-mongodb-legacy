@@ -146,6 +146,9 @@ module.exports.classNameToMethodList = new Map(api.map((api, _, array) =>
   [api.className, sorted(Array.from(new Set(Array.from(array.filter(v => v.className === api.className), method => method))), (a, b) => byStrings(a.method, b.method))]
 ));
 
+/**
+ * Generated from `api`, this is an exhaustive list of all methods we can unit test.
+ */
 module.exports.unitTestableAPI = [
   {
     "className": "Admin",
