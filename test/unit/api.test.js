@@ -215,7 +215,14 @@ function makeInstance({ client, db, namespace, collection }, className) {
     ['Db', () => new mongodbLegacy.Db(client, 'animals')],
     ['FindCursor', () => new mongodbLegacy.FindCursor(client, namespace)],
     ['GridFSBucket', () => new mongodbLegacy.GridFSBucket(db)],
-    ['GridFSBucketWriteStream', () => new mongodbLegacy.GridFSBucket(db).openUploadStream('file')],
+    [
+      'GridFSBucketWriteStream',
+      () => {
+        const stream = new mongodbLegacy.GridFSBucket(db).openUploadStream('file');
+        stream.on('error', () => {});
+        return stream;
+      }
+    ],
     ['ListCollectionsCursor', () => new mongodbLegacy.ListCollectionsCursor(db, {})],
     ['ListIndexesCursor', () => new mongodbLegacy.ListIndexesCursor(collection)],
     ['MongoClient', () => new mongodbLegacy.MongoClient('mongodb://iLoveJavascript')],
