@@ -52,7 +52,7 @@ const api = [
   { className: 'OrderedBulkOperation', method: 'execute', returnType: 'Promise<BulkWriteResult>' },
   { className: 'UnorderedBulkOperation', method: 'execute', returnType: 'Promise<BulkWriteResult>' },
 
-  { className: 'ChangeStream', method: 'close', returnType: 'Promise<void>', possibleCallbackPositions: [1, 2]},
+  { className: 'ChangeStream', method: 'close', returnType: 'Promise<void>', possibleCallbackPositions: [1, 2] },
   { className: 'ChangeStream', method: 'hasNext', returnType: 'Promise<boolean>' },
   { className: 'ChangeStream', method: 'next', returnType: 'Promise<TChange>' },
   { className: 'ChangeStream', method: 'tryNext', returnType: 'Promise<Document | null>' },
@@ -115,7 +115,7 @@ const api = [
   { className: 'Db', method: 'watch', returnType: 'ChangeStream', notAsync: true },
 
   { className: 'FindCursor', method: 'count', returnType: 'Promise<number>' },
-  { className: 'FindCursor', method: 'explain', returnType: 'Promise<Document>', possibleCallbackPositions: [1,2,3] },
+  { className: 'FindCursor', method: 'explain', returnType: 'Promise<Document>', possibleCallbackPositions: [1, 2, 3] },
 
   { className: 'GridFSBucket', method: 'delete', returnType: 'Promise<void>', possibleCallbackPositions: [1, 2] },
   { className: 'GridFSBucket', method: 'drop', returnType: 'Promise<void>', possibleCallbackPositions: [1, 2] },
@@ -145,3 +145,841 @@ module.exports.classNames = new Set(api.map(({ className }) => className))
 module.exports.classNameToMethodList = new Map(api.map((api, _, array) =>
   [api.className, sorted(Array.from(new Set(Array.from(array.filter(v => v.className === api.className), method => method))), (a, b) => byStrings(a.method, b.method))]
 ));
+
+module.exports.unitTestableAPI = [
+  {
+    "className": "Admin",
+    "method": "buildInfo",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Admin",
+    "method": "command",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Admin",
+    "method": "listDatabases",
+    "returnType": "Promise<ListDatabasesResult>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Admin",
+    "method": "ping",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Admin",
+    "method": "removeUser",
+    "returnType": "Promise<boolean>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Admin",
+    "method": "replSetGetStatus",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Admin",
+    "method": "serverInfo",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Admin",
+    "method": "serverStatus",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Admin",
+    "method": "validateCollection",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "AggregationCursor",
+    "method": "close",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "AggregationCursor",
+    "method": "explain",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2,
+      3
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "AggregationCursor",
+    "method": "forEach",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "AggregationCursor",
+    "method": "hasNext",
+    "returnType": "Promise<boolean>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "AggregationCursor",
+    "method": "next",
+    "returnType": "Promise<TSchema | null>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "AggregationCursor",
+    "method": "toArray",
+    "returnType": "Promise<TSchema[]>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "AggregationCursor",
+    "method": "tryNext",
+    "returnType": "Promise<TSchema | null>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "ChangeStream",
+    "method": "close",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "ChangeStream",
+    "method": "hasNext",
+    "returnType": "Promise<boolean>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "ChangeStream",
+    "method": "next",
+    "returnType": "Promise<TChange>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "ChangeStream",
+    "method": "tryNext",
+    "returnType": "Promise<Document | null>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "ClientSession",
+    "method": "abortTransaction",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "ClientSession",
+    "method": "commitTransaction",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "ClientSession",
+    "method": "endSession",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Collection",
+    "method": "bulkWrite",
+    "returnType": "Promise<BulkWriteResult>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Collection",
+    "method": "count",
+    "returnType": "Promise<number>",
+    "possibleCallbackPositions": [
+      1,
+      2,
+      3
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Collection",
+    "method": "countDocuments",
+    "returnType": "Promise<number>",
+    "possibleCallbackPositions": [
+      1,
+      2,
+      3
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Collection",
+    "method": "createIndex",
+    "returnType": "Promise<string>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Collection",
+    "method": "createIndexes",
+    "returnType": "Promise<string[]>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Collection",
+    "method": "deleteMany",
+    "returnType": "Promise<DeleteResult>",
+    "possibleCallbackPositions": [
+      1,
+      2,
+      3
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Collection",
+    "method": "deleteOne",
+    "returnType": "Promise<DeleteResult>",
+    "possibleCallbackPositions": [
+      1,
+      2,
+      3
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Collection",
+    "method": "distinct",
+    "returnType": "Promise<Array<Flatten<WithId<TSchema>[Key]>>>",
+    "possibleCallbackPositions": [
+      1,
+      2,
+      3
+    ],
+    "functionLength": 4
+  },
+  {
+    "className": "Collection",
+    "method": "drop",
+    "returnType": "Promise<boolean>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Collection",
+    "method": "dropIndex",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Collection",
+    "method": "dropIndexes",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Collection",
+    "method": "estimatedDocumentCount",
+    "returnType": "Promise<number>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Collection",
+    "method": "findOne",
+    "returnType": "Promise<WithId<TSchema> | null>",
+    "possibleCallbackPositions": [
+      1,
+      2,
+      3
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Collection",
+    "method": "findOneAndDelete",
+    "returnType": "Promise<ModifyResult<TSchema>>",
+    "possibleCallbackPositions": [
+      1,
+      2,
+      3
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Collection",
+    "method": "findOneAndReplace",
+    "returnType": "Promise<ModifyResult<TSchema>>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 4
+  },
+  {
+    "className": "Collection",
+    "method": "findOneAndUpdate",
+    "returnType": "Promise<ModifyResult<TSchema>>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 4
+  },
+  {
+    "className": "Collection",
+    "method": "indexes",
+    "returnType": "Promise<Document[]>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Collection",
+    "method": "indexExists",
+    "returnType": "Promise<boolean>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Collection",
+    "method": "indexInformation",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Collection",
+    "method": "insertMany",
+    "returnType": "Promise<InsertManyResult<TSchema>>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Collection",
+    "method": "insertOne",
+    "returnType": "Promise<InsertOneResult<TSchema>>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Collection",
+    "method": "isCapped",
+    "returnType": "Promise<boolean>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Collection",
+    "method": "options",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Collection",
+    "method": "replaceOne",
+    "returnType": "Promise<UpdateResult | Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 4
+  },
+  {
+    "className": "Collection",
+    "method": "updateMany",
+    "returnType": "Promise<UpdateResult | Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 4
+  },
+  {
+    "className": "Collection",
+    "method": "updateOne",
+    "returnType": "Promise<UpdateResult>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 4
+  },
+  {
+    "className": "Db",
+    "method": "command",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Db",
+    "method": "createIndex",
+    "returnType": "Promise<string>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 4
+  },
+  {
+    "className": "Db",
+    "method": "dropCollection",
+    "returnType": "Promise<boolean>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Db",
+    "method": "dropDatabase",
+    "returnType": "Promise<boolean>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Db",
+    "method": "indexInformation",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Db",
+    "method": "profilingLevel",
+    "returnType": "Promise<string>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "Db",
+    "method": "removeUser",
+    "returnType": "Promise<boolean>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Db",
+    "method": "setProfilingLevel",
+    "returnType": "Promise<ProfilingLevel>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "Db",
+    "method": "stats",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "FindCursor",
+    "method": "close",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "FindCursor",
+    "method": "count",
+    "returnType": "Promise<number>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "FindCursor",
+    "method": "explain",
+    "returnType": "Promise<Document>",
+    "possibleCallbackPositions": [
+      1,
+      2,
+      3
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "FindCursor",
+    "method": "forEach",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "FindCursor",
+    "method": "hasNext",
+    "returnType": "Promise<boolean>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "FindCursor",
+    "method": "next",
+    "returnType": "Promise<TSchema | null>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "FindCursor",
+    "method": "toArray",
+    "returnType": "Promise<TSchema[]>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "FindCursor",
+    "method": "tryNext",
+    "returnType": "Promise<TSchema | null>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "GridFSBucket",
+    "method": "delete",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 3
+  },
+  {
+    "className": "GridFSBucket",
+    "method": "drop",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "GridFSBucket",
+    "method": "rename",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 4
+  },
+  {
+    "className": "GridFSBucketWriteStream",
+    "method": "abort",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "ListCollectionsCursor",
+    "method": "close",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "ListCollectionsCursor",
+    "method": "forEach",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "ListCollectionsCursor",
+    "method": "hasNext",
+    "returnType": "Promise<boolean>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "ListCollectionsCursor",
+    "method": "next",
+    "returnType": "Promise<TSchema | null>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "ListCollectionsCursor",
+    "method": "toArray",
+    "returnType": "Promise<TSchema[]>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "ListCollectionsCursor",
+    "method": "tryNext",
+    "returnType": "Promise<TSchema | null>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "ListIndexesCursor",
+    "method": "close",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "ListIndexesCursor",
+    "method": "forEach",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "ListIndexesCursor",
+    "method": "hasNext",
+    "returnType": "Promise<boolean>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "ListIndexesCursor",
+    "method": "next",
+    "returnType": "Promise<TSchema | null>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "ListIndexesCursor",
+    "method": "toArray",
+    "returnType": "Promise<TSchema[]>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "ListIndexesCursor",
+    "method": "tryNext",
+    "returnType": "Promise<TSchema | null>",
+    "possibleCallbackPositions": [
+      1
+    ],
+    "functionLength": 1
+  },
+  {
+    "className": "MongoClient",
+    "method": "close",
+    "returnType": "Promise<void>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "OrderedBulkOperation",
+    "method": "execute",
+    "returnType": "Promise<BulkWriteResult>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  },
+  {
+    "className": "UnorderedBulkOperation",
+    "method": "execute",
+    "returnType": "Promise<BulkWriteResult>",
+    "possibleCallbackPositions": [
+      1,
+      2
+    ],
+    "functionLength": 2
+  }
+]
