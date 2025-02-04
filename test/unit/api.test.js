@@ -6,94 +6,39 @@ const { expect } = require('chai');
 const mongodbDriver = require('mongodb');
 const mongodbLegacy = require('../..');
 const { MongoDBNamespace } = require('mongodb/lib/utils');
-const { classNameToMethodList, unitTestableAPI } = require('../tools/api');
-const { byStrings, sorted, runMicroTask } = require('../tools/utils');
-
-// Dummy data to help with testing
-const iLoveJs = 'mongodb://iLoveJavascript';
-const client = new mongodbLegacy.MongoClient(iLoveJs);
-const db = new mongodbLegacy.Db(client, 'animals');
-const collection = new mongodbLegacy.Collection(db, 'pets', {});
-const namespace = MongoDBNamespace.fromString('animals.pets');
-
-const state = { client, db, collection, namespace };
-client.connect();
-
-function makeInstance({ client, db, namespace, collection }, className) {
-  const CLASS_FACTORY = new Map([
-    ['Admin', () => new mongodbLegacy.Admin(db)],
-    ['AggregationCursor', () => new mongodbLegacy.AggregationCursor(client, namespace)],
-    ['ChangeStream', () => new mongodbLegacy.ChangeStream(client)],
-    ['ClientSession', () => client.startSession()],
-    ['Collection', () => new mongodbLegacy.Collection(db, 'pets')],
-    ['Db', () => new mongodbLegacy.Db(client, 'animals')],
-    ['FindCursor', () => new mongodbLegacy.FindCursor(client, namespace)],
-    ['GridFSBucket', () => new mongodbLegacy.GridFSBucket(db)],
-    ['GridFSBucketWriteStream', () => new mongodbLegacy.GridFSBucket(db).openUploadStream('file')],
-    ['ListCollectionsCursor', () => new mongodbLegacy.ListCollectionsCursor(db, {})],
-    ['ListIndexesCursor', () => new mongodbLegacy.ListIndexesCursor(collection)],
-    ['MongoClient', () => new mongodbLegacy.MongoClient(iLoveJs)],
-    ['OrderedBulkOperation', () => collection.initializeOrderedBulkOp()],
-    ['UnorderedBulkOperation', () => collection.initializeUnorderedBulkOp()]
-  ]);
-
-  const factory =
-    CLASS_FACTORY.get(className) ??
-    (() => {
-      throw new Error('Unsupported classname: ' + className);
-    });
-
-  return factory();
-}
-
-function makeStub(className, method, superPromise) {
-  return sinon.stub(mongodbDriver[className].prototype, method).returns(superPromise);
-}
-
-/**
- * A generator that yields all programmatically-testable methods from the mongodb driver.  We do this in two steps:
- * First, we load the exhaustive list of all methods we need to test from api.js.  Second, we load the legacy driver
- * and use the methods loaded from api.js to find references to each class and method we need to test.  The
- * generator can then yield the references to the legacy classes, so that we can programmatically test them.  The
- * generator also yields all possible callback positions for each function.
- */
-function* generateTests() {
-  for (const object of unitTestableAPI) {
-    const { method, className, possibleCallbackPositions } = object;
-
-    const instance = makeInstance(state, className);
-
-    yield {
-      className,
-      method,
-      instance,
-      possibleCallbackPositions
-    };
-  }
-}
+const { unitTestableAPI } = require('../tools/api');
+const { runMicroTask } = require('../tools/utils');
 
 describe('wrapper API', () => {
-  it('all subclassed objects are tested', function () {
-    // const classesWithGetters = sorted(CLASS_FACTORY.keys(), byStrings);
-    // const listOfClasses = sorted(classNameToMethodList.keys(), byStrings);
-    // expect(classesWithGetters).to.deep.equal(listOfClasses);
-  });
-
-  afterEach(() => {
-    sinon.restore();
-  });
-
   for (const {
     className,
-    instance,
     method,
     possibleCallbackPositions,
+    functionLength,
     apiName = `${className}.${method}`
-  } of generateTests()) {
-    expect(instance, apiName).to.have.property(method).that.is.a('function');
-    const functionLength = instance[method].length;
-
+  } of unitTestableAPI) {
     describe(`${apiName}()`, () => {
+      let instance, client, db, collection, namespace;
+
+      beforeEach(function () {
+        client = new mongodbLegacy.MongoClient('mongodb://iLoveJavascript');
+        db = new mongodbLegacy.Db(client, 'animals');
+        collection = new mongodbLegacy.Collection(db, 'pets', {});
+        namespace = MongoDBNamespace.fromString('animals.pets');
+
+        client.connect().catch(_e => {});
+
+        instance = makeInstance(
+          {
+            client,
+            db,
+            namespace,
+            collection
+          },
+          className
+        );
+      });
+
       afterEach(async function () {
         if (className === 'ClientSession' && method !== 'endSession') {
           await instance.endSession();
@@ -104,6 +49,8 @@ describe('wrapper API', () => {
         if (className === 'GridFSBucketWriteStream' && method !== 'end') {
           await instance.end();
         }
+
+        sinon.restore();
       });
       const resolveSuite = [];
       const rejectsSuite = [];
@@ -129,7 +76,7 @@ describe('wrapper API', () => {
             let stubbedMethod;
             const expectedResult = { message: 'success!' };
 
-            before('setup success stub for callback case', function () {
+            beforeEach('setup success stub for callback case', function () {
               superPromise = Promise.resolve(expectedResult);
               stubbedMethod = makeStub(className, method, superPromise);
               callback = sinon.spy();
@@ -159,7 +106,7 @@ describe('wrapper API', () => {
             let actualError;
             const expectedError = new Error('error!');
 
-            before('setup error stub for callback case', function () {
+            beforeEach('setup error stub for callback case', function () {
               superPromise = Promise.reject(expectedError);
               stubbedMethod = makeStub(className, method, superPromise);
               callback = sinon.spy();
@@ -194,7 +141,7 @@ describe('wrapper API', () => {
           let stubbedMethod;
           let expectedResult = { message: 'success!' };
 
-          before('setup success stub for promise case', function () {
+          beforeEach('setup success stub for promise case', function () {
             superPromise = Promise.resolve(expectedResult);
             stubbedMethod = makeStub(className, method, superPromise);
             actualReturnValue = instance[method](...args);
@@ -223,7 +170,7 @@ describe('wrapper API', () => {
           let actualError;
           const expectedError = new Error('error!');
 
-          before('setup error stub for promise case', function () {
+          beforeEach('setup error stub for promise case', function () {
             superPromise = Promise.reject(expectedError);
             stubbedMethod = makeStub(className, method, superPromise);
             actualReturnValue = instance[method](...args);
@@ -257,3 +204,33 @@ describe('wrapper API', () => {
     });
   }
 });
+
+function makeInstance({ client, db, namespace, collection }, className) {
+  const CLASS_FACTORY = new Map([
+    ['Admin', () => new mongodbLegacy.Admin(db)],
+    ['AggregationCursor', () => new mongodbLegacy.AggregationCursor(client, namespace)],
+    ['ChangeStream', () => new mongodbLegacy.ChangeStream(client)],
+    ['ClientSession', () => client.startSession()],
+    ['Collection', () => new mongodbLegacy.Collection(db, 'pets')],
+    ['Db', () => new mongodbLegacy.Db(client, 'animals')],
+    ['FindCursor', () => new mongodbLegacy.FindCursor(client, namespace)],
+    ['GridFSBucket', () => new mongodbLegacy.GridFSBucket(db)],
+    ['GridFSBucketWriteStream', () => new mongodbLegacy.GridFSBucket(db).openUploadStream('file')],
+    ['ListCollectionsCursor', () => new mongodbLegacy.ListCollectionsCursor(db, {})],
+    ['ListIndexesCursor', () => new mongodbLegacy.ListIndexesCursor(collection)],
+    ['MongoClient', () => new mongodbLegacy.MongoClient('mongodb://iLoveJavascript')],
+    ['OrderedBulkOperation', () => collection.initializeOrderedBulkOp()],
+    ['UnorderedBulkOperation', () => collection.initializeUnorderedBulkOp()]
+  ]);
+
+  const _default = () => {
+    throw new Error('Unsupported classname: ' + className);
+  };
+  const factory = CLASS_FACTORY.get(className) ?? _default;
+
+  return factory();
+}
+
+function makeStub(className, method, superPromise) {
+  return sinon.stub(mongodbDriver[className].prototype, method).returns(superPromise);
+}
