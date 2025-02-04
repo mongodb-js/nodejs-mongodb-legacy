@@ -26,7 +26,7 @@ describe('wrapper API', () => {
         collection = new mongodbLegacy.Collection(db, 'pets', {});
         namespace = MongoDBNamespace.fromString('animals.pets');
 
-        client.connect().catch(_e => { });
+        client.connect().catch(_e => {});
 
         instance = makeInstance(
           {
@@ -221,7 +221,7 @@ function makeInstance({ client, db, namespace, collection }, className) {
       'GridFSBucketWriteStream',
       () => {
         const stream = new mongodbLegacy.GridFSBucket(db).openUploadStream('file');
-        stream.on('error', () => { });
+        stream.on('error', () => {});
         return stream;
       }
     ],
