@@ -26,7 +26,7 @@ describe('wrapper API', () => {
         collection = new mongodbLegacy.Collection(db, 'pets', {});
         namespace = MongoDBNamespace.fromString('animals.pets');
 
-        client.connect().catch(_e => {});
+        client.connect().catch(_e => { });
 
         instance = makeInstance(
           {
@@ -40,6 +40,8 @@ describe('wrapper API', () => {
       });
 
       afterEach(async function () {
+        sinon.restore();
+
         if (className === 'ClientSession' && method !== 'endSession') {
           await instance.endSession();
         }
@@ -49,7 +51,7 @@ describe('wrapper API', () => {
         if (className === 'GridFSBucketWriteStream' && method !== 'end') {
           await instance.end();
         }
-
+        await client.close();
         sinon.restore();
       });
       const resolveSuite = [];
@@ -219,7 +221,7 @@ function makeInstance({ client, db, namespace, collection }, className) {
       'GridFSBucketWriteStream',
       () => {
         const stream = new mongodbLegacy.GridFSBucket(db).openUploadStream('file');
-        stream.on('error', () => {});
+        stream.on('error', () => { });
         return stream;
       }
     ],
