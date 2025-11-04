@@ -1,8 +1,8 @@
-# MongoDB Node.js Driver with Optional Callback Support Legacy Package
+# MongoDB Node.js Driver with Optional Callback Support Legacy Package (DEPRECATED)
 
 **Attention :memo:**
 
-This is a wrapper of the `mongodb` driver, if you are starting a new project you likely just want to use the driver directly:
+This is a wrapper of the `mongodb` driver, compatible with versions 4.x-6.x ONLY. There will be no 7.x+ compatible version. If you are starting a new project please use the driver directly:
 
 - [Driver Source](https://github.com/mongodb/node-mongodb-native/)
 - [Driver NPM Package](https://www.npmjs.com/package/mongodb)
@@ -102,6 +102,7 @@ The following version combinations with the [MongoDB Node.js Driver](https://git
 
 |               | `mongodb-legacy@4.x` | `mongodb-legacy@5.x` | `mongodb-legacy@6.x` |
 | ------------- | -------------------- | -------------------- | -------------------- |
+| `mongodb@7.x` | N/A                  | N/A                  | N/A                  |
 | `mongodb@6.x` | N/A                  | N/A                  | ✓                    |
 | `mongodb@5.x` | N/A                  | ✓                    | N/A                  |
 | `mongodb@4.x` | ✓                    | N/A                  | N/A                  |
